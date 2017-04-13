@@ -1,0 +1,57 @@
+;Mod: RealGrass / Grass&Plants
+[Internal]
+SettingsVersion = 1.0
+
+[RealGrass-Shape]
+MinGrassHeight = 0.5
+MaxGrassHeight = 2.5
+MinGrassWidth = 0.8
+MaxGrassWidth = 1.3
+
+;The higher this is, the more varied the grass billboards will look
+;Minimum number of grass billboards per terrain tile
+;Maximum number of grass billboards per terrain tile
+;Minimum number of grass billboards per terrain tile
+;Maximum number of grass billboards per terrain tile
+[RealGrass-Variation]
+NoiseSpread = 0.4
+MinGrassThick = 3
+MaxGrassThick = 20
+MinGrassSparse = 0
+MaxGrassSparse = 7
+
+;Add water plants near river and lakes in addition to grass
+;Use winter version of plants or don't show them at all
+;Add little stones on farms ground (requires Grass&Plants)
+[Grass&Plants]
+UseGrassAndPlants = False
+WinterPlants = True
+TerrainStones = True
+
+[GrassShape]
+MinGrassHeight = 0.65
+MaxGrassHeight = 0.65
+MinGrassWidth = 1.0
+MaxGrassWidth = 1.0
+
+;The higher this is, the more varied the grass billboards will look
+;Minimum number of grass billboards per terrain tile
+;Maximum number of grass billboards per terrain tile
+;Minimum number of grass billboards per terrain tile
+;Maximum number of grass billboards per terrain tile
+[GrassVariation]
+NoiseSpread = 0.4
+thickLower = 8
+thickHigher = 24
+thinLower = 4
+thinHigher = 12
+
+;Minimum number of water plants per terrain tile
+;Maximum number of water plants per terrain tile
+;Minimum number of water plants per terrain tile
+;Maximum number of water plants per terrain tile
+[PlantsVariation]
+waterPlantsLower = 8
+waterPlantsHigher = 12
+desertLower = 10
+desertHigher = 15
