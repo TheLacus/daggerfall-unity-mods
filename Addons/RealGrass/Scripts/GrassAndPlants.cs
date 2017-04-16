@@ -1,13 +1,13 @@
 // Project:         Plants and Grass for Daggerfall Unity
+// Web Site:        http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
+// Source Code:     https://github.com/TheLacus/realgrass-du-mod
 // Original Author: Uncanny_Valley, TheLacus
 // Contributors:    
-
 
 using UnityEngine;
 using DaggerfallWorkshop.Utility;
 using DaggerfallWorkshop;
-using DaggerfallWorkshop.Game.Utility.ModSupport;
 using DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings;
 
 namespace RealGrass
@@ -40,9 +40,6 @@ namespace RealGrass
     public class GrassAndPlants : MonoBehaviour
     {
         #region Fields
-
-        // Mod
-        public static Mod plantsAndGrassMod;
 
         // Textures for grass billboards
         const string brownGrass = "tex_BrownGrass";
@@ -91,12 +88,6 @@ namespace RealGrass
         // Spread
         static float NoiseSpread;
 
-        private Color32[] tilemap;
-        private int[,] details0, details1, details2, details3;
-        private DaggerfallDateTime.Seasons currentSeason;
-
-        private int currentClimate;
-
         #endregion
 
         #region Start Mod
@@ -107,8 +98,8 @@ namespace RealGrass
         private void Awake()
         {
             // Load settings
+            ModSettings settings = RealGrassLoader.Settings;
             const string grassShape = "GrassShape", grassVariation = "GrassVariation", plantsVariation = "PlantsVariation";
-            ModSettings settings = new ModSettings(plantsAndGrassMod);
             MinGrassHeight = settings.GetFloat(grassShape, "MinGrassHeight");
             MaxGrassHeight = settings.GetFloat(grassShape, "MaxGrassHeight");
             MinGrassWidth = settings.GetFloat(grassShape, "MinGrassWidth");
@@ -130,48 +121,56 @@ namespace RealGrass
 
             // Create a holder for our grass and plants
             detailPrototype = new DetailPrototype[4];
-            detailPrototype[0] = new DetailPrototype();
-            detailPrototype[1] = new DetailPrototype();
-            detailPrototype[2] = new DetailPrototype();
-            detailPrototype[3] = new DetailPrototype();
 
             // Grass settings
             // We use billboards as they are cheap and make the grass terrain 
             // dense from every angolation
-            detailPrototype[0].minHeight = MinGrassHeight;
-            detailPrototype[0].minWidth = MinGrassWidth;
-            detailPrototype[0].maxHeight = MaxGrassHeight;
-            detailPrototype[0].maxWidth = MaxGrassWidth;
-            detailPrototype[0].noiseSpread = NoiseSpread;
-            detailPrototype[0].healthyColor = new Color(0.70f, 0.70f, 0.70f);
-            detailPrototype[0].dryColor = new Color(0.70f, 0.70f, 0.70f);
-            detailPrototype[0].renderMode = UnityEngine.DetailRenderMode.GrassBillboard;
+            detailPrototype[0] = new DetailPrototype()
+            {
+                minHeight = MinGrassHeight,
+                minWidth = MinGrassWidth,
+                maxHeight = MaxGrassHeight,
+                maxWidth = MaxGrassWidth,
+                noiseSpread = NoiseSpread,
+                healthyColor = new Color(0.70f, 0.70f, 0.70f),
+                dryColor = new Color(0.70f, 0.70f, 0.70f),
+                renderMode = DetailRenderMode.GrassBillboard
+            };
 
             // Near-water plants settings
             // Here we use the Grass shader which support meshes, and textures with transparency.
             // This allow us to have more realistic plants which still bend in the wind.
-            detailPrototype[1].usePrototypeMesh = true;
-            detailPrototype[1].noiseSpread = 0.4f;
-            detailPrototype[1].healthyColor = new Color(0.70f, 0.70f, 0.70f);
-            detailPrototype[1].dryColor = new Color(0.70f, 0.70f, 0.70f);
-            detailPrototype[1].renderMode = DetailRenderMode.Grass;
+            detailPrototype[1] = new DetailPrototype()
+            {
+                usePrototypeMesh = true,
+                noiseSpread = 0.4f,
+                healthyColor = new Color(0.70f, 0.70f, 0.70f),
+                dryColor = new Color(0.70f, 0.70f, 0.70f),
+                renderMode = DetailRenderMode.Grass
+            };
 
             // In-water plants settings
             // We use Grass as above
-            detailPrototype[2].usePrototypeMesh = true;
-            detailPrototype[2].noiseSpread = 0.4f;
-            detailPrototype[2].healthyColor = new Color(0.70f, 0.70f, 0.70f);
-            detailPrototype[2].dryColor = new Color(0.70f, 0.70f, 0.70f);
-            detailPrototype[2].renderMode = DetailRenderMode.Grass;
+            detailPrototype[2] = new DetailPrototype()
+            {
+                usePrototypeMesh = true,
+                noiseSpread = 0.4f,
+                healthyColor = new Color(0.70f, 0.70f, 0.70f),
+                dryColor = new Color(0.70f, 0.70f, 0.70f),
+                renderMode = DetailRenderMode.Grass
+            };
 
             // Little stones settings
             // For stones we use VertexLit as we are placing 3d static models.
-            detailPrototype[3].usePrototypeMesh = true;
-            detailPrototype[3].noiseSpread = 0.4f;
-            detailPrototype[3].healthyColor = new Color(0.70f, 0.70f, 0.70f);
-            detailPrototype[3].dryColor = new Color(0.70f, 0.70f, 0.70f);
-            detailPrototype[3].renderMode = DetailRenderMode.VertexLit;
-            detailPrototype[3].prototype = RealGrassHelper.LoadGameObject(Stone);
+            detailPrototype[3] = new DetailPrototype()
+            {
+                usePrototypeMesh = true,
+                noiseSpread = 0.4f,
+                healthyColor = new Color(0.70f, 0.70f, 0.70f),
+                dryColor = new Color(0.70f, 0.70f, 0.70f),
+                renderMode = DetailRenderMode.VertexLit,
+                prototype = RealGrassLoader.LoadGameObject(Stone)
+            };
         }
 
         #endregion
@@ -187,20 +186,20 @@ namespace RealGrass
             //			Stopwatch stopwatch = new Stopwatch();
             //			stopwatch.Start();
 
+            // Terrain settings 
+            RealGrassLoader.InitTerrain(terrainData);
+            Color32[] tilemap = daggerTerrain.TileMap;
+
+            // Get the current season and climate
+            var currentSeason = DaggerfallUnity.Instance.WorldTime.Now.SeasonValue;
+            int currentClimate = daggerTerrain.MapData.worldClimate;
+
             // Create details layers
+            int[,] details0, details1, details2, details3;
             details0 = new int[256, 256];
             details1 = new int[256, 256];
             details2 = new int[256, 256];
             details3 = new int[256, 256];
-
-            // Get the current season and climate
-            currentSeason = DaggerfallUnity.Instance.WorldTime.Now.SeasonValue;
-            currentClimate = daggerTerrain.MapData.worldClimate;
-
-            // Terrain settings 
-            tilemap = daggerTerrain.TileMap;
-            terrainData.wavingGrassTint = Color.gray;
-            terrainData.SetDetailResolution(256, 8);
 
             // Proceed if the worldClimate contains grass, which is everything above 225, with the exception of 229
             if (currentClimate > 225 && currentClimate != Climate.Desert3)
@@ -215,26 +214,26 @@ namespace RealGrass
                         case Climate.Mountain2:
 
                             // Mountain
-                            detailPrototype[0].prototypeTexture = RealGrassHelper.LoadTexture(brownGrass);
-                            detailPrototype[1].prototype = RealGrassHelper.LoadGameObject(MountainGrass);
-                            detailPrototype[2].prototype = RealGrassHelper.LoadGameObject(WaterMountainGrass);
+                            detailPrototype[0].prototypeTexture = RealGrassLoader.LoadTexture(brownGrass);
+                            detailPrototype[1].prototype = RealGrassLoader.LoadGameObject(MountainGrass);
+                            detailPrototype[2].prototype = RealGrassLoader.LoadGameObject(WaterMountainGrass);
                             break;
 
                         case Climate.Swamp:
                         case Climate.Swamp2:
 
                             // Swamp
-                            detailPrototype[0].prototypeTexture = RealGrassHelper.LoadTexture(brownGrass);
-                            detailPrototype[1].prototype = RealGrassHelper.LoadGameObject(SwampGrass);
+                            detailPrototype[0].prototypeTexture = RealGrassLoader.LoadTexture(brownGrass);
+                            detailPrototype[1].prototype = RealGrassLoader.LoadGameObject(SwampGrass);
                             break;
 
                         case Climate.Temperate:
                         case Climate.Temperate2:
 
                             // Temperate
-                            detailPrototype[0].prototypeTexture = RealGrassHelper.LoadTexture(greenGrass);
-                            detailPrototype[1].prototype = RealGrassHelper.LoadGameObject(TemperateGrass);
-                            detailPrototype[2].prototype = RealGrassHelper.LoadGameObject(Waterlily);
+                            detailPrototype[0].prototypeTexture = RealGrassLoader.LoadTexture(greenGrass);
+                            detailPrototype[1].prototype = RealGrassLoader.LoadGameObject(TemperateGrass);
+                            detailPrototype[2].prototype = RealGrassLoader.LoadGameObject(Waterlily);
                             break;
 
                         default:
@@ -516,21 +515,21 @@ namespace RealGrass
                         case Climate.Mountain2:
 
                             // Mountain
-                            detailPrototype[1].prototype = RealGrassHelper.LoadGameObject(MountainGrassWinter);
+                            detailPrototype[1].prototype = RealGrassLoader.LoadGameObject(MountainGrassWinter);
                             break;
 
                         case Climate.Swamp:
                         case Climate.Swamp2:
 
                             // Swamp
-                            detailPrototype[1].prototype = RealGrassHelper.LoadGameObject(SwampGrassWinter);
+                            detailPrototype[1].prototype = RealGrassLoader.LoadGameObject(SwampGrassWinter);
                             break;
 
                         case Climate.Temperate:
                         case Climate.Temperate2:
 
                             // Temperate
-                            detailPrototype[1].prototype = RealGrassHelper.LoadGameObject(TemperateGrassWinter);
+                            detailPrototype[1].prototype = RealGrassLoader.LoadGameObject(TemperateGrassWinter);
                             break;
 
                         default:
@@ -597,7 +596,7 @@ namespace RealGrass
             else if (currentClimate == Climate.Desert || currentClimate == Climate.Desert2 || currentClimate == Climate.Desert3)
             {
                 // Assign desert grass model
-                detailPrototype[1].prototype = RealGrassHelper.LoadGameObject(DesertGrass);
+                detailPrototype[1].prototype = RealGrassLoader.LoadGameObject(DesertGrass);
 
                 int colorValue;
 

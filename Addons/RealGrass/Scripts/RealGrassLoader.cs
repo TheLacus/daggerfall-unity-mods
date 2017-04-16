@@ -1,7 +1,9 @@
 ﻿// Project:         RealGrass/Plants&Grass for Daggerfall Unity
+// Web Site:        http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
+// Source Code:     https://github.com/TheLacus/realgrass-du-mod
 // Developers:      Original RealGrass by Uncanny_Valley, improvements by Midopa,
-//                  Grass&Plants and maintenance by TheLacus
+//                  Grass&Plants and maintenance by TheLacus (TheLacus@yandex.com)
 //
 // Original Author: TheLacus
 // Contributors:
@@ -13,40 +15,141 @@ using DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings;
 
 namespace RealGrass
 {
+    #region Structs
+
+    /// <summary>
+    /// Daggerfall climates.
+    /// </summary>
+    public struct Climate
+    {
+        public const int
+
+            None = 0,
+            Ocean = 223,
+            Desert = 224,
+            Desert2 = 225,
+            Mountain = 226,
+            Swamp = 227,
+            Swamp2 = 228,
+            Desert3 = 229,
+            Mountain2 = 230,
+            Temperate = 231,
+            Temperate2 = 232;
+    }
+
+    #endregion
+
     /// <summary>
     /// Loader for Real Grass and Grass and Plants
     /// </summary>
-    public class RealGrassLoader : MonoBehaviour
+    public class RealGrassLoader
     {
-        // Real Grass or Grass and Plants?
-        static bool waterPlants;
+        #region Fields & Properties
 
-        // Load mod
+        // This mod
+        private static Mod mod;
+
+        // Settings
+        private static ModSettings settings;
+
+        /// <summary>
+        /// Real Grass mod
+        /// </summary>
+        public static Mod Mod
+        {
+            get { return mod; }
+            internal set { mod = value; }
+        }
+
+        /// <summary>
+        /// Real Grass settings
+        /// </summary>
+        public static ModSettings Settings
+        {
+            get { return settings; }
+            internal set { settings = value; }
+        }
+
+        #endregion
+
+        #region Mod Loader
+
+        /// <summary>
+        /// Mod loader.
+        /// </summary>
         [Invoke(StateManager.StateTypes.Start, 0)]
         public static void Init(InitParams initParams)
         {
-            // Load settings
-            ModSettings settings = new ModSettings(initParams.Mod);
-            waterPlants = settings.GetBool("Grass&Plants", "UseGrassAndPlants");
+            // Get mod
+            mod = initParams.Mod;
 
-            RealGrassHelper.mod = initParams.Mod;
+            // Load settings
+            settings = new ModSettings(mod);
 
             // Add script to the scene.
-            if (waterPlants)
+            if (settings.GetBool("Grass&Plants", "UseGrassAndPlants"))
             {
-                GrassAndPlants.plantsAndGrassMod = initParams.Mod;
+                // Grass and water plants
                 GameObject go = new GameObject("PlantsAndGrass");
                 GrassAndPlants realGrass = go.AddComponent<GrassAndPlants>();
             }
             else
             {
-                RealGrass.realGrassMod = initParams.Mod;
+                // Only grass
                 GameObject go = new GameObject("RealGrass");
                 RealGrass realGrass = go.AddComponent<RealGrass>();
             }
 
             // After finishing, set the mod's IsReady flag to true.
-            ModManager.Instance.GetMod(initParams.ModTitle).IsReady = true;
+            mod.IsReady = true;
         }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Set common settings for terrain.
+        /// </summary>
+        public static void InitTerrain(TerrainData terrainData)
+        {
+            // Color of the waving grass
+            terrainData.wavingGrassTint = Color.gray;
+
+            // Resolution of the detail map
+            terrainData.SetDetailResolution(256, 8);
+        }
+
+        /// <summary>
+        /// Get texture from mod.
+        /// </summary>
+        /// <param name="name">Name of texture.</param>
+        public static Texture2D LoadTexture(string name)
+        {
+            var tex = mod.GetAsset<Texture2D>(name);
+
+            if (tex != null)
+                return tex;
+
+            Debug.LogError("Real Grass: Failed to load texture " + name);
+            return null;
+        }
+
+        /// <summary>
+        /// Get gameobject from mod.
+        /// </summary>
+        /// <param name="name">Name of gameobject.</param>
+        public static GameObject LoadGameObject(string name)
+        {
+            var go = mod.GetAsset<GameObject>(name);
+
+            if (go != null)
+                return go;
+
+            Debug.LogError("Real Grass: Failed to load model " + name);
+            return null;
+        }
+        
+        #endregion
     }
 }

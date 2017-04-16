@@ -1,13 +1,13 @@
-// Project:         Real Grass for Daggerfall Unity
+// Project:         RealGrass for Daggerfall Unity
+// Web Site:        http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
+// Source Code:     https://github.com/TheLacus/realgrass-du-mod
 // Original Author: Uncanny_Valley
 // Contributors:    Midopa, TheLacus
-
 
 using UnityEngine;
 using DaggerfallWorkshop;
 using DaggerfallWorkshop.Utility;
-using DaggerfallWorkshop.Game.Utility.ModSupport;
 using DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings;
 
 namespace RealGrass
@@ -23,9 +23,6 @@ namespace RealGrass
     public class RealGrass : MonoBehaviour
     {
         #region Fields
-
-        // Mod
-        public static Mod realGrassMod;
 
         // Textures
         const string brownGrass = "tex_BrownGrass";
@@ -82,8 +79,8 @@ namespace RealGrass
         void Start()
         {
             // Load settings
+            ModSettings settings = RealGrassLoader.Settings;
             const string variation = "RealGrass-Variation", shape = "RealGrass-Shape";
-            ModSettings settings = new ModSettings(realGrassMod);
             MinGrassThick = settings.GetInt(variation, "MinGrassThick");
             MaxGrassThick = settings.GetInt(variation, "MaxGrassThick");
             MinGrassSparse = settings.GetInt(variation, "MinGrassSparse");
@@ -349,11 +346,9 @@ namespace RealGrass
             //            Stopwatch stopwatch = new Stopwatch();
             //            stopwatch.Start();
 
-            //Get the current season
+            // Terrain settings
+            RealGrassLoader.InitTerrain(terrainData);
             var currentSeason = DaggerfallUnity.Instance.WorldTime.Now.SeasonValue;
-
-            terrainData.wavingGrassTint = Color.gray;
-            terrainData.SetDetailResolution(256, 8);
 
             // If it's winter or a climate with no grass, then pass an empty density map so the grass gets cleared
             if (currentSeason == DaggerfallDateTime.Seasons.Winter
@@ -365,12 +360,12 @@ namespace RealGrass
                 return;
             }
 
-            //Switch the grass texture based on the climate
+            // Switch the grass texture based on the climate
             if (daggerTerrain.MapData.worldClimate == Climate.Mountain || daggerTerrain.MapData.worldClimate == Climate.Swamp ||
                 daggerTerrain.MapData.worldClimate == Climate.Swamp2 || daggerTerrain.MapData.worldClimate == Climate.Mountain2)
-                _detailPrototype[0].prototypeTexture = RealGrassHelper.LoadTexture(brownGrass);
+                _detailPrototype[0].prototypeTexture = RealGrassLoader.LoadTexture(brownGrass);
             else
-                _detailPrototype[0].prototypeTexture = RealGrassHelper.LoadTexture(greenGrass);
+                _detailPrototype[0].prototypeTexture = RealGrassLoader.LoadTexture(greenGrass);
 
             terrainData.detailPrototypes = _detailPrototype;
 
