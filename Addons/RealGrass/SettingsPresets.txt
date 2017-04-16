@@ -1,0 +1,29 @@
+Preset1 by Uncanny_Valley
+----------------------------
+Low-profile grass.
+
+[Grass]
+MinGrassHeight = 0.65
+MaxGrassHeight = 0.65
+MinGrassWidth = 1.0
+MaxGrassWidth = 1.0
+NoiseSpread = 0.4
+thickLower = 8
+thickHigher = 24
+thinLower = 4
+thinHigher = 12
+
+Preset2 by Midopa
+-------------------
+More varieties of grass size.
+
+[Grass]
+MinGrassHeight = 0.5
+MaxGrassHeight = 2.5
+MinGrassWidth = 0.8
+MaxGrassWidth = 1.3
+NoiseSpread = 0.4
+thickLower = 3
+thickHigher = 20
+thinLower = 0
+thinHigher = 7

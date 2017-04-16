@@ -1,57 +1,49 @@
 ;Mod: RealGrass / Grass&Plants
 [Internal]
-SettingsVersion = 1.0
+SettingsVersion = 1.1
 
-[RealGrass-Shape]
-MinGrassHeight = 0.5
-MaxGrassHeight = 2.5
-MinGrassWidth = 0.8
-MaxGrassWidth = 1.3
-
-;The higher this is, the more varied the grass billboards will look
+;Minimum height
+;Maximum height
+;Minimum width
+;Maximum width
+;The higher this is, the more varied the grass will look
 ;Minimum number of grass billboards per terrain tile
 ;Maximum number of grass billboards per terrain tile
 ;Minimum number of grass billboards per terrain tile
 ;Maximum number of grass billboards per terrain tile
-[RealGrass-Variation]
-NoiseSpread = 0.4
-MinGrassThick = 3
-MaxGrassThick = 20
-MinGrassSparse = 0
-MaxGrassSparse = 7
-
-;Add water plants near river and lakes in addition to grass
-;Use winter version of plants or don't show them at all
-;Add little stones on farms ground (requires Grass&Plants)
-[Grass&Plants]
-UseGrassAndPlants = False
-WinterPlants = True
-TerrainStones = True
-
-[GrassShape]
+[Grass]
 MinGrassHeight = 0.65
 MaxGrassHeight = 0.65
 MinGrassWidth = 1.0
 MaxGrassWidth = 1.0
-
-;The higher this is, the more varied the grass billboards will look
-;Minimum number of grass billboards per terrain tile
-;Maximum number of grass billboards per terrain tile
-;Minimum number of grass billboards per terrain tile
-;Maximum number of grass billboards per terrain tile
-[GrassVariation]
 NoiseSpread = 0.4
 thickLower = 8
 thickHigher = 24
 thinLower = 4
 thinHigher = 12
 
+;Add water plants near river and lakes in addition to grass
+;Show winter version of plants during winter season
+;The higher this is, the more varied the water plants will look
 ;Minimum number of water plants per terrain tile
 ;Maximum number of water plants per terrain tile
 ;Minimum number of water plants per terrain tile
 ;Maximum number of water plants per terrain tile
-[PlantsVariation]
+[WaterPlants]
+WaterPlants = False
+WinterPlants = False
+NoiseSpread = 0.4
 waterPlantsLower = 8
 waterPlantsHigher = 12
 desertLower = 10
 desertHigher = 15
+
+;Add little stones on farms ground (requires water plants)
+;The higher this is, the more varied the stones will look
+;Minimum number of stones per terrain tile
+;Maximum number of stones per terrain tile
+[TerrainStones]
+TerrainStones = False
+NoiseSpread = 0.4
+stonesLower = 4
+stonesHigher = 12

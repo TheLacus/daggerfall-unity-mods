@@ -87,7 +87,7 @@ namespace RealGrass
             settings = new ModSettings(mod);
 
             // Add script to the scene.
-            if (settings.GetBool("Grass&Plants", "UseGrassAndPlants"))
+            if (settings.GetBool("WaterPlants", "WaterPlants"))
             {
                 // Grass and water plants
                 GameObject go = new GameObject("PlantsAndGrass");

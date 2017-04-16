@@ -80,16 +80,16 @@ namespace RealGrass
         {
             // Load settings
             ModSettings settings = RealGrassLoader.Settings;
-            const string variation = "RealGrass-Variation", shape = "RealGrass-Shape";
-            MinGrassThick = settings.GetInt(variation, "MinGrassThick");
-            MaxGrassThick = settings.GetInt(variation, "MaxGrassThick");
-            MinGrassSparse = settings.GetInt(variation, "MinGrassSparse");
-            MaxGrassSparse = settings.GetInt(variation, "MaxGrassSparse");
-            MinGrassHeight = settings.GetFloat(shape, "MinGrassHeight");
-            MaxGrassHeight = settings.GetFloat(shape, "MaxGrassHeight");
-            MinGrassWidth = settings.GetFloat(shape, "MinGrassWidth");
-            MaxGrassWidth = settings.GetFloat(shape, "MaxGrassWidth");
-            GrassVarietyFactor = settings.GetFloat(variation, "NoiseSpread");
+            const string grassSection = "Grass";
+            MinGrassThick = settings.GetInt(grassSection, "thickLower");
+            MaxGrassThick = settings.GetInt(grassSection, "thickHigher");
+            MinGrassSparse = settings.GetInt(grassSection, "thinLower");
+            MaxGrassSparse = settings.GetInt(grassSection, "thinHigher");
+            MinGrassHeight = settings.GetFloat(grassSection, "MinGrassHeight");
+            MaxGrassHeight = settings.GetFloat(grassSection, "MaxGrassHeight");
+            MinGrassWidth = settings.GetFloat(grassSection, "MinGrassWidth");
+            MaxGrassWidth = settings.GetFloat(grassSection, "MaxGrassWidth");
+            GrassVarietyFactor = settings.GetFloat(grassSection, "NoiseSpread");
 
             //Subscribe to the onPromoteTerrainData
             DaggerfallTerrain.OnPromoteTerrainData += AddGrass;

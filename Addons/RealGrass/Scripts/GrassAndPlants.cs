@@ -78,6 +78,9 @@ namespace RealGrass
         // Water plants for desert
         static int desertLower;
         static int desertHigher;
+        // Stones
+        static int stonesLower;
+        static int stonesHigher;
 
         // Shape
         static float MinGrassHeight;
@@ -87,6 +90,8 @@ namespace RealGrass
 
         // Spread
         static float NoiseSpread;
+        static float NoiseSpreadPlants;
+        static float NoiseSpreadStones;
 
         #endregion
 
@@ -98,23 +103,7 @@ namespace RealGrass
         private void Awake()
         {
             // Load settings
-            ModSettings settings = RealGrassLoader.Settings;
-            const string grassShape = "GrassShape", grassVariation = "GrassVariation", plantsVariation = "PlantsVariation";
-            MinGrassHeight = settings.GetFloat(grassShape, "MinGrassHeight");
-            MaxGrassHeight = settings.GetFloat(grassShape, "MaxGrassHeight");
-            MinGrassWidth = settings.GetFloat(grassShape, "MinGrassWidth");
-            MaxGrassWidth = settings.GetFloat(grassShape, "MaxGrassWidth");
-            thickLower = settings.GetInt(grassVariation, "thickLower");
-            thickHigher = settings.GetInt(grassVariation, "thickHigher");
-            thinLower = settings.GetInt(grassVariation, "thinLower");
-            thinHigher = settings.GetInt(grassVariation, "thinHigher");
-            waterPlantsLower = settings.GetInt(plantsVariation, "waterPlantsLower");
-            waterPlantsHigher = settings.GetInt(plantsVariation, "waterPlantsHigher");
-            desertLower = settings.GetInt(plantsVariation, "desertLower");
-            desertHigher = settings.GetInt(plantsVariation, "desertHigher");
-            NoiseSpread = settings.GetFloat(grassVariation, "NoiseSpread");
-            WinterPlants = settings.GetBool("Grass&Plants", "WinterPlants");
-            TerrainStones = settings.GetBool("Grass&Plants", "TerrainStones");
+            LoadSettings();
 
             // Subscribe to the onPromoteTerrainData
             DaggerfallTerrain.OnPromoteTerrainData += AddGrass;
@@ -143,7 +132,7 @@ namespace RealGrass
             detailPrototype[1] = new DetailPrototype()
             {
                 usePrototypeMesh = true,
-                noiseSpread = 0.4f,
+                noiseSpread = NoiseSpreadPlants,
                 healthyColor = new Color(0.70f, 0.70f, 0.70f),
                 dryColor = new Color(0.70f, 0.70f, 0.70f),
                 renderMode = DetailRenderMode.Grass
@@ -154,7 +143,7 @@ namespace RealGrass
             detailPrototype[2] = new DetailPrototype()
             {
                 usePrototypeMesh = true,
-                noiseSpread = 0.4f,
+                noiseSpread = NoiseSpreadPlants,
                 healthyColor = new Color(0.70f, 0.70f, 0.70f),
                 dryColor = new Color(0.70f, 0.70f, 0.70f),
                 renderMode = DetailRenderMode.Grass
@@ -496,8 +485,8 @@ namespace RealGrass
                                 case 219:
                                     if (TerrainStones)
                                     {
-                                        details3[i * 2, j * 2] = RandomThin();
-                                        details3[(i * 2) + 1, (j * 2) + 1] = RandomThin();
+                                        details3[i * 2, j * 2] = RandomStones();
+                                        details3[(i * 2) + 1, (j * 2) + 1] = RandomStones();
                                     }
                                     break;
 
@@ -672,6 +661,40 @@ namespace RealGrass
         #region Private Methods
 
         /// <summary>
+        /// Load settings.
+        /// </summary>
+        private void LoadSettings()
+        {
+            ModSettings settings = RealGrassLoader.Settings;
+            const string grass = "Grass", waterPlants = "WaterPlants", stones = "TerrainStones";
+
+            // Grass
+            MinGrassHeight = settings.GetFloat(grass, "MinGrassHeight");
+            MaxGrassHeight = settings.GetFloat(grass, "MaxGrassHeight");
+            MinGrassWidth = settings.GetFloat(grass, "MinGrassWidth");
+            MaxGrassWidth = settings.GetFloat(grass, "MaxGrassWidth");
+            thickLower = settings.GetInt(grass, "thickLower");
+            thickHigher = settings.GetInt(grass, "thickHigher");
+            thinLower = settings.GetInt(grass, "thinLower");
+            thinHigher = settings.GetInt(grass, "thinHigher");
+            NoiseSpread = settings.GetFloat(grass, "NoiseSpread");
+
+            // Water plants
+            waterPlantsLower = settings.GetInt(waterPlants, "waterPlantsLower");
+            waterPlantsHigher = settings.GetInt(waterPlants, "waterPlantsHigher");
+            desertLower = settings.GetInt(waterPlants, "desertLower");
+            desertHigher = settings.GetInt(waterPlants, "desertHigher");
+            WinterPlants = settings.GetBool(waterPlants, "WinterPlants");
+            NoiseSpreadPlants = settings.GetFloat(waterPlants, "NoiseSpread");
+
+            // Stones
+            TerrainStones = settings.GetBool(stones, "TerrainStones");
+            stonesLower = settings.GetInt(stones, "stonesLower");
+            stonesHigher = settings.GetInt(stones, "stonesHigher");
+            NoiseSpreadStones = settings.GetFloat(stones, "NoiseSpread");
+        }
+
+        /// <summary>
         /// Generate random values for the placement of thin grass. 
         /// </summary>
         private static int RandomThin()
@@ -701,6 +724,14 @@ namespace RealGrass
         private static int RandomDesert()
         {
             return Random.Range(desertLower, desertHigher);
+        }
+
+        /// <summary>
+        /// Generate random values for the placement of stones. 
+        /// </summary>
+        private static int RandomStones()
+        {
+            return Random.Range(stonesLower, stonesHigher);
         }
 
         #endregion
