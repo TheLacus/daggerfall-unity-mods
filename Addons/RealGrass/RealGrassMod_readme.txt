@@ -1,11 +1,12 @@
 =================================================================================================
 REAL GRASS
 
-1.08 for DaggerFall Unity 0.4.12
+1.09 for DaggerFall Unity 0.4.12
 =================================================================================================
 
 **DESCRIPTION**
 Adds grass and, optionally, water plants to the terrain of Daggerfall Unity.
+There are two variants of grass, varying for different regions.
 
 It's available in two versions:
 
@@ -16,6 +17,8 @@ This is the original mod made by Uncanny_Valley and improved by midopa.
 A revision by TheLacus which also adds water grass and plants, according to differents climates, 
 and little stones on farms ground.
 
+You can choose which version to use from the mod settings.
+
 **REQUIREMENTS**
 Daggerfall Unity 0.4.12
 
@@ -23,6 +26,36 @@ Daggerfall Unity 0.4.12
 Put the *.dfmod file 'DaggerfallUnity_Data/StreamingAssets/Mods'. 
 Use the load order settings window to choose if you want water plants and stones or only grass, 
 and customize the size and shape of grass.
+
+**CUSTOMIZATION**
+It is possible to customize this mod from the mod settings in-game. 
+Presets with default values are avilable, but it's possible to customize them individually.
+If you create an interesting combination, do not forget to share your own preset!
+
+- WaterPlants
+Places vegetation near water areas, like lakes and river.
+There is a total of four different plants, for the same number of climate regions: mountain, temperate, 
+desert and swamp. They all have two variations, summer and winter. 
+You can choose to show the winter version during this season, or not to show them like the grass.
+
+Additionally it places waterlilies above the surface of temperate lakes and some tufts 
+of grass inside the mountain water zones.
+Plants bend in the wind and waterlilies move slightly on the water surface moved by the same wind. 
+
+- TerrainStones 
+Places little stones on the cultivated grounds near farms.
+
+- Size
+The size of grass is determined by a minimum and a maximum value for height and width. 
+
+- Density
+Thick and thin values (separated for grass, water plants, desert plants and stones) affect
+the number of objects per terrain tile. Higher or lower numbers determine the density, while
+the delta between the min and max affect the homogeneity or variety among all tiles.
+
+- NoiseSpread
+The spread of the variety of grass, an higher number causes a more varied placement.
+It doesn't affect the number of objects.
 
 **UNINSTALL**
 If you wish to uninstall, you can safely remove the mod from the StreamingAssets folder. 
@@ -40,17 +73,14 @@ This mod is compatible with Nystul Distant Terrain.
 Be careful when installing other mods that affects terrain.
 
 **CHANGELOG**
+1.09
+* Added presets.
+
 1.08
 * Real Grass and Grass&Plants are now packed in the same mod for increased ease of use and maintenance.
 * (optional) Added winter version of water plants.
 * Customize size and shape of grass from the settings window.
 * Minor improvements.
-
-=================================================================================================
-Original Grass&Plants Changelog
-=================================================================================================
-*1.0
-Conversion from "build mod" to "mod-system mod".
 
 =================================================================================================
 Original Real Grass Readme
