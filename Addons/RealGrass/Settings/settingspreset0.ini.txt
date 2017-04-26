@@ -1,0 +1,16 @@
+﻿[Internal]
+PresetName = Low-profile
+PresetAuthor = Uncanny_Valley
+Description = Low-profile grass.
+SettingsVersion = 1.1
+
+[Grass]
+MinGrassHeight = 0.65
+MaxGrassHeight = 0.65
+MinGrassWidth = 1.0
+MaxGrassWidth = 1.0
+NoiseSpread = 0.4
+thickLower = 8
+thickHigher = 24
+thinLower = 4
+thinHigher = 12
