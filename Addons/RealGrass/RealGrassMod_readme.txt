@@ -1,10 +1,11 @@
-=================================================================================================
+﻿=================================================================================================
 REAL GRASS
 
 1.09 for DaggerFall Unity 0.4.12
 =================================================================================================
 
 **DESCRIPTION**
+-------------------------------------------------------------------------------------------------
 Adds grass and, optionally, water plants to the terrain of Daggerfall Unity.
 There are two variants of grass, varying for different regions.
 
@@ -20,14 +21,17 @@ and little stones on farms ground.
 You can choose which version to use from the mod settings.
 
 **REQUIREMENTS**
+-------------------------------------------------------------------------------------------------
 Daggerfall Unity 0.4.12
 
 **INSTALLATION**
+-------------------------------------------------------------------------------------------------
 Put the *.dfmod file 'DaggerfallUnity_Data/StreamingAssets/Mods'. 
 Use the load order settings window to choose if you want water plants and stones or only grass, 
 and customize the size and shape of grass.
 
 **CUSTOMIZATION**
+-------------------------------------------------------------------------------------------------
 It is possible to customize this mod from the mod settings in-game. 
 Presets with default values are avilable, but it's possible to customize them individually.
 If you create an interesting combination, do not forget to share your own preset!
@@ -57,11 +61,55 @@ the delta between the min and max affect the homogeneity or variety among all ti
 The spread of the variety of grass, an higher number causes a more varied placement.
 It doesn't affect the number of objects.
 
+**PRESETS**
+-------------------------------------------------------------------------------------------------
+Settings presets are ini files which contain a group of the settings descripted above.
+Such ini file should have this section as an header:
+
+[Internal]
+PresetName = MyPreset
+PresetAuthor = MyName
+Description = Short Description.
+SettingsVersion = 1.1
+
+Settings version is not the version of the preset but the version of this mod settings
+the preset is made for.
+
+Then you can have your settings as they are in realgrass.ini. 
+You don't need to include all sections or keys.
+
+When you created your preset, call it 'realgrasspreset*.ini' (use any number or name instead of *)
+and place it in the same folder with realgrass.ini.
+
+**RESOURCES FOLDER**
+-------------------------------------------------------------------------------------------------
+It's possible to create a subfolder called 'Resources' to further customize the grass
+and import custom textures. For example:
+
+- Mods/RealGrass/realgrass.dfmod
+- Mods/RealGrass/Resources
+
+These are the names for the textures:
+- tex_BrownGrass.png
+- tex_GreenGrass.png
+- tex_DesertGrass.png
+- tex_MountainGrass.png
+- tex_MountainGrassWinter.png
+- tex_stone.png
+- tex_SwampGrass.png
+- tex_SwampGrassWinter.png
+- tex_TemperateGrass.png
+- tex_TemperateGrassWinter.png
+- tex_waterlilies.png
+- tex_WaterMountainGrass.png
+
 **UNINSTALL**
+-------------------------------------------------------------------------------------------------
 If you wish to uninstall, you can safely remove the mod from the StreamingAssets folder. 
 It won't affect saves.
 
 **CREDITS**
+-------------------------------------------------------------------------------------------------
 Main developer: Uncanny_Valley
 Additional changes: midopa
 GrassAndPlants and conversion to mod-system: TheLacus
@@ -69,12 +117,15 @@ GrassAndPlants and conversion to mod-system: TheLacus
 Real Grass on Daggerfall Unity forums: http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
 
 **COMPATIBILITY**
+-------------------------------------------------------------------------------------------------
 This mod is compatible with Nystul Distant Terrain. 
 Be careful when installing other mods that affects terrain.
 
 **CHANGELOG**
+-------------------------------------------------------------------------------------------------
 1.09
 * Added presets.
+* Customize textures from disk.
 
 1.08
 * Real Grass and Grass&Plants are now packed in the same mod for increased ease of use and maintenance.
