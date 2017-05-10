@@ -45,6 +45,10 @@ namespace RealGrass
         const string brownGrass = "tex_BrownGrass";
         const string greenGrass = "tex_GreenGrass";
 
+        // Models for grass shader
+        const string brownGrassMesh = "BrownGrass";
+        const string greenGrassMesh = "GreenGrass";
+
         // Models for water plants
         const string TemperateGrass = "TemperateGrass"; // water plants for temperate
         const string Waterlily = "Waterlily"; // waterlilies for temperate
@@ -72,6 +76,7 @@ namespace RealGrass
         static int thickHigher;
         static int thinLower;
         static int thinHigher;
+        static bool useGrassShader;
         // Water plants for temperate, mountain and swamp
         static int waterPlantsLower;
         static int waterPlantsHigher;
@@ -112,8 +117,7 @@ namespace RealGrass
             detailPrototype = new DetailPrototype[4];
 
             // Grass settings
-            // We use billboards as they are cheap and make the grass terrain 
-            // dense from every angolation
+            // We use GrassBillboard or Grass rendermode
             detailPrototype[0] = new DetailPrototype()
             {
                 minHeight = MinGrassHeight,
@@ -123,7 +127,8 @@ namespace RealGrass
                 noiseSpread = NoiseSpread,
                 healthyColor = new Color(0.70f, 0.70f, 0.70f),
                 dryColor = new Color(0.70f, 0.70f, 0.70f),
-                renderMode = DetailRenderMode.GrassBillboard
+                renderMode = RealGrassLoader.GetGrassShader(out useGrassShader),
+                usePrototypeMesh = useGrassShader
             };
 
             // Near-water plants settings
@@ -154,7 +159,7 @@ namespace RealGrass
             detailPrototype[3] = new DetailPrototype()
             {
                 usePrototypeMesh = true,
-                noiseSpread = 0.4f,
+                noiseSpread = NoiseSpreadStones,
                 healthyColor = new Color(0.70f, 0.70f, 0.70f),
                 dryColor = new Color(0.70f, 0.70f, 0.70f),
                 renderMode = DetailRenderMode.VertexLit,
@@ -176,7 +181,7 @@ namespace RealGrass
             //			stopwatch.Start();
 
             // Terrain settings 
-            RealGrassLoader.InitTerrain(terrainData);
+            RealGrassLoader.InitTerrain(daggerTerrain, terrainData);
             Color32[] tilemap = daggerTerrain.TileMap;
 
             // Get the current season and climate
@@ -203,7 +208,10 @@ namespace RealGrass
                         case Climate.Mountain2:
 
                             // Mountain
-                            detailPrototype[0].prototypeTexture = RealGrassLoader.LoadTexture(brownGrass);
+                            if (!useGrassShader)
+                                detailPrototype[0].prototypeTexture = RealGrassLoader.LoadTexture(brownGrass);
+                            else
+                                detailPrototype[0].prototype = RealGrassLoader.LoadGameObject(brownGrassMesh);
                             detailPrototype[1].prototype = RealGrassLoader.LoadGameObject(MountainGrass);
                             detailPrototype[2].prototype = RealGrassLoader.LoadGameObject(WaterMountainGrass);
                             break;
@@ -212,7 +220,10 @@ namespace RealGrass
                         case Climate.Swamp2:
 
                             // Swamp
-                            detailPrototype[0].prototypeTexture = RealGrassLoader.LoadTexture(brownGrass);
+                            if (!useGrassShader)
+                                detailPrototype[0].prototypeTexture = RealGrassLoader.LoadTexture(brownGrass);
+                            else
+                                detailPrototype[0].prototype = RealGrassLoader.LoadGameObject(brownGrassMesh);
                             detailPrototype[1].prototype = RealGrassLoader.LoadGameObject(SwampGrass);
                             break;
 
@@ -220,7 +231,10 @@ namespace RealGrass
                         case Climate.Temperate2:
 
                             // Temperate
-                            detailPrototype[0].prototypeTexture = RealGrassLoader.LoadTexture(greenGrass);
+                            if (!useGrassShader)
+                                detailPrototype[0].prototypeTexture = RealGrassLoader.LoadTexture(greenGrass);
+                            else
+                                detailPrototype[0].prototype = RealGrassLoader.LoadGameObject(greenGrassMesh);
                             detailPrototype[1].prototype = RealGrassLoader.LoadGameObject(TemperateGrass);
                             detailPrototype[2].prototype = RealGrassLoader.LoadGameObject(Waterlily);
                             break;

@@ -49,6 +49,8 @@ Plants bend in the wind and waterlilies move slightly on the water surface moved
 - TerrainStones 
 Places little stones on the cultivated grounds near farms.
 
+**Grass, plants and stones**
+
 - Size
 The size of grass is determined by a minimum and a maximum value for height and width. 
 
@@ -60,6 +62,22 @@ the delta between the min and max affect the homogeneity or variety among all ti
 - NoiseSpread
 The spread of the variety of grass, an higher number causes a more varied placement.
 It doesn't affect the number of objects.
+
+**Terrain**
+
+- DetailDistance
+The distance from camera beyond which the grass will be culled.
+Lower values can increase performance.
+
+- DetailDensity
+1.0 is the original density, as decided by Thick and Thin. 
+Lower values result in less detail objects being rendered, increasing performance.
+
+**Wind**
+
+- WavingAmount, WavingSpeed and WavingStrength. 
+Affect how much the wind moves the grass.
+All three accept values in a range between 0.0 (no wind) and 1.0.
 
 **PRESETS**
 -------------------------------------------------------------------------------------------------

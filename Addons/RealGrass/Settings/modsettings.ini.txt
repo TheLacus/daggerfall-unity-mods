@@ -1,6 +1,6 @@
 ;Mod: RealGrass / Grass&Plants
 [Internal]
-SettingsVersion = 1.1
+SettingsVersion = 1.2
 
 ;Minimum height
 ;Maximum height
@@ -11,6 +11,7 @@ SettingsVersion = 1.1
 ;Maximum number of grass billboards per terrain tile
 ;Minimum number of grass billboards per terrain tile
 ;Maximum number of grass billboards per terrain tile
+;Use Grass instead of GrassBillboard
 [Grass]
 MinGrassHeight = 0.65
 MaxGrassHeight = 0.65
@@ -21,6 +22,7 @@ thickLower = 8
 thickHigher = 24
 thinLower = 4
 thinHigher = 12
+UseGrassShader = False
 
 ;Add water plants near river and lakes in addition to grass
 ;Show winter version of plants during winter season
@@ -47,3 +49,17 @@ TerrainStones = False
 NoiseSpread = 0.4
 stonesLower = 4
 stonesHigher = 12
+
+;Grass will be displayed up to this distance
+;Max density of grass (0.0-1.0)
+[Terrain]
+DetailDistance = 80
+DetailDensity = 1.0
+
+;Amount of waving grass (0.0-1.0)
+;Speed of the waving grass (0.0-1.0)
+;Strength of the waving grass (0.0-1.0)
+[Wind]
+WavingAmount = 0.5
+WavingSpeed = 0.5
+WavingStrength = 0.5

@@ -28,6 +28,10 @@ namespace RealGrass
         const string brownGrass = "tex_BrownGrass";
         const string greenGrass = "tex_GreenGrass";
 
+        // Models
+        const string brownGrassMesh = "BrownGrass";
+        const string greenGrassMesh = "GreenGrass";
+
         // Description of the grass billboards to render
         DetailPrototype[] _detailPrototype;
 
@@ -48,6 +52,9 @@ namespace RealGrass
         // The higher this is, the more varied the grass billboards will look.
         // This does not control the density of the grass, but it does control the positions.
         static float GrassVarietyFactor;
+
+        // Shader
+        static bool useGrassShader;
 
         // Convenience/readability consts for how a tile should be filled with grass
         public struct Fill
@@ -94,7 +101,7 @@ namespace RealGrass
             //Subscribe to the onPromoteTerrainData
             DaggerfallTerrain.OnPromoteTerrainData += AddGrass;
 
-            //Create a holder for our grass
+            // Create a holder for our grass
             _detailPrototype = new[]
             {
                 new DetailPrototype
@@ -106,7 +113,8 @@ namespace RealGrass
                     noiseSpread = GrassVarietyFactor,
                     healthyColor = new Color(0.70f, 0.70f, 0.70f),
                     dryColor = new Color(0.70f, 0.70f, 0.70f),
-                    renderMode = DetailRenderMode.GrassBillboard
+                    renderMode = RealGrassLoader.GetGrassShader(out useGrassShader),
+                    usePrototypeMesh = useGrassShader
                 }
             };
 
@@ -347,7 +355,7 @@ namespace RealGrass
             //            stopwatch.Start();
 
             // Terrain settings
-            RealGrassLoader.InitTerrain(terrainData);
+            RealGrassLoader.InitTerrain(daggerTerrain, terrainData);
             var currentSeason = DaggerfallUnity.Instance.WorldTime.Now.SeasonValue;
 
             // If it's winter or a climate with no grass, then pass an empty density map so the grass gets cleared
@@ -363,9 +371,19 @@ namespace RealGrass
             // Switch the grass texture based on the climate
             if (daggerTerrain.MapData.worldClimate == Climate.Mountain || daggerTerrain.MapData.worldClimate == Climate.Swamp ||
                 daggerTerrain.MapData.worldClimate == Climate.Swamp2 || daggerTerrain.MapData.worldClimate == Climate.Mountain2)
-                _detailPrototype[0].prototypeTexture = RealGrassLoader.LoadTexture(brownGrass);
+            {
+                if (!useGrassShader)
+                    _detailPrototype[0].prototypeTexture = RealGrassLoader.LoadTexture(brownGrass);
+                else
+                    _detailPrototype[0].prototype = RealGrassLoader.LoadGameObject(brownGrassMesh);
+            }
             else
-                _detailPrototype[0].prototypeTexture = RealGrassLoader.LoadTexture(greenGrass);
+            {
+                if (!useGrassShader)
+                    _detailPrototype[0].prototypeTexture = RealGrassLoader.LoadTexture(greenGrass);
+                else
+                    _detailPrototype[0].prototype = RealGrassLoader.LoadGameObject(greenGrassMesh);
+            }
 
             terrainData.detailPrototypes = _detailPrototype;
 
