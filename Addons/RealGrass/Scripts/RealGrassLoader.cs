@@ -10,11 +10,11 @@
 
 using System.IO;
 using UnityEngine;
+using DaggerfallWorkshop;
 using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
 using DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings;
 using DaggerfallWorkshop.Utility.AssetInjection;
-using DaggerfallWorkshop;
 
 namespace RealGrass
 {

@@ -63,6 +63,12 @@ the delta between the min and max affect the homogeneity or variety among all ti
 The spread of the variety of grass, an higher number causes a more varied placement.
 It doesn't affect the number of objects.
 
+- UseGrassShader
+By default Real Grass uses the GrassBillboard render mode. This makes the grass images rotate
+so that they always face the camera and it's the cheapest option.
+When 'UseGrassShader' is enabled, the Grass render mode is used instead. 
+This can help creating a more realistic grass, but it's up to personal preferences.
+
 **Terrain**
 
 - DetailDistance
@@ -88,7 +94,7 @@ Such ini file should have this section as an header:
 PresetName = MyPreset
 PresetAuthor = MyName
 Description = Short Description.
-SettingsVersion = 1.1
+SettingsVersion = 1.2
 
 Settings version is not the version of the preset but the version of this mod settings
 the preset is made for.
@@ -121,6 +127,14 @@ These are the names for the textures:
 - tex_waterlilies.png
 - tex_WaterMountainGrass.png
 
+**FAQ**
+-------------------------------------------------------------------------------------------------
+- How can i improve performance?
+* Reducing 'DetailDistance' is the single most impactful option on game performance.
+* Disable 'UseGrassShader'
+* Reduce density of grass through *Lower and *Higher and/or with the general setting 'DetailDensity'.
+* If you imported custom textures, reduce their resolution.
+
 **UNINSTALL**
 -------------------------------------------------------------------------------------------------
 If you wish to uninstall, you can safely remove the mod from the StreamingAssets folder. 
@@ -130,7 +144,7 @@ It won't affect saves.
 -------------------------------------------------------------------------------------------------
 Main developer: Uncanny_Valley
 Additional changes: midopa
-GrassAndPlants and conversion to mod-system: TheLacus
+GrassAndPlants, conversion to mod-system and improvements: TheLacus
 
 Real Grass on Daggerfall Unity forums: http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
 
@@ -141,6 +155,11 @@ Be careful when installing other mods that affects terrain.
 
 **CHANGELOG**
 -------------------------------------------------------------------------------------------------
+1.10
+* Added options for terrain and wind
+* Use a terrain-specific seed for random methods
+* Added option for Grass shader instead of GrassBillboard
+
 1.09
 * Added presets.
 * Customize textures from disk.

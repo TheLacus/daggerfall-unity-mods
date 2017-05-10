@@ -1,7 +1,7 @@
 ﻿[Internal]
 PresetName = Medium plants
 Description = Medium number of plants around water zones.
-SettingsVersion = 1.1
+SettingsVersion = 1.2
 
 [WaterPlants]
 NoiseSpread = 0.4

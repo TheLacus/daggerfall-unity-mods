@@ -2,7 +2,7 @@
 PresetName = Tall grass
 PresetAuthor = Midopa
 Description = More varieties of grass size.
-SettingsVersion = 1.1
+SettingsVersion = 1.2
 
 [Grass]
 MinGrassHeight = 0.5
@@ -14,3 +14,4 @@ thickLower = 3
 thickHigher = 20
 thinLower = 0
 thinHigher = 7
+UseGrassShader = False

@@ -28,7 +28,7 @@ namespace RealGrass
         const string brownGrass = "tex_BrownGrass";
         const string greenGrass = "tex_GreenGrass";
 
-        // Models
+        // Meshes
         const string brownGrassMesh = "BrownGrass";
         const string greenGrassMesh = "GreenGrass";
 
