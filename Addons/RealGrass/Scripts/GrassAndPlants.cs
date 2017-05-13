@@ -6,8 +6,8 @@
 // Contributors:    
 
 using UnityEngine;
-using DaggerfallWorkshop.Utility;
 using DaggerfallWorkshop;
+using DaggerfallWorkshop.Utility;
 using DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings;
 
 namespace RealGrass
@@ -176,9 +176,9 @@ namespace RealGrass
         /// </summary>
         private void AddGrass(DaggerfallTerrain daggerTerrain, TerrainData terrainData)
         {
-            //			Used to check performance
-            //			Stopwatch stopwatch = new Stopwatch();
-            //			stopwatch.Start();
+            // Used to check performance
+            // var stopwatch = new System.Diagnostics.Stopwatch();
+            // stopwatch.Start();
 
             // Terrain settings 
             RealGrassLoader.InitTerrain(daggerTerrain, terrainData);
@@ -664,10 +664,9 @@ namespace RealGrass
             if (TerrainStones)
                 terrainData.SetDetailLayer(0, 0, 3, details3); // Stones
 
-            //			stopwatch.Stop();
-            //			// Write result
-            //			UnityEngine.Debug.Log("Time elapsed: " +
-            //			                      stopwatch.Elapsed);
+            // stopwatch.Stop();
+            // Write result
+            // Debug.Log("RealGrass - Time elapsed: " + stopwatch.Elapsed);
         }
 
         #endregion
