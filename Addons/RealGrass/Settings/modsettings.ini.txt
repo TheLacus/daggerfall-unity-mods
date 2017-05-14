@@ -44,11 +44,13 @@ desertHigher = 15
 ;The higher this is, the more varied the stones will look
 ;Minimum number of stones per terrain tile
 ;Maximum number of stones per terrain tile
+;Flowers (0: no flowers - 100: max density)
 [TerrainStones]
 TerrainStones = False
 NoiseSpread = 0.4
 stonesLower = 4
 stonesHigher = 12
+flowersDensity = 10
 
 ;Grass will be displayed up to this distance
 ;Max density of grass (0.0-1.0)

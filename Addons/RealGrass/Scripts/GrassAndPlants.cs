@@ -67,6 +67,11 @@ namespace RealGrass
         static bool TerrainStones;
         const string Stone = "Stone";
 
+        // Flowers
+        static int flowersDensity;
+        static bool flowers;
+        const string Flowers = "Flowers";
+
         // Create detailprototype
         private DetailPrototype[] detailPrototype;
 
@@ -114,7 +119,7 @@ namespace RealGrass
             DaggerfallTerrain.OnPromoteTerrainData += AddGrass;
 
             // Create a holder for our grass and plants
-            detailPrototype = new DetailPrototype[4];
+            detailPrototype = new DetailPrototype[5];
 
             // Grass settings
             // We use GrassBillboard or Grass rendermode
@@ -165,6 +170,17 @@ namespace RealGrass
                 renderMode = DetailRenderMode.VertexLit,
                 prototype = RealGrassLoader.LoadGameObject(Stone)
             };
+
+            // Flowers
+            detailPrototype[4] = new DetailPrototype()
+            {
+                usePrototypeMesh = true,
+                noiseSpread = NoiseSpreadStones,
+                healthyColor = new Color(0.70f, 0.70f, 0.70f),
+                dryColor = new Color(0.70f, 0.70f, 0.70f),
+                renderMode = DetailRenderMode.Grass,
+                prototype = RealGrassLoader.LoadGameObject(Flowers)
+            };
         }
 
         #endregion
@@ -189,11 +205,12 @@ namespace RealGrass
             int currentClimate = daggerTerrain.MapData.worldClimate;
 
             // Create details layers
-            int[,] details0, details1, details2, details3;
+            int[,] details0, details1, details2, details3, details4;
             details0 = new int[256, 256];
             details1 = new int[256, 256];
             details2 = new int[256, 256];
             details3 = new int[256, 256];
+            details4 = new int[256, 256];
 
             // Proceed if the worldClimate contains grass, which is everything above 225, with the exception of 229
             if (currentClimate > 225 && currentClimate != Climate.Desert3)
@@ -265,6 +282,11 @@ namespace RealGrass
                                     details0[i * 2, (j * 2) + 1] = RandomThick();
                                     details0[(i * 2) + 1, j * 2] = RandomThick();
                                     details0[(i * 2) + 1, (j * 2) + 1] = RandomThick();
+                                    if (flowers)
+                                    {
+                                        var index = RandomPosition(i, j);
+                                        details4[index.First, index.Second] = RandomFlowers();
+                                    }
                                     break;
 
                                 // Upper left corner 
@@ -663,6 +685,8 @@ namespace RealGrass
             terrainData.SetDetailLayer(0, 0, 2, details2); // Waterlilies and grass inside water
             if (TerrainStones)
                 terrainData.SetDetailLayer(0, 0, 3, details3); // Stones
+            if (flowers)
+                terrainData.SetDetailLayer(0, 0, 4, details4); // Flowers
 
             // stopwatch.Stop();
             // Write result
@@ -704,6 +728,8 @@ namespace RealGrass
             TerrainStones = settings.GetBool(stones, "TerrainStones");
             stonesLower = settings.GetInt(stones, "stonesLower");
             stonesHigher = settings.GetInt(stones, "stonesHigher");
+            flowersDensity = settings.GetInt(stones, "flowersDensity", 0, 100);
+            flowers = flowersDensity != 0;
             NoiseSpreadStones = settings.GetFloat(stones, "NoiseSpread");
         }
 
@@ -745,6 +771,36 @@ namespace RealGrass
         private static int RandomStones()
         {
             return Random.Range(stonesLower, stonesHigher);
+        }
+
+        /// <summary>
+        /// Generate random values for the placement of flowers. 
+        /// </summary>
+        private static int RandomFlowers()
+        {
+            return Random.Range(0, 100) < flowersDensity ? 1 : 0;
+        }
+
+        /// <summary>
+        /// Get a random position on tile.
+        /// </summary>
+        /// <param name="y">First index.</param>
+        /// <param name="x">Second index.</param>
+        /// <returns>One of the four possible position on tile.</returns>
+        private static Tuple<int, int> RandomPosition(int y, int x)
+        {
+            switch (Random.Range(0, 4))
+            {
+                case 0:
+                    return new Tuple<int, int>(y * 2, x * 2);
+                case 1:
+                    return new Tuple<int, int>(y * 2, (x * 2) + 1);
+                case 2:
+                    return new Tuple<int, int>((y * 2) + 1, x * 2);
+                case 3:
+                default:
+                    return new Tuple<int, int>((y * 2) + 1, (x * 2) + 1);
+            }
         }
 
         #endregion
