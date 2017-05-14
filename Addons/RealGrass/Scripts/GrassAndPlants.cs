@@ -44,15 +44,15 @@ namespace RealGrass
         // Details resources
         private DetailPrototype[] detailPrototype;
 
-        // ColorValue from the terrain
-        private int colorValue;
-
         // Details layers
         private int[,] details0, details1, details2, details3, details4;
 
         #endregion
-        
+
         #region Constants
+
+        // Size of tile map
+        const int tilemapSize = 128;
 
         // Textures for grass billboards
         const string brownGrass = "tex_BrownGrass";
@@ -370,27 +370,24 @@ namespace RealGrass
         /// </summary>
         private void SetDensitySummer (Color32[] tilemap, int currentClimate)
         {
-            // Check all the tiles, Daggerfall uses the red color value to draw tiles
-            for (int i = 0; i < 128; i++)
+            for (int y = 0; y < tilemapSize; y++)
             {
-                for (int j = 0; j < 128; j++)
+                for (int x = 0; x < tilemapSize; x++)
                 {
-                    colorValue = tilemap[(i * 128) + j].r; //For easier checking
-
-                    switch (colorValue)
+                    switch (tilemap[(y * tilemapSize) + x].r)
                     {
                         // Four corner tiles
                         case 8:
                         case 9:
                         case 10:
                         case 11:
-                            details0[i * 2, j * 2] = RandomThick();
-                            details0[i * 2, (j * 2) + 1] = RandomThick();
-                            details0[(i * 2) + 1, j * 2] = RandomThick();
-                            details0[(i * 2) + 1, (j * 2) + 1] = RandomThick();
+                            details0[y * 2, x * 2] = RandomThick();
+                            details0[y * 2, (x * 2) + 1] = RandomThick();
+                            details0[(y * 2) + 1, x * 2] = RandomThick();
+                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThick();
                             if (flowers)
                             {
-                                var index = RandomPosition(i, j);
+                                var index = RandomPosition(y, x);
                                 details4[index.First, index.Second] = RandomFlowers();
                             }
                             break;
@@ -401,7 +398,7 @@ namespace RealGrass
                         case 164:
                         case 176:
                         case 181:
-                            details0[(i * 2) + 1, j * 2] = RandomThin();
+                            details0[(y * 2) + 1, x * 2] = RandomThin();
                             break;
 
                         // Lower left corner 
@@ -410,7 +407,7 @@ namespace RealGrass
                         case 165:
                         case 177:
                         case 182:
-                            details0[i * 2, j * 2] = RandomThin();
+                            details0[y * 2, x * 2] = RandomThin();
                             break;
 
                         // Lower right corner 
@@ -419,7 +416,7 @@ namespace RealGrass
                         case 166:
                         case 178:
                         case 183:
-                            details0[i * 2, (j * 2) + 1] = RandomThin();
+                            details0[y * 2, (x * 2) + 1] = RandomThin();
                             break;
 
                         // Upper right corner 
@@ -428,7 +425,7 @@ namespace RealGrass
                         case 167:
                         case 179:
                         case 180:
-                            details0[(i * 2) + 1, (j * 2) + 1] = RandomThin();
+                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
                             break;
 
                         // Left side
@@ -436,16 +433,16 @@ namespace RealGrass
                         case 66:
                         case 160:
                         case 168:
-                            details0[(i * 2) + 1, j * 2] = RandomThin();
-                            details0[i * 2, j * 2] = RandomThin();
+                            details0[(y * 2) + 1, x * 2] = RandomThin();
+                            details0[y * 2, x * 2] = RandomThin();
                             break;
 
                         // Left side: grass and plants
                         case 84:
-                            details0[(i * 2) + 1, j * 2] = RandomThin();
-                            details0[i * 2, j * 2] = RandomThin();
-                            details1[(i * 2) + 1, j * 2] = RandomWaterPlants();
-                            details1[i * 2, j * 2] = RandomWaterPlants();
+                            details0[(y * 2) + 1, x * 2] = RandomThin();
+                            details0[y * 2, x * 2] = RandomThin();
+                            details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
+                            details1[y * 2, x * 2] = RandomWaterPlants();
                             break;
 
                         // Lower side
@@ -453,16 +450,16 @@ namespace RealGrass
                         case 67:
                         case 161:
                         case 169:
-                            details0[i * 2, (j * 2) + 1] = RandomThin();
-                            details0[i * 2, j * 2] = RandomThin();
+                            details0[y * 2, (x * 2) + 1] = RandomThin();
+                            details0[y * 2, x * 2] = RandomThin();
                             break;
 
                         // Lower side: grass and plants
                         case 85:
-                            details0[i * 2, (j * 2) + 1] = RandomThin();
-                            details0[i * 2, j * 2] = RandomThin();
-                            details1[i * 2, (j * 2) + 1] = RandomWaterPlants();
-                            details1[i * 2, (j * 2)] = RandomWaterPlants();
+                            details0[y * 2, (x * 2) + 1] = RandomThin();
+                            details0[y * 2, x * 2] = RandomThin();
+                            details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
+                            details1[y * 2, (x * 2)] = RandomWaterPlants();
                             break;
 
                         // Right side
@@ -470,16 +467,16 @@ namespace RealGrass
                         case 64:
                         case 162:
                         case 170:
-                            details0[(i * 2) + 1, (j * 2) + 1] = RandomThin();
-                            details0[i * 2, (j * 2) + 1] = RandomThin();
+                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
+                            details0[y * 2, (x * 2) + 1] = RandomThin();
                             break;
 
                         // Right side: grass and plants
                         case 86:
-                            details0[(i * 2) + 1, (j * 2) + 1] = RandomThin();
-                            details0[i * 2, (j * 2) + 1] = RandomThin();
-                            details1[(i * 2) + 1, (j * 2) + 1] = RandomWaterPlants();
-                            details1[i * 2, (j * 2) + 1] = RandomWaterPlants();
+                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
+                            details0[y * 2, (x * 2) + 1] = RandomThin();
+                            details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
+                            details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
                             break;
 
                         // Upper side
@@ -487,53 +484,52 @@ namespace RealGrass
                         case 65:
                         case 163:
                         case 171:
-                            details0[(i * 2) + 1, (j * 2) + 1] = RandomThin();
-                            details0[(i * 2) + 1, j * 2] = RandomThin();
+                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
+                            details0[(y * 2) + 1, x * 2] = RandomThin();
                             break;
 
                         // Upper side: grass and plants
                         case 87:
-                            details0[(i * 2) + 1, (j * 2) + 1] = RandomThin();
-                            details0[(i * 2) + 1, j * 2] = RandomThin();
-                            details1[(i * 2) + 1, (j * 2) + 1] = RandomWaterPlants();
-                            details1[(i * 2) + 1, j * 2] = RandomWaterPlants();
+                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
+                            details0[(y * 2) + 1, x * 2] = RandomThin();
+                            details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
+                            details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
                             break;
 
                         // All expect lower right
                         case 48:
                         case 62:
                         case 156:
-                            details0[i * 2, j * 2] = RandomThin();
-                            details0[(i * 2) + 1, j * 2] = RandomThin();
-                            details0[(i * 2) + 1, (j * 2) + 1] = RandomThin();
+                            details0[y * 2, x * 2] = RandomThin();
+                            details0[(y * 2) + 1, x * 2] = RandomThin();
+                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
                             break;
 
                         // All expect lower right: grass and plants
                         case 88:
-                            details0[i * 2, j * 2] = RandomThin();
-                            details0[(i * 2) + 1, j * 2] = RandomThin();
-                            details0[(i * 2) + 1, (j * 2) + 1] = RandomThin();
-                            details1[i * 2, j * 2] = RandomWaterPlants();
-                            details1[(i * 2) + 1, (j * 2) + 1] = RandomWaterPlants();
+                            details0[y * 2, x * 2] = RandomThin();
+                            details0[(y * 2) + 1, x * 2] = RandomThin();
+                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
+                            details1[y * 2, x * 2] = RandomWaterPlants();
+                            details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
                             break;
-
 
                         // All expect upper right
                         case 49:
                         case 63:
                         case 157:
-                            details0[i * 2, j * 2] = RandomThin();
-                            details0[i * 2, (j * 2) + 1] = RandomThin();
-                            details0[(i * 2) + 1, j * 2] = RandomThin();
+                            details0[y * 2, x * 2] = RandomThin();
+                            details0[y * 2, (x * 2) + 1] = RandomThin();
+                            details0[(y * 2) + 1, x * 2] = RandomThin();
                             break;
 
                         // All expect upper right: grass and plants
                         case 89:
-                            details0[i * 2, j * 2] = RandomThin();
-                            details0[i * 2, (j * 2) + 1] = RandomThin();
-                            details0[(i * 2) + 1, j * 2] = RandomThin();
-                            details1[i * 2, (j * 2) + 1] = RandomWaterPlants();
-                            details1[(i * 2) + 1, j * 2] = RandomWaterPlants();
+                            details0[y * 2, x * 2] = RandomThin();
+                            details0[y * 2, (x * 2) + 1] = RandomThin();
+                            details0[(y * 2) + 1, x * 2] = RandomThin();
+                            details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
+                            details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
                             break;
 
 
@@ -541,62 +537,62 @@ namespace RealGrass
                         case 50:
                         case 60:
                         case 158:
-                            details0[i * 2, j * 2] = RandomThin();
-                            details0[i * 2, (j * 2) + 1] = RandomThin();
-                            details0[(i * 2) + 1, (j * 2) + 1] = RandomThin();
+                            details0[y * 2, x * 2] = RandomThin();
+                            details0[y * 2, (x * 2) + 1] = RandomThin();
+                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
                             break;
 
                         // All expect upper left: grass and plants
                         case 90:
-                            details0[i * 2, j * 2] = RandomThin();
-                            details0[i * 2, (j * 2) + 1] = RandomThin();
-                            details0[(i * 2) + 1, (j * 2) + 1] = RandomThin();
-                            details1[i * 2, j * 2] = RandomWaterPlants();
-                            details1[(i * 2) + 1, (j * 2) + 1] = RandomWaterPlants();
+                            details0[y * 2, x * 2] = RandomThin();
+                            details0[y * 2, (x * 2) + 1] = RandomThin();
+                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
+                            details1[y * 2, x * 2] = RandomWaterPlants();
+                            details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
                             break;
 
                         // All expect lower left
                         case 51:
                         case 61:
                         case 159:
-                            details0[i * 2, (j * 2) + 1] = RandomThin();
-                            details0[(i * 2) + 1, j * 2] = RandomThin();
-                            details0[(i * 2) + 1, (j * 2) + 1] = RandomThin();
+                            details0[y * 2, (x * 2) + 1] = RandomThin();
+                            details0[(y * 2) + 1, x * 2] = RandomThin();
+                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
                             break;
 
                         // All expect lower left: grass and plants
                         case 91:
-                            details0[i * 2, (j * 2) + 1] = RandomThin();
-                            details0[(i * 2) + 1, j * 2] = RandomThin();
-                            details0[(i * 2) + 1, (j * 2) + 1] = RandomThin();
-                            details1[i * 2, (j * 2) + 1] = RandomWaterPlants();
-                            details1[(i * 2) + 1, j * 2] = RandomWaterPlants();
+                            details0[y * 2, (x * 2) + 1] = RandomThin();
+                            details0[(y * 2) + 1, x * 2] = RandomThin();
+                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
+                            details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
+                            details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
                             break;
 
                         // Left to right
                         case 204:
                         case 206:
                         case 214:
-                            details0[i * 2, j * 2] = RandomThin();
-                            details0[(i * 2) + 1, (j * 2) + 1] = RandomThin();
+                            details0[y * 2, x * 2] = RandomThin();
+                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
                             break;
 
                         // Right to left
                         case 205:
                         case 207:
                         case 213:
-                            details0[(i * 2) + 1, j * 2] = RandomThin();
-                            details0[i * 2, (j * 2) + 1] = RandomThin();
+                            details0[(y * 2) + 1, x * 2] = RandomThin();
+                            details0[y * 2, (x * 2) + 1] = RandomThin();
                             break;
 
                         // Swamp upper right corner
                         case 81:
-                            details1[(i * 2), (j * 2)] = RandomWaterPlants();
+                            details1[(y * 2), (x * 2)] = RandomWaterPlants();
                             break;
 
                         // Swamp lower left corner
                         case 83:
-                            details1[(i * 2) + 1, (j * 2) + 1] = RandomWaterPlants();
+                            details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
                             break;
 
                         // In-water grass
@@ -607,16 +603,16 @@ namespace RealGrass
                             // Mountain: grass
                             if (currentClimate == Climate.Mountain || currentClimate == Climate.Mountain2)
                             {
-                                details2[i * 2, j * 2] = Random.Range(1, 2);
-                                details2[(i * 2) + 1, (j * 2) + 1] = Random.Range(1, 2);
+                                details2[y * 2, x * 2] = Random.Range(1, 2);
+                                details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(1, 2);
                             }
                             // Temperate: waterlilies
                             else if (currentClimate == Climate.Temperate || currentClimate == Climate.Temperate2)
                             {
-                                details2[i * 2, j * 2] = 1;
-                                details2[(i * 2) + 1, (j * 2) + 1] = 1;
-                                details2[(i * 2) + 1, j * 2] = 1;
-                                details2[i * 2, (j * 2) + 1] = 1;
+                                details2[y * 2, x * 2] = 1;
+                                details2[(y * 2) + 1, (x * 2) + 1] = 1;
+                                details2[(y * 2) + 1, x * 2] = 1;
+                                details2[y * 2, (x * 2) + 1] = 1;
                             }
                             break;
 
@@ -627,8 +623,8 @@ namespace RealGrass
                         case 219:
                             if (TerrainStones)
                             {
-                                details3[i * 2, j * 2] = RandomStones();
-                                details3[(i * 2) + 1, (j * 2) + 1] = RandomStones();
+                                details3[y * 2, x * 2] = RandomStones();
+                                details3[(y * 2) + 1, (x * 2) + 1] = RandomStones();
                             }
                             break;
                     }
@@ -641,51 +637,48 @@ namespace RealGrass
         /// </summary>
         private void SetDensityWinter(Color32[] tilemap)
         {
-            // Check all the tiles, Daggerfall uses the red color value to draw tiles
-            for (int i = 0; i < 128; i++)
+            for (int y = 0; y < tilemapSize; y++)
             {
-                for (int j = 0; j < 128; j++)
+                for (int x = 0; x < tilemapSize; x++)
                 {
-                    colorValue = tilemap[(i * 128) + j].r; //For easier checking
-
-                    switch (colorValue)
+                    switch (tilemap[(y * tilemapSize) + x].r)
                     {
                         // Left side
                         case 84:
-                            details1[(i * 2) + 1, j * 2] = RandomWaterPlants();
-                            details1[i * 2, j * 2] = RandomWaterPlants();
+                            details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
+                            details1[y * 2, x * 2] = RandomWaterPlants();
                             break;
                         // Lower side
                         case 85:
-                            details1[i * 2, (j * 2) + 1] = RandomWaterPlants();
-                            details1[i * 2, (j * 2)] = RandomWaterPlants();
+                            details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
+                            details1[y * 2, (x * 2)] = RandomWaterPlants();
                             break;
                         // Right side
                         case 86:
-                            details1[(i * 2) + 1, (j * 2) + 1] = RandomWaterPlants();
-                            details1[i * 2, (j * 2) + 1] = RandomWaterPlants();
+                            details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
+                            details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
                             break;
                         // Upper side
                         case 87:
-                            details1[(i * 2) + 1, (j * 2) + 1] = RandomWaterPlants();
-                            details1[(i * 2) + 1, j * 2] = RandomWaterPlants();
+                            details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
+                            details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
                             break;
                         // Corners
                         case 88:
-                            details1[i * 2, j * 2] = RandomWaterPlants();
-                            details1[(i * 2) + 1, (j * 2) + 1] = RandomWaterPlants();
+                            details1[y * 2, x * 2] = RandomWaterPlants();
+                            details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
                             break;
                         case 89:
-                            details1[i * 2, (j * 2) + 1] = RandomWaterPlants();
-                            details1[(i * 2) + 1, j * 2] = RandomWaterPlants();
+                            details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
+                            details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
                             break;
                         case 90:
-                            details1[i * 2, j * 2] = RandomWaterPlants();
-                            details1[(i * 2) + 1, (j * 2) + 1] = RandomWaterPlants();
+                            details1[y * 2, x * 2] = RandomWaterPlants();
+                            details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
                             break;
                         case 91:
-                            details1[i * 2, (j * 2) + 1] = RandomWaterPlants();
-                            details1[(i * 2) + 1, j * 2] = RandomWaterPlants();
+                            details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
+                            details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
                             break;
                     }
                 }
@@ -698,51 +691,48 @@ namespace RealGrass
         /// </summary>
         private void SetDensityDesert(Color32[] tilemap)
         {
-            // Check all the tiles, Daggerfall uses the red color value to draw tiles
-            for (int i = 0; i < 128; i++)
+            for (int y = 0; y < tilemapSize; y++)
             {
-                for (int j = 0; j < 128; j++)
+                for (int x = 0; x < tilemapSize; y++)
                 {
-                    colorValue = tilemap[(i * 128) + j].r; //For easier checking
-
-                    switch (colorValue)
+                    switch (tilemap[(y * tilemapSize) + x].r)
                     {
                         // Left side
                         case 84:
-                            details1[(i * 2) + 1, j * 2] = RandomDesert();
-                            details1[i * 2, j * 2] = RandomDesert();
+                            details1[(y * 2) + 1, x * 2] = RandomDesert();
+                            details1[y * 2, x * 2] = RandomDesert();
                             break;
                         // Lower side
                         case 85:
-                            details1[i * 2, (j * 2) + 1] = RandomDesert();
-                            details1[i * 2, (j * 2)] = RandomDesert();
+                            details1[y * 2, (x * 2) + 1] = RandomDesert();
+                            details1[y * 2, (x * 2)] = RandomDesert();
                             break;
                         // Right side
                         case 86:
-                            details1[(i * 2) + 1, (j * 2) + 1] = RandomDesert();
-                            details1[i * 2, (j * 2) + 1] = RandomDesert();
+                            details1[(y * 2) + 1, (x * 2) + 1] = RandomDesert();
+                            details1[y * 2, (x * 2) + 1] = RandomDesert();
                             break;
                         // Upper side
                         case 87:
-                            details1[(i * 2) + 1, (j * 2) + 1] = RandomDesert();
-                            details1[(i * 2) + 1, j * 2] = RandomDesert();
+                            details1[(y * 2) + 1, (x * 2) + 1] = RandomDesert();
+                            details1[(y * 2) + 1, x * 2] = RandomDesert();
                             break;
                         // Corners
                         case 88:
-                            details1[i * 2, j * 2] = RandomDesert();
-                            details1[(i * 2) + 1, (j * 2) + 1] = RandomDesert();
+                            details1[y * 2, x * 2] = RandomDesert();
+                            details1[(y * 2) + 1, (x * 2) + 1] = RandomDesert();
                             break;
                         case 89:
-                            details1[i * 2, (j * 2) + 1] = RandomDesert();
-                            details1[(i * 2) + 1, j * 2] = RandomDesert();
+                            details1[y * 2, (x * 2) + 1] = RandomDesert();
+                            details1[(y * 2) + 1, x * 2] = RandomDesert();
                             break;
                         case 90:
-                            details1[i * 2, j * 2] = RandomDesert();
-                            details1[(i * 2) + 1, (j * 2) + 1] = RandomDesert();
+                            details1[y * 2, x * 2] = RandomDesert();
+                            details1[(y * 2) + 1, (x * 2) + 1] = RandomDesert();
                             break;
                         case 91:
-                            details1[i * 2, (j * 2) + 1] = RandomDesert();
-                            details1[(i * 2) + 1, j * 2] = RandomDesert();
+                            details1[y * 2, (x * 2) + 1] = RandomDesert();
+                            details1[(y * 2) + 1, x * 2] = RandomDesert();
                             break;
                     }
                 }
