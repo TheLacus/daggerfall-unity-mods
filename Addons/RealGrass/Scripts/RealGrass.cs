@@ -676,7 +676,7 @@ namespace RealGrass
         {
             for (int y = 0; y < tilemapSize; y++)
             {
-                for (int x = 0; x < tilemapSize; y++)
+                for (int x = 0; x < tilemapSize; x++)
                 {
                     switch (tilemap[(y * tilemapSize) + x].r)
                     {
