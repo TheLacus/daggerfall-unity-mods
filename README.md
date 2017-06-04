@@ -1,21 +1,20 @@
-# RealGrass-DU-mod
-Mod for Daggerfall Unity, originally created by Uncanny_Valley.
+# Real Grass
+Adds grass and, optionally, water plants, stones and flowers to the terrain of Daggerfall Unity.
 
-## Description
-Adds grass and, optionally, water plants to the terrain of Daggerfall Unity.
-It's available in two versions:
+## Features
++ Grass, water plants, rocks and flowers for different climates and seasons.
++ Higly and easily customizable (density, size, position)
++ Support pre-made presets of settings
++ It's possible to import alternatives textures directly from disk.
++ Supports two shaders: _GrassBilboard_ for classic style and _Grass_ for a more realistic vegetation
++ Advanced and performance-important settings like distant rendering and wind settings can be changed by the user
 
-+ RealGrass
-This is the original mod made by Uncanny_Valley and improved by midopa.
+## Credits and history
+Real Grass was originally created by Uncanny_Valley in 2015, as an automatic [vanilla-friendly grass](2015) placer for Daggerfall Unity. It supported two kinds of grass for different climates
 
-+ GrassAndPlants
-A revision by TheLacus which also adds water grass and plants, according to differents climates, 
-and little stones on farms ground.
+In 2016, and more in 2017, TheLacus expanded it, adding [water plants](https://i.imgur.com/xoAoh61.png) and rocks for different climates, and moving it as an indipendent mod allowing settings and customization from users.
 
-## Credits
-+ Main developer: Uncanny_Valley
-+ Additional changes: midopa
-+ GrassAndPlants and maintenance: TheLacus
+At the same time, while it was still hosted alongside the Daggerfall Unity project, it received contributions from Midopa.
 
 ## Info
 + Version: 1.08
