@@ -10,7 +10,6 @@ using UnityEngine;
 using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
 using DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings;
-using DaggerfallWorkshop.Utility.AssetInjection;
 
 namespace RealGrass
 {
@@ -55,12 +54,30 @@ namespace RealGrass
         private static string resourcesFolder;
 
         /// <summary>
+        /// This mod.
+        /// </summary>
+        public static Mod Mod
+        {
+            get { return mod; }
+            internal set { mod = value; }
+        }
+
+        /// <summary>
         /// Real Grass settings
         /// </summary>
         public static ModSettings Settings
         {
             get { return settings; }
             internal set { settings = value; }
+        }
+
+        /// <summary>
+        /// Resources folder on disk.
+        /// </summary>
+        public static string ResourcesFolder
+        {
+            get { return resourcesFolder; }
+            internal set { resourcesFolder = value; }
         }
 
         #endregion
@@ -88,48 +105,6 @@ namespace RealGrass
 
             // After finishing, set the mod's IsReady flag to true.
             mod.IsReady = true;
-        }
-
-        /// <summary>
-        /// Get texture from disk or from mod.
-        /// </summary>
-        /// <param name="name">Name of texture.</param>
-        public static Texture2D LoadTexture(string name)
-        {
-            Texture2D tex;
-
-            if (!TextureReplacement.ImportTextureFromDisk(resourcesFolder, name, out tex))
-                tex = mod.GetAsset<Texture2D>(name);
-
-            if (tex != null)
-                return tex;
-
-            Debug.LogError("Real Grass: Failed to load texture " + name);
-            return null;
-        }
-
-        /// <summary>
-        /// Get gameobject from mod and customize
-        /// texture from disk asset (if present).
-        /// </summary>
-        /// <param name="name">Name of gameobject.</param>
-        public static GameObject LoadGameObject(string name)
-        {
-            var go = mod.GetAsset<GameObject>(name);
-
-            if (go != null)
-            {
-                Texture2D tex;
-                Material material = go.GetComponent<MeshRenderer>().material;
-
-                if (TextureReplacement.ImportTextureFromDisk(resourcesFolder, material.mainTexture.name, out tex))
-                    material.mainTexture = tex;
-
-                return go;
-            }
-
-            Debug.LogError("Real Grass: Failed to load model " + name);
-            return null;
         }
         
         #endregion
