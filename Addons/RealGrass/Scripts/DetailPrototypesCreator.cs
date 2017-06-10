@@ -61,8 +61,10 @@ namespace RealGrass
         /// Initialize detail protoypes.
         /// </summary>
         /// <param name="settings">Mod settings.</param>
-        public DetailPrototypesCreator(ModSettings settings)
+        public DetailPrototypesCreator(ModSettings settings, bool waterPlants)
         {
+            this.waterPlants = waterPlants;
+
             Color detailColor = new Color(0.70f, 0.70f, 0.70f);
 
             // Grass
@@ -76,7 +78,6 @@ namespace RealGrass
 
             // Water plants
             const string waterPlantsSection = "WaterPlants";
-            waterPlants = settings.GetBool(waterPlantsSection, "WaterPlants");
             float noiseSpreadPlants = settings.GetFloat(waterPlantsSection, "NoiseSpread");
 
             // Stones

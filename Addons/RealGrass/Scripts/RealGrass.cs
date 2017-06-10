@@ -41,40 +41,22 @@ namespace RealGrass
     {
         #region Fields
 
-        // Size of tile map
-        const int tilemapSize = 128;
-
-        // Details layers
-        private int[,] details0, details1, details2, details3, details4;
-
         DetailPrototypesCreator detailPrototypesCreator;
+        DetailPrototypesDensity detailPrototypesDensity;
 
         #endregion
 
         #region Settings
 
-        // Grass
-        static int thickLower;
-        static int thickHigher;
-        static int thinLower;
-        static int thinHigher;
-
         // Water plants
         static bool waterPlants;
         static bool WinterPlants; // Enable plants during winter
-        static int waterPlantsLower;
-        static int waterPlantsHigher;
-        static int desertLower;
-        static int desertHigher;
 
         // Stones
         static bool TerrainStones; // Enable stones on terrain
-        static int stonesLower;
-        static int stonesHigher;
 
         // Flowers
         static bool flowers; // Enable flowers
-        static int flowersDensity; // Density of flowers
 
         // Terrain
         static float detailObjectDistance;
@@ -116,13 +98,6 @@ namespace RealGrass
             var currentSeason = DaggerfallUnity.Instance.WorldTime.Now.SeasonValue;
             int currentClimate = daggerTerrain.MapData.worldClimate;
 
-            // Create details layers
-            details0 = new int[256, 256];
-            details1 = new int[256, 256];
-            details2 = new int[256, 256];
-            details3 = new int[256, 256];
-            details4 = new int[256, 256];
-
             // Update detail layers
             if (currentClimate > 225 && currentClimate != Climate.Desert3)
             {
@@ -130,13 +105,13 @@ namespace RealGrass
                 {
                     // Summer
                     detailPrototypesCreator.UpdateClimateSummer(currentClimate);
-                    SetDensitySummer(tilemap, currentClimate);
+                    detailPrototypesDensity.SetDensitySummer(tilemap, currentClimate);
                 }
                 else if (waterPlants && WinterPlants)
                 {
                     // Winter
                     detailPrototypesCreator.UpdateClimateWinter(currentClimate);
-                    SetDensityWinter(tilemap);
+                    detailPrototypesDensity.SetDensityWinter(tilemap);
                 }
             }
             else if (waterPlants && 
@@ -144,508 +119,27 @@ namespace RealGrass
             {
                 // Desert
                 detailPrototypesCreator.UpdateClimateDesert();
-                SetDensityDesert(tilemap);
+                detailPrototypesDensity.SetDensityDesert(tilemap);
             }
 
             // Assign detail prototypes to the terrain
             terrainData.detailPrototypes = detailPrototypesCreator.detailPrototype;
 
             // Assign detail layers to the terrain
-            terrainData.SetDetailLayer(0, 0, 0, details0); // Grass
+            terrainData.SetDetailLayer(0, 0, 0, detailPrototypesDensity.Grass); // Grass
             if (waterPlants)
             {
-                terrainData.SetDetailLayer(0, 0, 1, details1); // Water plants near water
-                terrainData.SetDetailLayer(0, 0, 2, details2); // Waterlilies and grass inside water
+                terrainData.SetDetailLayer(0, 0, 1, detailPrototypesDensity.WaterPlants); // Water plants near water
+                terrainData.SetDetailLayer(0, 0, 2, detailPrototypesDensity.Waterlilies); // Waterlilies and grass inside water
             }
             if (TerrainStones)
-                terrainData.SetDetailLayer(0, 0, 3, details3); // Stones
+                terrainData.SetDetailLayer(0, 0, 3, detailPrototypesDensity.Stones); // Stones
             if (flowers)
-                terrainData.SetDetailLayer(0, 0, 4, details4); // Flowers
+                terrainData.SetDetailLayer(0, 0, 4, detailPrototypesDensity.Flowers); // Flowers
 
             // stopwatch.Stop();
             // Write result
             // Debug.Log("RealGrass - Time elapsed: " + stopwatch.Elapsed);
-        }
-
-        #endregion
-
-        #region Set Density
-
-        /// <summary>
-        /// Set density for Summer.
-        /// </summary>
-        private void SetDensitySummer (Color32[] tilemap, int currentClimate)
-        {
-            for (int y = 0; y < tilemapSize; y++)
-            {
-                for (int x = 0; x < tilemapSize; x++)
-                {
-                    switch (tilemap[(y * tilemapSize) + x].r)
-                    {
-                        // Four corner tiles
-                        case 8:
-                        case 9:
-                        case 10:
-                        case 11:
-                            details0[y * 2, x * 2] = RandomThick();
-                            details0[y * 2, (x * 2) + 1] = RandomThick();
-                            details0[(y * 2) + 1, x * 2] = RandomThick();
-                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThick();
-                            if (flowers)
-                            {
-                                var index = RandomPosition(y, x);
-                                details4[index.First, index.Second] = RandomFlowers();
-                            }
-                            break;
-
-                        // Upper left corner 
-                        case 40:
-                        case 224:
-                        case 164:
-                        case 176:
-                        case 181:
-                            details0[(y * 2) + 1, x * 2] = RandomThin();
-                            break;
-
-                        // Lower left corner 
-                        case 41:
-                        case 221:
-                        case 165:
-                        case 177:
-                        case 182:
-                            details0[y * 2, x * 2] = RandomThin();
-                            break;
-
-                        // Lower right corner 
-                        case 42:
-                        case 222:
-                        case 166:
-                        case 178:
-                        case 183:
-                            details0[y * 2, (x * 2) + 1] = RandomThin();
-                            break;
-
-                        // Upper right corner 
-                        case 43:
-                        case 223:
-                        case 167:
-                        case 179:
-                        case 180:
-                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
-                            break;
-
-                        // Left side
-                        case 44:
-                        case 66:
-                        case 160:
-                        case 168:
-                            details0[(y * 2) + 1, x * 2] = RandomThin();
-                            details0[y * 2, x * 2] = RandomThin();
-                            break;
-
-                        // Left side: grass and plants
-                        case 84:
-                            details0[(y * 2) + 1, x * 2] = RandomThin();
-                            details0[y * 2, x * 2] = RandomThin();
-                            if (waterPlants)
-                            {
-                                details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
-                                details1[y * 2, x * 2] = RandomWaterPlants();
-                            }
-                            break;
-
-                        // Lower side
-                        case 45:
-                        case 67:
-                        case 161:
-                        case 169:
-                            details0[y * 2, (x * 2) + 1] = RandomThin();
-                            details0[y * 2, x * 2] = RandomThin();
-                            break;
-
-                        // Lower side: grass and plants
-                        case 85:
-                            details0[y * 2, (x * 2) + 1] = RandomThin();
-                            details0[y * 2, x * 2] = RandomThin();
-                            if (waterPlants)
-                            {
-                                details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
-                                details1[y * 2, (x * 2)] = RandomWaterPlants();
-                            }
-                            break;
-
-                        // Right side
-                        case 46:
-                        case 64:
-                        case 162:
-                        case 170:
-                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
-                            details0[y * 2, (x * 2) + 1] = RandomThin();
-                            break;
-
-                        // Right side: grass and plants
-                        case 86:
-                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
-                            details0[y * 2, (x * 2) + 1] = RandomThin();
-                            if (waterPlants)
-                            {
-                                details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
-                                details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
-                            }
-                            break;
-
-                        // Upper side
-                        case 47:
-                        case 65:
-                        case 163:
-                        case 171:
-                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
-                            details0[(y * 2) + 1, x * 2] = RandomThin();
-                            break;
-
-                        // Upper side: grass and plants
-                        case 87:
-                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
-                            details0[(y * 2) + 1, x * 2] = RandomThin();
-                            if (waterPlants)
-                            {
-                                details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
-                                details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
-                            }
-                            break;
-
-                        // All expect lower right
-                        case 48:
-                        case 62:
-                        case 156:
-                            details0[y * 2, x * 2] = RandomThin();
-                            details0[(y * 2) + 1, x * 2] = RandomThin();
-                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
-                            break;
-
-                        // All expect lower right: grass and plants
-                        case 88:
-                            details0[y * 2, x * 2] = RandomThin();
-                            details0[(y * 2) + 1, x * 2] = RandomThin();
-                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
-                            if (waterPlants)
-                            {
-                                details1[y * 2, x * 2] = RandomWaterPlants();
-                                details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
-                            }
-                            break;
-
-                        // All expect upper right
-                        case 49:
-                        case 63:
-                        case 157:
-                            details0[y * 2, x * 2] = RandomThin();
-                            details0[y * 2, (x * 2) + 1] = RandomThin();
-                            details0[(y * 2) + 1, x * 2] = RandomThin();
-                            break;
-
-                        // All expect upper right: grass and plants
-                        case 89:
-                            details0[y * 2, x * 2] = RandomThin();
-                            details0[y * 2, (x * 2) + 1] = RandomThin();
-                            details0[(y * 2) + 1, x * 2] = RandomThin();
-                            if (waterPlants)
-                            {
-                                details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
-                                details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
-                            }
-                            break;
-
-
-                        // All expect upper left
-                        case 50:
-                        case 60:
-                        case 158:
-                            details0[y * 2, x * 2] = RandomThin();
-                            details0[y * 2, (x * 2) + 1] = RandomThin();
-                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
-                            break;
-
-                        // All expect upper left: grass and plants
-                        case 90:
-                            details0[y * 2, x * 2] = RandomThin();
-                            details0[y * 2, (x * 2) + 1] = RandomThin();
-                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
-                            if (waterPlants)
-                            {
-                                details1[y * 2, x * 2] = RandomWaterPlants();
-                                details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
-                            }
-                            break;
-
-                        // All expect lower left
-                        case 51:
-                        case 61:
-                        case 159:
-                            details0[y * 2, (x * 2) + 1] = RandomThin();
-                            details0[(y * 2) + 1, x * 2] = RandomThin();
-                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
-                            break;
-
-                        // All expect lower left: grass and plants
-                        case 91:
-                            details0[y * 2, (x * 2) + 1] = RandomThin();
-                            details0[(y * 2) + 1, x * 2] = RandomThin();
-                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
-                            if (waterPlants)
-                            {
-                                details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
-                                details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
-                            }
-                            break;
-
-                        // Left to right
-                        case 204:
-                        case 206:
-                        case 214:
-                            details0[y * 2, x * 2] = RandomThin();
-                            details0[(y * 2) + 1, (x * 2) + 1] = RandomThin();
-                            break;
-
-                        // Right to left
-                        case 205:
-                        case 207:
-                        case 213:
-                            details0[(y * 2) + 1, x * 2] = RandomThin();
-                            details0[y * 2, (x * 2) + 1] = RandomThin();
-                            break;
-
-                        // Swamp upper right corner
-                        case 81:
-                            if (waterPlants)
-                                details1[(y * 2), (x * 2)] = RandomWaterPlants();
-                            break;
-
-                        // Swamp lower left corner
-                        case 83:
-                            if (waterPlants)
-                                details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
-                            break;
-
-                        // In-water grass
-                        // case 0 is not enabled because is used for the sea
-                        case 1:
-                        case 2:
-                        case 3:
-                            if (waterPlants)
-                            {
-                                // Mountain: grass
-                                if (currentClimate == Climate.Mountain || currentClimate == Climate.Mountain2)
-                                {
-                                    details2[y * 2, x * 2] = Random.Range(1, 2);
-                                    details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(1, 2);
-                                }
-                                // Temperate: waterlilies
-                                else if (currentClimate == Climate.Temperate || currentClimate == Climate.Temperate2)
-                                {
-                                    details2[y * 2, x * 2] = 1;
-                                    details2[(y * 2) + 1, (x * 2) + 1] = 1;
-                                    details2[(y * 2) + 1, x * 2] = 1;
-                                    details2[y * 2, (x * 2) + 1] = 1;
-                                }
-                            }
-                            break;
-
-                        // Little stones
-                        case 216:
-                        case 217:
-                        case 218:
-                        case 219:
-                            if (TerrainStones)
-                            {
-                                details3[y * 2, x * 2] = RandomStones();
-                                details3[(y * 2) + 1, (x * 2) + 1] = RandomStones();
-                            }
-                            break;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Set density for Winter.
-        /// </summary>
-        private void SetDensityWinter(Color32[] tilemap)
-        {
-            for (int y = 0; y < tilemapSize; y++)
-            {
-                for (int x = 0; x < tilemapSize; x++)
-                {
-                    switch (tilemap[(y * tilemapSize) + x].r)
-                    {
-                        // Left side
-                        case 84:
-                            details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
-                            details1[y * 2, x * 2] = RandomWaterPlants();
-                            break;
-                        // Lower side
-                        case 85:
-                            details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
-                            details1[y * 2, (x * 2)] = RandomWaterPlants();
-                            break;
-                        // Right side
-                        case 86:
-                            details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
-                            details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
-                            break;
-                        // Upper side
-                        case 87:
-                            details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
-                            details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
-                            break;
-                        // Corners
-                        case 88:
-                            details1[y * 2, x * 2] = RandomWaterPlants();
-                            details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
-                            break;
-                        case 89:
-                            details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
-                            details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
-                            break;
-                        case 90:
-                            details1[y * 2, x * 2] = RandomWaterPlants();
-                            details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
-                            break;
-                        case 91:
-                            details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
-                            details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
-                            break;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Set density for Desert locations.
-        /// Desert has grass around water but not on mainland, also desert regions don't have winter season.
-        /// </summary>
-        private void SetDensityDesert(Color32[] tilemap)
-        {
-            for (int y = 0; y < tilemapSize; y++)
-            {
-                for (int x = 0; x < tilemapSize; x++)
-                {
-                    switch (tilemap[(y * tilemapSize) + x].r)
-                    {
-                        // Left side
-                        case 84:
-                            details1[(y * 2) + 1, x * 2] = RandomDesert();
-                            details1[y * 2, x * 2] = RandomDesert();
-                            break;
-                        // Lower side
-                        case 85:
-                            details1[y * 2, (x * 2) + 1] = RandomDesert();
-                            details1[y * 2, (x * 2)] = RandomDesert();
-                            break;
-                        // Right side
-                        case 86:
-                            details1[(y * 2) + 1, (x * 2) + 1] = RandomDesert();
-                            details1[y * 2, (x * 2) + 1] = RandomDesert();
-                            break;
-                        // Upper side
-                        case 87:
-                            details1[(y * 2) + 1, (x * 2) + 1] = RandomDesert();
-                            details1[(y * 2) + 1, x * 2] = RandomDesert();
-                            break;
-                        // Corners
-                        case 88:
-                            details1[y * 2, x * 2] = RandomDesert();
-                            details1[(y * 2) + 1, (x * 2) + 1] = RandomDesert();
-                            break;
-                        case 89:
-                            details1[y * 2, (x * 2) + 1] = RandomDesert();
-                            details1[(y * 2) + 1, x * 2] = RandomDesert();
-                            break;
-                        case 90:
-                            details1[y * 2, x * 2] = RandomDesert();
-                            details1[(y * 2) + 1, (x * 2) + 1] = RandomDesert();
-                            break;
-                        case 91:
-                            details1[y * 2, (x * 2) + 1] = RandomDesert();
-                            details1[(y * 2) + 1, x * 2] = RandomDesert();
-                            break;
-                    }
-                }
-            }
-        }
-
-        #endregion
-
-        #region Random Generators
-
-        /// <summary>
-        /// Generate random values for the placement of thin grass. 
-        /// </summary>
-        private static int RandomThin()
-        {
-            return Random.Range(thinLower, thinHigher);
-        }
-
-        /// <summary>
-        /// Generate random values for the placement of thick grass.
-        /// </summary>
-        private static int RandomThick()
-        {
-            return Random.Range(thickLower, thickHigher);
-        }
-
-        /// <summary>
-        /// Generate random values for the placement of water plants.
-        /// </summary>
-        private static int RandomWaterPlants()
-        {
-            return Random.Range(waterPlantsLower, waterPlantsHigher);
-        }
-
-        /// <summary>
-        /// Generate random values for the placement of desert grass.
-        /// </summary>
-        private static int RandomDesert()
-        {
-            return Random.Range(desertLower, desertHigher);
-        }
-
-        /// <summary>
-        /// Generate random values for the placement of stones. 
-        /// </summary>
-        private static int RandomStones()
-        {
-            return Random.Range(stonesLower, stonesHigher);
-        }
-
-        /// <summary>
-        /// Generate random values for the placement of flowers. 
-        /// </summary>
-        private static int RandomFlowers()
-        {
-            return Random.Range(0, 100) < flowersDensity ? 1 : 0;
-        }
-
-        /// <summary>
-        /// Get a random position on tile.
-        /// </summary>
-        /// <param name="y">First index.</param>
-        /// <param name="x">Second index.</param>
-        /// <returns>One of the four possible position on tile.</returns>
-        private static Tuple<int, int> RandomPosition(int y, int x)
-        {
-            switch (Random.Range(0, 4))
-            {
-                case 0:
-                    return new Tuple<int, int>(y * 2, x * 2);
-                case 1:
-                    return new Tuple<int, int>(y * 2, (x * 2) + 1);
-                case 2:
-                    return new Tuple<int, int>((y * 2) + 1, x * 2);
-                case 3:
-                default:
-                    return new Tuple<int, int>((y * 2) + 1, (x * 2) + 1);
-            }
         }
 
         #endregion
@@ -657,31 +151,18 @@ namespace RealGrass
         /// </summary>
         private void LoadSettings()
         {
-            const string grass = "Grass", waterPlantsSection = "WaterPlants", stones = "TerrainStones";
+            const string waterPlantsSection = "WaterPlants", stonesSection = "TerrainStones";
 
             ModSettings settings = RealGrassLoader.Settings;
-            detailPrototypesCreator = new DetailPrototypesCreator(settings);
-
-            // Grass
-            thickLower = settings.GetInt(grass, "thickLower");
-            thickHigher = settings.GetInt(grass, "thickHigher");
-            thinLower = settings.GetInt(grass, "thinLower");
-            thinHigher = settings.GetInt(grass, "thinHigher");
-
-            // Water plants
-            waterPlants = settings.GetBool("WaterPlants", "WaterPlants");
-            waterPlantsLower = settings.GetInt(waterPlantsSection, "waterPlantsLower");
-            waterPlantsHigher = settings.GetInt(waterPlantsSection, "waterPlantsHigher");
-            desertLower = settings.GetInt(waterPlantsSection, "desertLower");
-            desertHigher = settings.GetInt(waterPlantsSection, "desertHigher");
+            
+            // Optional details
             WinterPlants = settings.GetBool(waterPlantsSection, "WinterPlants");
+            TerrainStones = settings.GetBool(stonesSection, "TerrainStones");
+            flowers = settings.GetInt(stonesSection, "flowersDensity", 0, 100) != 0;
 
-            // Stones
-            TerrainStones = settings.GetBool(stones, "TerrainStones");
-            stonesLower = settings.GetInt(stones, "stonesLower");
-            stonesHigher = settings.GetInt(stones, "stonesHigher");
-            flowersDensity = settings.GetInt(stones, "flowersDensity", 0, 100);
-            flowers = flowersDensity != 0;
+            // Detail prototypes
+            detailPrototypesCreator = new DetailPrototypesCreator(settings, waterPlants);
+            detailPrototypesDensity = new DetailPrototypesDensity(settings, waterPlants, TerrainStones, flowers);
 
             // Terrain
             const string terrainSection = "Terrain", windSection = "Wind";
@@ -689,7 +170,7 @@ namespace RealGrass
             detailObjectDensity = settings.GetFloat(terrainSection, "DetailDensity", 0.1f, 1f);
             wavingGrassAmount = settings.GetFloat(windSection, "WavingAmount", 0f, 1f);
             wavingGrassSpeed = settings.GetFloat(windSection, "WavingSpeed", 0f, 1f);
-            wavingGrassStrength = settings.GetFloat(windSection, "WavingStrength", 0f, 1f); 
+            wavingGrassStrength = settings.GetFloat(windSection, "WavingStrength", 0f, 1f);
         }
 
         /// <summary>
