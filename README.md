@@ -1,7 +1,7 @@
 # Real Grass
 Adds grass and, optionally, water plants, stones and flowers to the terrain of Daggerfall Unity.
 
-![Real Grass](http://i.imgur.com/Z49ZGWC.png)
+![Real Grass](https://i.imgur.com/bBpb8SU.png)
 
 ## Features
 + Grass, water plants, rocks and flowers for different climates and seasons.
