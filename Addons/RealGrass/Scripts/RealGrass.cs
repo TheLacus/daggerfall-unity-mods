@@ -6,6 +6,8 @@
 // Contributors:    TheLacus (Water plants, mod version and improvements) 
 //                  Midopa
 
+// #define TEST_PERFORMANCE
+
 using UnityEngine;
 using DaggerfallWorkshop;
 using DaggerfallWorkshop.Utility;
@@ -44,21 +46,13 @@ namespace RealGrass
         DetailPrototypesCreator detailPrototypesCreator;
         DetailPrototypesDensity detailPrototypesDensity;
 
-        #endregion
-
-        #region Settings
-
-        // Water plants
-        static bool waterPlants;
-        static bool WinterPlants; // Enable plants during winter
-
-        // Stones
-        static bool TerrainStones; // Enable stones on terrain
-
-        // Flowers
+        // Optional details
+        static bool waterPlants; // Enable plants
+        static bool winterPlants; // Enable plants during winter
+        static bool terrainStones; // Enable stones on terrain
         static bool flowers; // Enable flowers
 
-        // Terrain
+        // Terrain settings
         static float detailObjectDistance;
         static float detailObjectDensity;
         static float wavingGrassAmount;
@@ -67,7 +61,7 @@ namespace RealGrass
 
         #endregion
 
-        #region Init Mod
+        #region Unity
 
         /// <summary>
         /// Awake mod and set up vegetation settings
@@ -81,14 +75,23 @@ namespace RealGrass
             DaggerfallTerrain.OnPromoteTerrainData += AddGrass;
         }
 
+        #endregion
+
+        #region Add Grass
+
         /// <summary>
         /// Add Grass and other details on terrain.
         /// </summary>
         private void AddGrass(DaggerfallTerrain daggerTerrain, TerrainData terrainData)
         {
+
+#if TEST_PERFORMANCE
+
             // Used to check performance
-            // var stopwatch = new System.Diagnostics.Stopwatch();
-            // stopwatch.Start();
+            var stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
+
+#endif
 
             // Terrain settings 
             InitTerrain(daggerTerrain, terrainData);
@@ -99,6 +102,7 @@ namespace RealGrass
             int currentClimate = daggerTerrain.MapData.worldClimate;
 
             // Update detail layers
+            detailPrototypesDensity.InitDetailsLayers();
             if (currentClimate > 225 && currentClimate != Climate.Desert3)
             {
                 if (currentSeason != DaggerfallDateTime.Seasons.Winter)
@@ -107,7 +111,7 @@ namespace RealGrass
                     detailPrototypesCreator.UpdateClimateSummer(currentClimate);
                     detailPrototypesDensity.SetDensitySummer(tilemap, currentClimate);
                 }
-                else if (waterPlants && WinterPlants)
+                else if (waterPlants && winterPlants)
                 {
                     // Winter
                     detailPrototypesCreator.UpdateClimateWinter(currentClimate);
@@ -132,14 +136,19 @@ namespace RealGrass
                 terrainData.SetDetailLayer(0, 0, 1, detailPrototypesDensity.WaterPlants); // Water plants near water
                 terrainData.SetDetailLayer(0, 0, 2, detailPrototypesDensity.Waterlilies); // Waterlilies and grass inside water
             }
-            if (TerrainStones)
+            if (terrainStones)
                 terrainData.SetDetailLayer(0, 0, 3, detailPrototypesDensity.Stones); // Stones
             if (flowers)
                 terrainData.SetDetailLayer(0, 0, 4, detailPrototypesDensity.Flowers); // Flowers
 
-            // stopwatch.Stop();
+#if TEST_PERFORMANCE
+
+            stopwatch.Stop();
             // Write result
-            // Debug.Log("RealGrass - Time elapsed: " + stopwatch.Elapsed);
+            Debug.Log("RealGrass - Time elapsed: " + stopwatch.Elapsed);
+
+#endif
+
         }
 
         #endregion
@@ -154,15 +163,16 @@ namespace RealGrass
             const string waterPlantsSection = "WaterPlants", stonesSection = "TerrainStones";
 
             ModSettings settings = RealGrassLoader.Settings;
-            
+
             // Optional details
-            WinterPlants = settings.GetBool(waterPlantsSection, "WinterPlants");
-            TerrainStones = settings.GetBool(stonesSection, "TerrainStones");
+            waterPlants = settings.GetBool(waterPlantsSection, "WaterPlants");
+            winterPlants = settings.GetBool(waterPlantsSection, "WinterPlants");
+            terrainStones = settings.GetBool(stonesSection, "TerrainStones");
             flowers = settings.GetInt(stonesSection, "flowersDensity", 0, 100) != 0;
 
             // Detail prototypes
             detailPrototypesCreator = new DetailPrototypesCreator(settings, waterPlants);
-            detailPrototypesDensity = new DetailPrototypesDensity(settings, waterPlants, TerrainStones, flowers);
+            detailPrototypesDensity = new DetailPrototypesDensity(settings, waterPlants, terrainStones, flowers);
 
             // Terrain
             const string terrainSection = "Terrain", windSection = "Wind";

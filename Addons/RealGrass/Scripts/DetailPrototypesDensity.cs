@@ -65,13 +65,20 @@ namespace RealGrass
             LoadSettings(settings);
         }
 
+        public void InitDetailsLayers()
+        {
+            details0 = new int[256, 256];
+            details1 = new int[256, 256];
+            details2 = new int[256, 256];
+            details3 = new int[256, 256];
+            details4 = new int[256, 256];
+        }
+
         /// <summary>
         /// Set density for Summer.
         /// </summary>
         public void SetDensitySummer(Color32[] tilemap, int currentClimate)
         {
-            InitDetailsLayers();
-
             for (int y = 0; y < tilemapSize; y++)
             {
                 for (int x = 0; x < tilemapSize; x++)
@@ -368,8 +375,6 @@ namespace RealGrass
         /// </summary>
         public void SetDensityWinter(Color32[] tilemap)
         {
-            InitDetailsLayers();
-
             for (int y = 0; y < tilemapSize; y++)
             {
                 for (int x = 0; x < tilemapSize; x++)
@@ -424,8 +429,6 @@ namespace RealGrass
         /// </summary>
         public void SetDensityDesert(Color32[] tilemap)
         {
-            InitDetailsLayers();
-
             for (int y = 0; y < tilemapSize; y++)
             {
                 for (int x = 0; x < tilemapSize; x++)
@@ -572,15 +575,6 @@ namespace RealGrass
             stonesLower = settings.GetInt(stonesSection, "stonesLower");
             stonesHigher = settings.GetInt(stonesSection, "stonesHigher");
             flowersDensity = settings.GetInt(stonesSection, "flowersDensity", 0, 100);
-        }
-
-        private void InitDetailsLayers()
-        {
-            details0 = new int[256, 256];
-            details1 = new int[256, 256];
-            details2 = new int[256, 256];
-            details3 = new int[256, 256];
-            details4 = new int[256, 256];
         }
 
         #endregion
