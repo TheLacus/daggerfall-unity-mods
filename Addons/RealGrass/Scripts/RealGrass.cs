@@ -168,7 +168,7 @@ namespace RealGrass
             waterPlants = settings.GetBool(waterPlantsSection, "WaterPlants");
             winterPlants = settings.GetBool(waterPlantsSection, "WinterPlants");
             terrainStones = settings.GetBool(stonesSection, "TerrainStones");
-            flowers = settings.GetInt(stonesSection, "flowersDensity", 0, 100) != 0;
+            flowers = settings.GetInt(stonesSection, "FlowersDensity", 0, 100) != 0;
 
             // Detail prototypes
             detailPrototypesCreator = new DetailPrototypesCreator(settings, waterPlants);

@@ -1,56 +1,42 @@
-;Mod: RealGrass / Grass&Plants
+﻿;Mod: RealGrass
 [Internal]
 SettingsVersion = 1.2
 
-;Minimum height
-;Maximum height
-;Minimum width
-;Maximum width
+;Grass height (min-max)
+;Grass width (min-max)
 ;The higher this is, the more varied the grass will look
-;Minimum number of grass billboards per terrain tile
-;Maximum number of grass billboards per terrain tile
-;Minimum number of grass billboards per terrain tile
-;Maximum number of grass billboards per terrain tile
+;Number of grass billboards per terrain tile (min-max)
+;Number of grass billboards per terrain tile (min-max)
 ;Use Grass instead of GrassBillboard
 [Grass]
-MinGrassHeight = 0.65
-MaxGrassHeight = 0.65
-MinGrassWidth = 1.0
-MaxGrassWidth = 1.0
+GrassHeight = 0.65<,>0.65
+GrassWidth = 1.0<,>1.0
 NoiseSpread = 0.4
-thickLower = 8
-thickHigher = 24
-thinLower = 4
-thinHigher = 12
+ThickDensity = 8<,>24
+ThinDensity = 4<,>12
 UseGrassShader = False
 
 ;Add water plants near river and lakes in addition to grass
 ;Show winter version of plants during winter season
 ;The higher this is, the more varied the water plants will look
-;Minimum number of water plants per terrain tile
-;Maximum number of water plants per terrain tile
-;Minimum number of water plants per terrain tile
-;Maximum number of water plants per terrain tile
+;Number of water plants per terrain tile (min-max)
+;Number of water plants per terrain tile (min-max)
 [WaterPlants]
 WaterPlants = False
 WinterPlants = False
 NoiseSpread = 0.4
-waterPlantsLower = 8
-waterPlantsHigher = 12
-desertLower = 10
-desertHigher = 15
+WaterPlantsDensity = 0<,>5
+DesertDensity = 3<,>6
 
-;Add little stones on farms ground (requires water plants)
+;Add little stones on farms ground
 ;The higher this is, the more varied the stones will look
-;Minimum number of stones per terrain tile
-;Maximum number of stones per terrain tile
+;Number of stones per terrain tile (min-max)
 ;Flowers (0: no flowers - 100: max density)
 [TerrainStones]
 TerrainStones = False
 NoiseSpread = 0.4
-stonesLower = 4
-stonesHigher = 12
-flowersDensity = 10
+StonesDensity = 4<,>12
+FlowersDensity = 0
 
 ;Grass will be displayed up to this distance
 ;Max density of grass (0.0-1.0)

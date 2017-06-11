@@ -5,13 +5,9 @@ Description = Low-profile grass.
 SettingsVersion = 1.2
 
 [Grass]
-MinGrassHeight = 0.65
-MaxGrassHeight = 0.65
-MinGrassWidth = 1.0
-MaxGrassWidth = 1.0
+GrassHeight = 0.65<,>0.65
+GrassWidth = 1.0<,>1.0
 NoiseSpread = 0.4
-thickLower = 8
-thickHigher = 24
-thinLower = 4
-thinHigher = 12
+ThickDensity = 8<,>24
+ThinDensity = 4<,>12
 UseGrassShader = False

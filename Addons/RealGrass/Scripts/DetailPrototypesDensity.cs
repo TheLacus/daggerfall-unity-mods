@@ -22,22 +22,17 @@ namespace RealGrass
         const int tilemapSize = 128;
 
         // Grass
-        int thickLower;
-        int thickHigher;
-        int thinLower;
-        int thinHigher;
+        Tuple<int, int> thickDensity;
+        Tuple<int, int> thinDensity;
 
         // Water plants
         bool waterPlants;
-        int waterPlantsLower;
-        int waterPlantsHigher;
-        int desertLower;
-        int desertHigher;
+        Tuple<int, int> waterPlantsDensity;
+        Tuple<int, int> desertDensity;
 
         // Stones
         bool terrainStones; // Enable stones on terrain
-        int stonesLower;
-        int stonesHigher;
+        Tuple<int, int> stonesDensity;
 
         // Flowers
         bool flowers; // Enable flowers
@@ -486,7 +481,7 @@ namespace RealGrass
         /// </summary>
         private int RandomThin()
         {
-            return Random.Range(thinLower, thinHigher);
+            return Random.Range(thinDensity.First, thinDensity.Second);
         }
 
         /// <summary>
@@ -494,7 +489,7 @@ namespace RealGrass
         /// </summary>
         private int RandomThick()
         {
-            return Random.Range(thickLower, thickHigher);
+            return Random.Range(thickDensity.First, thickDensity.Second);
         }
 
         /// <summary>
@@ -502,7 +497,7 @@ namespace RealGrass
         /// </summary>
         private int RandomWaterPlants()
         {
-            return Random.Range(waterPlantsLower, waterPlantsHigher);
+            return Random.Range(waterPlantsDensity.First, waterPlantsDensity.Second);
         }
 
         /// <summary>
@@ -510,7 +505,7 @@ namespace RealGrass
         /// </summary>
         private int RandomDesert()
         {
-            return Random.Range(desertLower, desertHigher);
+            return Random.Range(desertDensity.First, desertDensity.Second);
         }
 
         /// <summary>
@@ -518,7 +513,7 @@ namespace RealGrass
         /// </summary>
         private int RandomStones()
         {
-            return Random.Range(stonesLower, stonesHigher);
+            return Random.Range(stonesDensity.First, stonesDensity.Second);
         }
 
         /// <summary>
@@ -560,21 +555,16 @@ namespace RealGrass
             const string grassSection = "Grass", waterPlantsSection = "WaterPlants", stonesSection = "TerrainStones";
 
             // Grass
-            thickLower = settings.GetInt(grassSection, "thickLower");
-            thickHigher = settings.GetInt(grassSection, "thickHigher");
-            thinLower = settings.GetInt(grassSection, "thinLower");
-            thinHigher = settings.GetInt(grassSection, "thinHigher");
+            thickDensity = settings.GetTupleInt(grassSection, "ThickDensity");
+            thinDensity = settings.GetTupleInt(grassSection, "ThinDensity");
 
             // Water plants
-            waterPlantsLower = settings.GetInt(waterPlantsSection, "waterPlantsLower");
-            waterPlantsHigher = settings.GetInt(waterPlantsSection, "waterPlantsHigher");
-            desertLower = settings.GetInt(waterPlantsSection, "desertLower");
-            desertHigher = settings.GetInt(waterPlantsSection, "desertHigher");
+            waterPlantsDensity = settings.GetTupleInt(waterPlantsSection, "WaterPlantsDensity");
+            desertDensity = settings.GetTupleInt(waterPlantsSection, "DesertDensity");
 
             // Stones
-            stonesLower = settings.GetInt(stonesSection, "stonesLower");
-            stonesHigher = settings.GetInt(stonesSection, "stonesHigher");
-            flowersDensity = settings.GetInt(stonesSection, "flowersDensity", 0, 100);
+            stonesDensity = settings.GetTupleInt(stonesSection, "StonesDensity");
+            flowersDensity = settings.GetInt(stonesSection, "FlowersDensity", 0, 100);
         }
 
         #endregion

@@ -5,7 +5,5 @@ SettingsVersion = 1.2
 
 [WaterPlants]
 NoiseSpread = 0.4
-waterPlantsLower = 8
-waterPlantsHigher = 12
-desertLower = 10
-desertHigher = 15
+WaterPlantsDensity = 8<,>12
+DesertDensity = 10<,>15
