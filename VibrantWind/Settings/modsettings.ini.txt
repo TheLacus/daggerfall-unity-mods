@@ -1,0 +1,9 @@
+﻿;Mod: Vibrant Wind
+[Internal]
+SettingsVersion = 1.0
+
+;Strenght of the wind (min-max)
+;0: Lerp, 1: Sinerp, 2: Coserp, 3: SmoothStep
+[WindStrength]
+Range = 0.1<,>0.6
+Interpolation = 0
