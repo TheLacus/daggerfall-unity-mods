@@ -30,6 +30,7 @@ namespace VibrantWind
 
         // This mod
         static Mod mod;
+        static VibrantWind instance;
 
         // DU components
         StreamingWorld streamingWorld;
@@ -38,7 +39,31 @@ namespace VibrantWind
         // Current strength of wind
         float currentStrength = 0;
 
+        bool isEnabled = false;
+
+        #endregion
+
         #region Properties
+
+        /// <summary>
+        /// Vibrant Wind instance.
+        /// </summary>
+        public static VibrantWind Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = FindObjectOfType<VibrantWind>();
+                return instance;
+            }
+            private set { instance = value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether Vibrant Wind is enabled.
+        /// Set new status with <see cref="ToggleMod"/>.
+        /// </summary>
+        public static bool IsEnabled { get { return instance.isEnabled; } }
 
         /// <summary>
         /// Vibrant Wind mod.
@@ -57,8 +82,6 @@ namespace VibrantWind
         
         #endregion
 
-        #endregion
-
         #region Setup
 
         [Invoke(StateManager.StateTypes.Start, 0)]
@@ -69,10 +92,16 @@ namespace VibrantWind
 
             // Add script to scene
             GameObject go = new GameObject("VibrantWind");
-            go.AddComponent<VibrantWind>();
+            instance = go.AddComponent<VibrantWind>();
 
             // Set mod as Ready
             mod.IsReady = true;
+        }
+
+        private void Awake()
+        {
+            // Add commands to console
+            VibrantWindConsoleCommands.RegisterCommands();
         }
 
         void Start()
@@ -91,9 +120,7 @@ namespace VibrantWind
             windStrength = WindStrengths.GetStrengths(range, interpolation);
 
             // Subscribe to events
-            StreamingWorld.OnInitWorld += StreamingWorld_OnInitWorld;
-            DaggerfallTerrain.OnPromoteTerrainData += DaggerfallTerrain_OnPromoteTerrainData;
-            WeatherManager.OnWeatherChange += WeatherManager_OnWeatherChange;
+            ToggleMod(true);
 
             // Set ModMessages
             mod.MessageReciver = MessageReceiver;
@@ -102,6 +129,56 @@ namespace VibrantWind
                 mod.Title, mod.ModInfo.ModVersion, windStrength.None, windStrength.VeryStrong));
         }
 
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Toggles Vibrant Wind mod.
+        /// Check current status with <see cref="IsEnabled"/>.
+        /// </summary>
+        /// <param name="toggle">Enable or disable the mod.</param>
+        public void ToggleMod(bool toggle)
+        {
+            if (toggle == isEnabled)
+                return;
+
+            if (toggle)
+            {
+                StreamingWorld.OnInitWorld += StreamingWorld_OnInitWorld;
+                DaggerfallTerrain.OnPromoteTerrainData += DaggerfallTerrain_OnPromoteTerrainData;
+                WeatherManager.OnWeatherChange += WeatherManager_OnWeatherChange;
+            }
+            else
+            {
+                StreamingWorld.OnInitWorld -= StreamingWorld_OnInitWorld;
+                DaggerfallTerrain.OnPromoteTerrainData -= DaggerfallTerrain_OnPromoteTerrainData;
+                WeatherManager.OnWeatherChange -= WeatherManager_OnWeatherChange;
+            }
+
+            isEnabled = toggle;
+            Debug.Log(GetStatusMessage());
+        }
+
+        /// <summary>
+        /// Gets a message for the current status.
+        /// </summary>
+        public string GetStatusMessage()
+        {
+            string status = isEnabled ? "enabled" : "disabled";
+            return string.Format("{0} {1} is {2}.", mod.Title, mod.ModInfo.ModVersion, status);
+        }
+
+        /// <summary>
+        /// Applies immediately the wind strength on all active terrains.
+        /// </summary>
+        /// <param name="strength">The new strength.</param>
+        public void ApplyWindStrength(float strength)
+        {
+            UpdateWindStrength(strength);
+            SetWindStrength();
+        }
+        
         #endregion
 
         #region OnEvents
@@ -261,8 +338,7 @@ namespace VibrantWind
                 case SetStrength:
                     try
                     {
-                        UpdateWindStrength((float)data);
-                        SetWindStrength();
+                        ApplyWindStrength((float)data);
                     }
                     catch (InvalidCastException)
                     {
