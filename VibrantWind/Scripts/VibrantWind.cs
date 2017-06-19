@@ -123,7 +123,7 @@ namespace VibrantWind
             ToggleMod(true);
 
             // Set ModMessages
-            mod.MessageReciver = MessageReceiver;
+            mod.MessageReceiver = MessageReceiver;
 
             Debug.Log(string.Format("{0}, version {1}, correctly started. Wind is in range {2}-{3}", 
                 mod.Title, mod.ModInfo.ModVersion, windStrength.None, windStrength.VeryStrong));
