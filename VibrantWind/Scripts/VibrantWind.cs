@@ -1,10 +1,10 @@
 ﻿// Project:         Vibrant Wind for Daggerfall Unity
-// Web Site:        -
+// Web Site:        http://forums.dfworkshop.net/viewtopic.php?f=14&t=532
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Source Code:     https://github.com/TheLacus/vibrantwind-du-mod
 // Original Author: TheLacus
 // Contributors:    
-// Version:         0.1
+// Version:         0.2
 
 // #define TEST_WIND
 // #define TEST_PERFORMANCE

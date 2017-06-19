@@ -1,6 +1,6 @@
 ﻿VIBRANT WIND
 
-Version: 0.1
+Version: 0.2
 
 Description 
 -----------
@@ -34,8 +34,23 @@ Eases in near 0 using cosine. The variations among non-pleasant weathers is bigg
 The interpolation will gradually speed up from the start and slow down toward the end; 
 middle values have the biggest variations while the start and the end are 'smoothed'.
 
+Console Commands
+----------------
+- set_weather 0-6
+Daggerfall Unity; Changes weather with index from pleasants to non pleasants (0: sunny, 6: snow).
+
+- vwind_getstrength
+Get current strength of wind.
+
+- vwind_setstrength
+Set a new value for the strength of wind. Changes are applied immediately.
+Must be higher than zero, values higher than one look "funny".
+
 Changelog
 ---------
+* 0.2
+- Console commands
+
 * 0.1
 - First release.
 
