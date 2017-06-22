@@ -73,6 +73,8 @@ namespace RealGrass
             var grassWidth = settings.GetTupleFloat(grassSection, "GrassWidth");
             float noiseSpread = settings.GetFloat(grassSection, "NoiseSpread");
             useGrassShader = settings.GetBool(grassSection, "UseGrassShader");
+            Color grassHealthyColor = settings.GetColor(grassSection, "HealthyColor");
+            Color grassDryColor = settings.GetColor(grassSection, "DryColor");
 
             // Water plants
             const string waterPlantsSection = "WaterPlants";
@@ -93,8 +95,8 @@ namespace RealGrass
                 maxHeight = grassHeight.Second,
                 maxWidth = grassWidth.Second,
                 noiseSpread = noiseSpread,
-                healthyColor = detailColor,
-                dryColor = detailColor,
+                healthyColor = grassHealthyColor,
+                dryColor = grassDryColor,
                 renderMode = useGrassShader ? DetailRenderMode.Grass : DetailRenderMode.GrassBillboard,
                 usePrototypeMesh = useGrassShader
             };

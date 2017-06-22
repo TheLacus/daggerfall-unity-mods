@@ -8,6 +8,8 @@ SettingsVersion = 1.2
 ;Number of grass billboards per terrain tile (min-max)
 ;Number of grass billboards per terrain tile (min-max)
 ;Use Grass instead of GrassBillboard
+;Color of patches of grass at the centres
+;Color of patches of grass at the edges
 [Grass]
 GrassHeight = 0.65<,>0.65
 GrassWidth = 1.0<,>1.0
@@ -15,6 +17,8 @@ NoiseSpread = 0.4
 ThickDensity = 8<,>24
 ThinDensity = 4<,>12
 UseGrassShader = False
+HealthyColor = B2B2B2ff
+DryColor = B2B2B2ff
 
 ;Add water plants near river and lakes in addition to grass
 ;Show winter version of plants during winter season
