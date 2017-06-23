@@ -37,7 +37,7 @@ namespace VibrantWind
         PlayerWeather playerWeather;
 
         // Current strength of wind
-        float currentStrength = 0;
+        WindValues currentStrength;
 
         bool isEnabled = false;
 
@@ -78,8 +78,23 @@ namespace VibrantWind
         /// <summary>
         /// Gets the current wind strength.
         /// </summary>
-        public float CurrentWindStrength { get { return currentStrength; } }
-        
+        public float CurrentWindSpeed { get { return currentStrength.Speed; } }
+
+        /// <summary>
+        /// Gets the current wind amount.
+        /// </summary>
+        public float CurrentWindBending { get { return currentStrength.Bending; } }
+
+        /// <summary>
+        /// Gets the current wind speed.
+        /// </summary>
+        public float CurrentWindSize { get { return currentStrength.Size; } }
+
+        /// <summary>
+        /// Gets the current wind values in a nicely formatted string.
+        /// </summary>
+        public string CurrentWindText { get { return currentStrength.ToString(); } }
+
         #endregion
 
         #region Setup
@@ -104,7 +119,7 @@ namespace VibrantWind
             VibrantWindConsoleCommands.RegisterCommands();
         }
 
-        void Start()
+        private void Start()
         {
             // Get Daggerfall Unity components
             streamingWorld = GameManager.Instance.StreamingWorld;
@@ -112,12 +127,19 @@ namespace VibrantWind
 
             // Get settings
             ModSettings settings = new ModSettings(mod);
-            const string windStrengthSection = "WindStrength";
-            Tuple<float, float> range = settings.GetTupleFloat(windStrengthSection, "Range");
-            int interpolation = settings.GetInt(windStrengthSection, "Interpolation", 0, 4);
+            const string speedSection = "Speed", bendingSection = "Bending", sizeSection = "Size";
 
-            // Get all strength values
-            windStrength = WindStrengths.GetStrengths(range, interpolation);
+            Tuple<float, float> speedRange = settings.GetTupleFloat(speedSection, "Range");
+            int speedInt = settings.GetInt(speedSection, "Interpolation", 0, 4);
+
+            Tuple<float, float> bendingRange = settings.GetTupleFloat(bendingSection, "Range");
+            int bendingInt = settings.GetInt(bendingSection, "Interpolation", 0, 4);
+
+            Tuple<float, float> sizeRange = settings.GetTupleFloat(sizeSection, "Range");
+            int sizeInt = settings.GetInt(sizeSection, "Interpolation", 0, 4);
+
+            // Get all wind values
+            windStrength = new WindStrengths().GetStrengths(speedRange, speedInt, bendingRange, bendingInt, sizeRange, sizeInt);
 
             // Subscribe to events
             ToggleMod(true);
@@ -125,7 +147,7 @@ namespace VibrantWind
             // Set ModMessages
             mod.MessageReceiver = MessageReceiver;
 
-            Debug.Log(string.Format("{0}, version {1}, correctly started. Wind is in range {2}-{3}", 
+            Debug.Log(string.Format("{0}, version {1}, correctly started. Wind is in range [{2}] - [{3}]", 
                 mod.Title, mod.ModInfo.ModVersion, windStrength.None, windStrength.VeryStrong));
         }
 
@@ -175,7 +197,17 @@ namespace VibrantWind
         /// <param name="strength">The new strength.</param>
         public void ApplyWindStrength(float strength)
         {
-            UpdateWindStrength(strength);
+            UpdateWindStrength(new WindValues(strength));
+            SetWindStrength();
+        }
+
+        /// <summary>
+        /// Applies immediately the wind strength on all active terrains.
+        /// </summary>
+        /// <param name="strength">The new strength.</param>
+        public void ApplyWindStrength(float strength, float amount, float speed)
+        {
+            UpdateWindStrength(new WindValues(strength, amount, speed));
             SetWindStrength();
         }
         
@@ -231,9 +263,9 @@ namespace VibrantWind
         /// Set <paramref name="newStrength"/> as wind strength.
         /// Use <see cref="SetWindStrength()"/> to apply.
         /// </summary>
-        private void UpdateWindStrength(float newStrength)
+        private void UpdateWindStrength(WindValues windValues)
         {
-            currentStrength = newStrength;
+            currentStrength = windValues;
         }
 
         /// <summary>
@@ -246,7 +278,7 @@ namespace VibrantWind
             currentStrength = GetWindStrength(weather);
 
 #if TEST_WIND
-            Debug.Log(string.Format("VibrantWind: {0}, {1}", currentStrength, weather));
+            Debug.Log(string.Format("VibrantWind: weather [{0}], {1}", weather, currentStrength));
 #endif
         }
 
@@ -255,7 +287,7 @@ namespace VibrantWind
         /// </summary>
         /// <param name="weather">New weather.</param>
         /// <returns>New wind strength.</returns>
-        private float GetWindStrength(WeatherType weather)
+        private WindValues GetWindStrength(WeatherType weather)
         {
             switch (weather)
             {
@@ -309,9 +341,9 @@ namespace VibrantWind
                 terrainData.wavingGrassAmount, terrainData.wavingGrassSpeed, currentStrength));
 #endif
 
-            terrainData.wavingGrassStrength = currentStrength;
-            terrainData.wavingGrassAmount = currentStrength;
-            terrainData.wavingGrassSpeed = currentStrength;
+            terrainData.wavingGrassStrength = currentStrength.Speed;
+            terrainData.wavingGrassAmount = currentStrength.Bending;
+            terrainData.wavingGrassSpeed = currentStrength.Size;
         }
 
         #endregion

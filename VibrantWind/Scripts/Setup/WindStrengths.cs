@@ -1,5 +1,5 @@
 ﻿// Project:         Vibrant Wind for Daggerfall Unity
-// Web Site:        -
+// Web Site:        http://forums.dfworkshop.net/viewtopic.php?f=14&t=532
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Source Code:     https://github.com/TheLacus/vibrantwind-du-mod
 // Original Author: TheLacus
@@ -8,19 +8,18 @@
 // #define TEST_VALUES
 
 using System;
+using System.Linq;
 using UnityEngine;
 using DaggerfallWorkshop.Utility;
+using System.Collections.Generic;
 
 namespace VibrantWind
 {
-    /// <summary>
-    /// Strength of wind.
-    /// </summary>
     public class WindStrength
     {
         public const uint Items = 6;
 
-        public float
+        public WindValues
 
             None,
             VeryLight,
@@ -40,36 +39,92 @@ namespace VibrantWind
             SmoothStep = 3;
     }
 
-    public static class WindStrengths
+    public class WindStrengths
     {
+        List<float> speed, bending, size;
+
+        int n = -1;
+
         /// <summary>
-        /// Get all strength values.
+        /// Get all wind values.
         /// </summary>
         /// <param name="range">Min and max value.</param>
         /// <param name="interpolation">Interpolation to use.</param>
-        public static WindStrength GetStrengths(Tuple<float, float> range, int interpolation)
+        public WindStrength GetStrengths
+            (
+            Tuple<float, float> speedRange, 
+            int speedInterpolation,
+            Tuple<float, float> bendingRange,
+            int bendingInterpolation,
+            Tuple<float, float> sizeRange,
+            int sizeInterpolation
+            )
         {
-            const uint times = WindStrength.Items - 1;
-            var sV = new ScaledValues(range.First, range.Second, times, interpolation);
+            speed = InitList(speedRange, speedInterpolation);
+            bending = InitList(bendingRange, bendingInterpolation);
+            size = InitList(sizeRange, sizeInterpolation);
+
+#if TEST_VALUES
+            Debug.Log(string.Format("VibrantWind: Speed {0}\nBending {1}\nSize {2}", 
+                AllValues(speed), AllValues(bending), AllValues(size)));
+#endif
+
             return new WindStrength
             {
-                None = sV.NextValue(),
-                VeryLight = sV.NextValue(),
-                Light = sV.NextValue(),
-                Medium = sV.NextValue(),
-                Strong = sV.NextValue(),
-                VeryStrong = sV.NextValue()
+                None = NextValues(),
+                VeryLight = NextValues(),
+                Light = NextValues(),
+                Medium = NextValues(),
+                Strong = NextValues(),
+                VeryStrong = NextValues()
             };
         }
+
+        /// <summary>
+        /// Get all values for one property.
+        /// </summary>
+        private List<float> InitList(Tuple<float, float> range, int interpolation)
+        {
+            const uint times = WindStrength.Items - 1;
+
+            List<float> list = new List<float>();
+            var sV = new ScaledValues(range.First, range.Second, times, interpolation);
+
+            for (int i = 0; i < WindStrength.Items; i++)
+                list.Add(sV.NextValue());
+
+            return list;
+        }
+
+        /// <summary>
+        /// Create a set of strength, amount and speed values.
+        /// </summary>
+        private WindValues NextValues()
+        {
+            return new WindValues(speed[++n], bending[n], size[n]);
+
+            //n++;
+            //var windValues = new WindValues(speed[n], bending[n], size[n])
+            //return windValues;
+        }
+
+#if TEST_VALUES
+        private string AllValues(List<float> list)
+        {
+            return string.Join(",", list.Select(x => x.ToString()).ToArray());
+        }
+#endif
 
         /// <summary>
         /// Scales a group of values between min and max.
         /// </summary>
         public class ScaledValues
         {
-            float min, max;
-            uint times, current = 0;
-            int interpolation;
+            readonly float min, max;
+            readonly uint times;
+            readonly int interpolation;
+
+            uint current = 0;
 
             /// <summary>
             /// Get values between min and max using interpolation.

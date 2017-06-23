@@ -63,7 +63,7 @@ namespace VibrantWind
                 if (vibrantWind == null)
                     return noInstanceMessage;
 
-                return string.Format("Current wind strength is {0}", vibrantWind.CurrentWindStrength);
+                return vibrantWind.CurrentWindText;
             }
         }
 
