@@ -1,9 +1,21 @@
 ﻿;Mod: Vibrant Wind
 [Internal]
-SettingsVersion = 1.0
+SettingsVersion = 1.1
 
-;Strenght of the wind (min-max)
+;The speed of the wind as it blows grass (min-max)
 ;0: Lerp, 1: Sinerp, 2: Coserp, 3: SmoothStep
-[WindStrength]
-Range = 0.1<,>0.6
+[Speed]
+Range = 0.1<,>0.9
 Interpolation = 0
+
+;The degree to which grass objects are bent over by the wind (min-max)
+;0: Lerp, 1: Sinerp, 2: Coserp, 3: SmoothStep
+[Bending]
+Range = 0.2<,>0.6
+Interpolation = 3
+
+;The size of the 'ripples' on grassy areas (min-max)
+;0: Lerp, 1: Sinerp, 2: Coserp, 3: SmoothStep
+[Size]
+Range = 0.1<,>0.8
+Interpolation = 2
