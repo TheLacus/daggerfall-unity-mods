@@ -4,7 +4,7 @@
 // Source Code:     https://github.com/TheLacus/vibrantwind-du-mod
 // Original Author: TheLacus
 // Contributors:    
-// Version:         0.2
+// Version:         0.3
 
 // #define TEST_WIND
 // #define TEST_PERFORMANCE
@@ -78,22 +78,7 @@ namespace VibrantWind
         /// <summary>
         /// Gets the current wind strength.
         /// </summary>
-        public float CurrentWindSpeed { get { return currentStrength.Speed; } }
-
-        /// <summary>
-        /// Gets the current wind amount.
-        /// </summary>
-        public float CurrentWindBending { get { return currentStrength.Bending; } }
-
-        /// <summary>
-        /// Gets the current wind speed.
-        /// </summary>
-        public float CurrentWindSize { get { return currentStrength.Size; } }
-
-        /// <summary>
-        /// Gets the current wind values in a nicely formatted string.
-        /// </summary>
-        public string CurrentWindText { get { return currentStrength.ToString(); } }
+        public WindValues CurrentWindStrength { get { return currentStrength; } }
 
         #endregion
 
@@ -145,10 +130,9 @@ namespace VibrantWind
             ToggleMod(true);
 
             // Set ModMessages
-            mod.MessageReceiver = MessageReceiver;
+            mod.MessageReceiver = VibrantWindModMessages.MessageReceiver;
 
-            Debug.Log(string.Format("{0}, version {1}, correctly started. Wind is in range [{2}] - [{3}]", 
-                mod.Title, mod.ModInfo.ModVersion, windStrength.None, windStrength.VeryStrong));
+            Debug.Log(string.Format("{0}, version {1}, correctly started. {2}", mod.Title, mod.ModInfo.ModVersion, windStrength));
         }
 
         #endregion
@@ -194,21 +178,19 @@ namespace VibrantWind
         /// <summary>
         /// Applies immediately the wind strength on all active terrains.
         /// </summary>
-        /// <param name="strength">The new strength.</param>
-        public void ApplyWindStrength(float strength)
+        public void ApplyWindStrength(WindValues wind)
         {
-            UpdateWindStrength(new WindValues(strength));
+            UpdateWindStrength(wind);
             SetWindStrength();
         }
 
         /// <summary>
-        /// Applies immediately the wind strength on all active terrains.
+        /// Applies immediately the wind strength on all active terrains
+        /// with user settings. <paramref name="windRel"/> is in range 0-1.
         /// </summary>
-        /// <param name="strength">The new strength.</param>
-        public void ApplyWindStrength(float strength, float amount, float speed)
+        public void ApplyWindStrength(float windRel)
         {
-            UpdateWindStrength(new WindValues(strength, amount, speed));
-            SetWindStrength();
+            ApplyWindStrength(windStrength[windRel]);
         }
         
         #endregion
@@ -346,40 +328,6 @@ namespace VibrantWind
             terrainData.wavingGrassSpeed = currentStrength.Size;
         }
 
-        #endregion
-
-        #region ModMessages
-
-        /// <summary>
-        /// Receive messages from other mods.
-        /// </summary>
-        private void MessageReceiver(string message, object data, DFModMessageCallback callBack)
-        {
-            const string GetStrength = "GetStrength"; // Return current strength of wind.
-            const string SetStrength = "SetStrength"; // Set strength of wind.
-
-            switch (message)
-            {
-                case GetStrength:
-                    if (callBack != null)
-                        callBack(GetStrength, currentStrength);
-                    else
-                        Debug.LogError("VibrantWind: Failed to send strength value to mod; callBack is null");
-                    break;
-
-                case SetStrength:
-                    try
-                    {
-                        ApplyWindStrength((float)data);
-                    }
-                    catch (InvalidCastException)
-                    {
-                        Debug.LogError("VibrantWind: Failed to set strength value as requested by mod; data is not float");
-                    }
-                    break;
-            }
-        }
-        
         #endregion
     }
 }

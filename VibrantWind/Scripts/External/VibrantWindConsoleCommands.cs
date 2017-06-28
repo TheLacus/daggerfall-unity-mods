@@ -23,6 +23,7 @@ namespace VibrantWind
         {
             try
             {
+                ConsoleCommandsDatabase.RegisterCommand(ToggleVibrantWind.name, ToggleVibrantWind.description, ToggleVibrantWind.usage, ToggleVibrantWind.Execute);
                 ConsoleCommandsDatabase.RegisterCommand(GetWindStrength.name, GetWindStrength.description, GetWindStrength.usage, GetWindStrength.Execute);
                 ConsoleCommandsDatabase.RegisterCommand(SetWindStrength.name, SetWindStrength.description, SetWindStrength.usage, SetWindStrength.Execute);
 
@@ -63,49 +64,40 @@ namespace VibrantWind
                 if (vibrantWind == null)
                     return noInstanceMessage;
 
-                return vibrantWind.CurrentWindText;
+                return vibrantWind.CurrentWindStrength.ToString();
             }
         }
 
         private static class SetWindStrength
         {
             public static readonly string name = "vwind_setstrength";
-            public static readonly string description = "Set immediately wind strength; should be in range 0.0-1.0";
-            public static readonly string usage = "vwind_setstrength {x.y}";
+            public static readonly string description = "Set immediately wind strength; values should be in range 0.0-1.0";
+            public static readonly string usage = "vwind_setstrength {speed} {bending} {size}";
 
             public static string Execute(params string[] args)
             {
-                const string error = "Failed to set wind strength;";
-                float strength;
+                // Allow values higher than one
+                bool force = args.Length == 4 && args[3] == "-force";
+                if (!force && args.Length != 3)
+                    return string.Format("Unknown parameters, use {0}", usage);
 
-                try
-                {
-                    // Get strength from arguments
-                    strength = float.Parse(args[0], NumberStyles.Float, CultureInfo.InvariantCulture);
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    return string.Format("{0} missing parameter for strength\n{1}.", error, usage);
-                }
-                catch (FormatException)
-                {
-                    return string.Format("{0} {1} is not a valid number.", error, args[0]);
-                }
-                catch (Exception e)
-                {
-                    return string.Format("{0} {1}", error, e.Message);
-                }
+                // Speed component
+                float speed;
+                string message = GetValue(args[0], force, out speed);
+                if (message != null)
+                    return message;
 
-                // Check value
-                if (strength < 0)
-                    return string.Format("{0} strength can't be a negative value.");
-                else if (strength > 1)
-                {
-                    if (args.Length != 2 || args[1] != "-force")
-                        return string.Format("{0} strength must be lower than one.\nIf you really want use {1} -force", error, usage);
-                }
-                else if (args.Length != 1)
-                    return string.Format("{0} Unknown parameters.", error);
+                // Bending component
+                float bending;
+                message = GetValue(args[1], force, out bending);
+                if (message != null)
+                    return message;
+
+                // Size component
+                float size;
+                message = GetValue(args[2], force, out size);
+                if (message != null)
+                    return message;
 
                 // Get instance
                 var vibrantWind = VibrantWind.Instance;
@@ -113,9 +105,40 @@ namespace VibrantWind
                     return noInstanceMessage;
 
                 // Apply new value for wind strength
-                vibrantWind.ApplyWindStrength(strength);
-                return string.Format("Wind strength is now {0}", strength);
+                vibrantWind.ApplyWindStrength(new WindValues(speed, bending, size));
+                return string.Format("Wind strength is now {0}", vibrantWind.CurrentWindStrength.ToString());
             }
+        }
+
+        private static string GetValue(string par, bool force, out float value)
+        {
+            const string error = "Failed to set wind strength;";
+            value = default(float);
+
+            try
+            {
+                value = float.Parse(par, NumberStyles.Float, CultureInfo.InvariantCulture);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return string.Format("{0} missing parameter for strength\n{1}.", error, SetWindStrength.usage);
+            }
+            catch (FormatException)
+            {
+                return string.Format("{0} {1} is not a valid number.", error, par);
+            }
+            catch (Exception e)
+            {
+                return string.Format("{0} {1}", error, e.Message);
+            }
+
+            if (value < 0)
+                return string.Format("{0} strength can't be a negative value.");
+
+            else if (value > 1 && !force)
+                return string.Format("{0} strength must be lower than one.\nIf you really want use {1} -force", error, SetWindStrength.usage);
+
+            return null;
         }
     }
 }

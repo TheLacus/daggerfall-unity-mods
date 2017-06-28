@@ -5,6 +5,8 @@
 // Original Author: TheLacus
 // Contributors:   
 
+using UnityEngine;
+
 namespace VibrantWind
 {
     /// <summary>
@@ -16,7 +18,12 @@ namespace VibrantWind
     {
         /// <summary>
         /// Values for the terrain wind.
-        /// Uses <paramref name="strength"/> for Strength, Amount and Speed.
+        /// </summary>
+        public WindValues() {}
+        
+        /// <summary>
+        /// Values for the terrain wind.
+        /// Uses <paramref name="strength"/> for Speed, Bending and Size.
         /// </summary>
         /// <param name="strength"></param>
         public WindValues(float strength) : this(strength, strength, strength) { }
@@ -29,11 +36,6 @@ namespace VibrantWind
             this.Speed = speed;
             this.Bending = bending;
             this.Size = size;
-        }
-
-        public override string ToString()
-        {
-            return string.Format("Speed: {0}, Bending: {1}, Size {2}", Speed, Bending, Size);
         }
 
         /// <summary>
@@ -59,5 +61,20 @@ namespace VibrantWind
         /// terrainData.Speed
         /// </value>
         public float Size { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("Speed: {0}, Bending: {1}, Size {2}", Speed, Bending, Size);
+        }
+
+        public static implicit operator Vector3(WindValues wind)
+        {
+            return new Vector3(wind.Speed, wind.Bending, wind.Size);
+        }
+
+        public static implicit operator WindValues(Vector3 wind)
+        {
+            return new WindValues(wind.x, wind.y, wind.z);
+        }
     }
 }

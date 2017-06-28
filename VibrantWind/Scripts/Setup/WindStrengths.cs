@@ -8,27 +8,12 @@
 // #define TEST_VALUES
 
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using DaggerfallWorkshop.Utility;
-using System.Collections.Generic;
 
 namespace VibrantWind
 {
-    public class WindStrength
-    {
-        public const uint Items = 6;
-
-        public WindValues
-
-            None,
-            VeryLight,
-            Light,
-            Medium,
-            Strong,
-            VeryStrong;
-    }
-
     public struct Interpolation
     {
         public const int
@@ -69,15 +54,11 @@ namespace VibrantWind
                 AllValues(speed), AllValues(bending), AllValues(size)));
 #endif
 
-            return new WindStrength
-            {
-                None = NextValues(),
-                VeryLight = NextValues(),
-                Light = NextValues(),
-                Medium = NextValues(),
-                Strong = NextValues(),
-                VeryStrong = NextValues()
-            };
+            var windStrength = new WindStrength();
+            for (int i = 0; i < WindStrength.Items; i++)
+                windStrength[i] = NextValues();
+
+            return windStrength;
         }
 
         /// <summary>
@@ -102,10 +83,6 @@ namespace VibrantWind
         private WindValues NextValues()
         {
             return new WindValues(speed[++n], bending[n], size[n]);
-
-            //n++;
-            //var windValues = new WindValues(speed[n], bending[n], size[n])
-            //return windValues;
         }
 
 #if TEST_VALUES

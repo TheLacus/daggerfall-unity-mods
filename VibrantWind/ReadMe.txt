@@ -1,6 +1,6 @@
 ﻿VIBRANT WIND
 
-Version: 0.2
+Version: 0.3
 
 Description 
 -----------
@@ -18,6 +18,20 @@ Move vibrantwind.dfmod inside 'StreamingAssets/Mods'.
 
 Settings
 --------
+- Speed
+The speed (or strength) of the wind as it blows grass.
+The higher this is, the faster the grass will move back and forth.
+
+- Bending
+The degree to which grass objects are bent over by the wind.
+Excessively high values deform the grass mesh, while too low values make it looks static.
+
+- Size
+The size of the 'ripples' on grassy areas. An higher value means a bigger zone 
+affected by the wind at the same time.
+
+Settings keys
+-------------
 - Range
 Min: The strength of the wind when there is light/no wind. Must be bigger than zero and lower than max.
 Max: The highest strength of the wind, used during strong storms. Should be lower than one.
@@ -36,20 +50,43 @@ middle values have the biggest variations while the start and the end are 'smoot
 
 Console Commands
 ----------------
-- set_weather 0-6
+- set_weather {0-6}
 Daggerfall Unity; Changes weather with index from pleasants to non pleasants (0: sunny, 6: snow).
 
 - vwind_getstrength
 Get current strength of wind.
 
-- vwind_setstrength
-Set a new value for the strength of wind. Changes are applied immediately.
-Must be higher than zero, values higher than one look "funny".
+- vwind_setstrength {speed} {bending} {size}
+Set new values for the strength of wind. Changes are applied immediately.
+All values must be higher than zero and lower than one.
+
+- vwind_setstrength {speed} {bending} {size} -force
+Allow values higher than one.
+
+- vwind_toggle
+Disable mod. When the game loads new terrains, they will use a default of 0.5 for all values.
+Use the same command to re-enable it. Changes are applied for new terrains or on weather change.
+
+Compatibility
+-------------
+This mod is compatible with every mod, including eventual weather mods, 
+provided that it doesn't affect terrainData wind settings.
+
+Mod Messages
+------------
+- ("GetStrength", null, callback)
+Get the current strength (on callback).
+
+- ("SetStrength", new Vector3{speed, bending, size}, null)
+Set a new strength. Changes are applied immediately.
 
 Changelog
 ---------
+* 0.3
+- Set speed, bending and size separately.
+
 * 0.2
-- Console commands
+- Console commands.
 
 * 0.1
 - First release.
