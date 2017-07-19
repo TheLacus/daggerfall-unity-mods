@@ -10,6 +10,7 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: Plane.001
+    4300002: Plane.005
   materials:
     importMaterials: 1
     materialName: 0
