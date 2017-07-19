@@ -79,12 +79,6 @@ Lower values can increase performance.
 1.0 is the original density, as decided by Thick and Thin. 
 Lower values result in less detail objects being rendered, increasing performance.
 
-**Wind**
-
-- WavingAmount, WavingSpeed and WavingStrength. 
-Affect how much the wind moves the grass.
-All three accept values in a range between 0.0 (no wind) and 1.0.
-
 **PRESETS**
 -------------------------------------------------------------------------------------------------
 Settings presets are ini files which contain a group of the settings descripted above.
@@ -156,7 +150,7 @@ Be careful when installing other mods that affects terrain.
 **CHANGELOG**
 -------------------------------------------------------------------------------------------------
 1.10
-* Added options for terrain and wind
+* Added options for terrain.
 * Use a terrain-specific seed for random methods
 * Added option for Grass shader instead of GrassBillboard
 

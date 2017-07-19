@@ -9,7 +9,7 @@ Adds grass and, optionally, water plants, stones and flowers to the terrain of D
 + Support pre-made presets of settings
 + It's possible to import alternatives textures directly from disk.
 + Supports two shaders: _GrassBilboard_ for classic style and _Grass_ for a more realistic vegetation
-+ Advanced and performance-important settings like distant rendering and wind settings can be changed by the user
++ Advanced and performance-important settings like distant rendering can be changed by the user
 
 ## Credits and history
 Real Grass was originally created by Uncanny_Valley in 2015, as an automatic [vanilla-friendly grass](http://forums.dfworkshop.net/download/file.php?id=6) placer for Daggerfall Unity. It supported two kinds of grass for different climates.

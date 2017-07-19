@@ -55,9 +55,6 @@ namespace RealGrass
         // Terrain settings
         static float detailObjectDistance;
         static float detailObjectDensity;
-        static float wavingGrassAmount;
-        static float wavingGrassSpeed;
-        static float wavingGrassStrength;
 
         #endregion
 
@@ -175,12 +172,9 @@ namespace RealGrass
             detailPrototypesDensity = new DetailPrototypesDensity(settings, waterPlants, terrainStones, flowers);
 
             // Terrain
-            const string terrainSection = "Terrain", windSection = "Wind";
+            const string terrainSection = "Terrain";
             detailObjectDistance = settings.GetFloat(terrainSection, "DetailDistance", 10f);
             detailObjectDensity = settings.GetFloat(terrainSection, "DetailDensity", 0.1f, 1f);
-            wavingGrassAmount = settings.GetFloat(windSection, "WavingAmount", 0f, 1f);
-            wavingGrassSpeed = settings.GetFloat(windSection, "WavingSpeed", 0f, 1f);
-            wavingGrassStrength = settings.GetFloat(windSection, "WavingStrength", 0f, 1f);
         }
 
         /// <summary>
@@ -196,11 +190,8 @@ namespace RealGrass
             terrain.detailObjectDistance = detailObjectDistance;
             terrain.detailObjectDensity = detailObjectDensity;
 
-            // Waving grass settings
+            // Waving grass tint
             terrainData.wavingGrassTint = Color.gray;
-            terrainData.wavingGrassAmount = wavingGrassAmount;
-            terrainData.wavingGrassSpeed = wavingGrassSpeed;
-            terrainData.wavingGrassStrength = wavingGrassStrength;
 
             // Set seed for terrain
             Random.InitState(TerrainHelper.MakeTerrainKey(daggerTerrain.MapPixelX, daggerTerrain.MapPixelY));

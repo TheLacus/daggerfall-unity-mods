@@ -47,11 +47,3 @@ FlowersDensity = 0
 [Terrain]
 DetailDistance = 80
 DetailDensity = 1.0
-
-;Amount of waving grass (0.0-1.0)
-;Speed of the waving grass (0.0-1.0)
-;Strength of the waving grass (0.0-1.0)
-[Wind]
-WavingAmount = 0.5
-WavingSpeed = 0.5
-WavingStrength = 0.5
