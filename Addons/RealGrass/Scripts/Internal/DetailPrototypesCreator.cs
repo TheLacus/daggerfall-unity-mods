@@ -78,8 +78,8 @@ namespace RealGrass
 
             // Grass
             const string grassSection = "Grass";
-            var grassHeight = settings.GetTupleFloat(grassSection, "GrassHeight");
-            var grassWidth = settings.GetTupleFloat(grassSection, "GrassWidth");
+            Range<float> grassHeight = settings.GetTupleFloat(grassSection, "GrassHeight");
+            Range<float> grassWidth = settings.GetTupleFloat(grassSection, "GrassWidth");
             float noiseSpread = settings.GetFloat(grassSection, "NoiseSpread");
             useGrassShader = settings.GetBool(grassSection, "UseGrassShader");
             Color grassHealthyColor = settings.GetColor(grassSection, "HealthyColor");
@@ -99,10 +99,10 @@ namespace RealGrass
             // We use GrassBillboard or Grass rendermode
             detailPrototype[0] = new DetailPrototype()
             {
-                minHeight = grassHeight.First,
-                minWidth = grassWidth.First,
-                maxHeight = grassHeight.Second,
-                maxWidth = grassWidth.Second,
+                minHeight = grassHeight.Min,
+                maxHeight = grassHeight.Max,
+                minWidth = grassWidth.Min,
+                maxWidth = grassWidth.Max,
                 noiseSpread = noiseSpread,
                 healthyColor = grassHealthyColor,
                 dryColor = grassDryColor,
