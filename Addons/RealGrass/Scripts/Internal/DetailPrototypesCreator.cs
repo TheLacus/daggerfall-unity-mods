@@ -78,12 +78,12 @@ namespace RealGrass
 
             // Grass
             const string grassSection = "Grass";
-            Range<float> grassHeight = settings.GetTupleFloat(grassSection, "GrassHeight");
-            Range<float> grassWidth = settings.GetTupleFloat(grassSection, "GrassWidth");
+            Range<float> grassHeight = settings.GetTupleFloat(grassSection, "Height");
+            Range<float> grassWidth = settings.GetTupleFloat(grassSection, "Width");
             float noiseSpread = settings.GetFloat(grassSection, "NoiseSpread");
-            useGrassShader = settings.GetBool(grassSection, "UseGrassShader");
             Color grassHealthyColor = settings.GetColor(grassSection, "HealthyColor");
             Color grassDryColor = settings.GetColor(grassSection, "DryColor");
+            useGrassShader = settings.GetBool(grassSection, "UseGrassShader");
 
             // Water plants
             const string waterPlantsSection = "WaterPlants";
@@ -149,7 +149,7 @@ namespace RealGrass
             detailPrototype[4] = new DetailPrototype()
             {
                 usePrototypeMesh = true,
-                noiseSpread = noiseSpreadStones,
+                noiseSpread = 0.4f,
                 healthyColor = detailColor,
                 dryColor = detailColor,
                 renderMode = DetailRenderMode.Grass,

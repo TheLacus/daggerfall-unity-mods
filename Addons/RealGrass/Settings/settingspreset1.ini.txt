@@ -5,8 +5,8 @@ Description = More varieties of grass size.
 SettingsVersion = 1.2
 
 [Grass]
-GrassHeight = 0.5<,>2.5
-GrassWidth = 0.8<,>1.3
+Height = 0.5<,>2.5
+Width = 0.8<,>1.3
 NoiseSpread = 0.4
 ThickDensity = 3<,>20
 ThinDensity = 0<,>7

@@ -7,18 +7,18 @@ SettingsVersion = 1.2
 ;The higher this is, the more varied the grass will look
 ;Number of grass billboards per terrain tile (min-max)
 ;Number of grass billboards per terrain tile (min-max)
-;Use Grass instead of GrassBillboard
 ;Color of patches of grass at the centres
 ;Color of patches of grass at the edges
+;Use Grass instead of GrassBillboard
 [Grass]
-GrassHeight = 0.65<,>0.65
-GrassWidth = 1.0<,>1.0
+Height = 0.65<,>0.65
+Width = 1.0<,>1.0
 NoiseSpread = 0.4
 ThickDensity = 8<,>24
 ThinDensity = 4<,>12
-UseGrassShader = False
 HealthyColor = B2B2B2ff
 DryColor = B2B2B2ff
+UseGrassShader = False
 
 ;Add water plants near river and lakes in addition to grass
 ;Show winter version of plants during winter season
@@ -26,21 +26,23 @@ DryColor = B2B2B2ff
 ;Number of water plants per terrain tile (min-max)
 ;Number of water plants per terrain tile (min-max)
 [WaterPlants]
-WaterPlants = False
-WinterPlants = False
+Enable = False
+EnableWinter = False
 NoiseSpread = 0.4
-WaterPlantsDensity = 0<,>5
+Density = 0<,>5
 DesertDensity = 3<,>6
 
 ;Add little stones on farms ground
 ;The higher this is, the more varied the stones will look
 ;Number of stones per terrain tile (min-max)
-;Flowers (0: no flowers - 100: max density)
 [TerrainStones]
-TerrainStones = False
+Enable = False
 NoiseSpread = 0.4
-StonesDensity = 4<,>12
-FlowersDensity = 0
+Density = 4<,>12
+
+;Flowers (0: no flowers - 100: max density) [Experimental]
+[Flowers]
+Density = 0
 
 ;Grass will be displayed up to this distance
 ;Max density of grass (0.0-1.0)

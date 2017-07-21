@@ -553,19 +553,22 @@ namespace RealGrass
 
         private void LoadSettings(ModSettings settings)
         {
-            const string grassSection = "Grass", waterPlantsSection = "WaterPlants", stonesSection = "TerrainStones";
+            const string grassSection = "Grass", waterPlantsSection = "WaterPlants", 
+                stonesSection = "TerrainStones", flowersSection = "Flowers";
 
             // Grass
             thickDensity = settings.GetTupleInt(grassSection, "ThickDensity");
             thinDensity = settings.GetTupleInt(grassSection, "ThinDensity");
 
             // Water plants
-            waterPlantsDensity = settings.GetTupleInt(waterPlantsSection, "WaterPlantsDensity");
+            waterPlantsDensity = settings.GetTupleInt(waterPlantsSection, "Density");
             desertDensity = settings.GetTupleInt(waterPlantsSection, "DesertDensity");
 
             // Stones
-            stonesDensity = settings.GetTupleInt(stonesSection, "StonesDensity");
-            flowersDensity = settings.GetInt(stonesSection, "FlowersDensity", 0, 100);
+            stonesDensity = settings.GetTupleInt(stonesSection, "Density");
+
+            // Flowers
+            flowersDensity = settings.GetInt(flowersSection, "Density", 0, 100);
         }
 
         private int[,] EmptyMap()

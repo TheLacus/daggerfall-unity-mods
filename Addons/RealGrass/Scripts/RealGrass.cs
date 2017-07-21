@@ -157,15 +157,15 @@ namespace RealGrass
         /// </summary>
         private void LoadSettings()
         {
-            const string waterPlantsSection = "WaterPlants", stonesSection = "TerrainStones";
+            const string waterPlantsSection = "WaterPlants", stonesSection = "TerrainStones", flowersSection = "Flowers";
 
             ModSettings settings = RealGrassLoader.Settings;
 
             // Optional details
-            waterPlants = settings.GetBool(waterPlantsSection, "WaterPlants");
-            winterPlants = settings.GetBool(waterPlantsSection, "WinterPlants");
-            terrainStones = settings.GetBool(stonesSection, "TerrainStones");
-            flowers = settings.GetInt(stonesSection, "FlowersDensity", 0, 100) != 0;
+            waterPlants = settings.GetBool(waterPlantsSection, "Enable");
+            winterPlants = settings.GetBool(waterPlantsSection, "EnableWinter");
+            terrainStones = settings.GetBool(stonesSection, "Enable");
+            flowers = settings.GetInt(flowersSection, "Density", 0, 100) != 0;
 
             // Detail prototypes
             detailPrototypesCreator = new DetailPrototypesCreator(settings, waterPlants, terrainStones, flowers);
