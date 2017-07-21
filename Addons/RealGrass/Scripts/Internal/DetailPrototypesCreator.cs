@@ -16,13 +16,10 @@ namespace RealGrass
     /// </summary>
     public class DetailPrototypesCreator
     {
-        bool useGrassShader;
-        bool waterPlants;
-
-        /// <summary>
-        /// Assets used by the terrain for grass.
-        /// </summary>
-        public DetailPrototype[] detailPrototype { get; set; }
+        // Fields
+        readonly bool useGrassShader;
+        readonly bool waterPlants;
+        readonly DetailPrototype[] detailPrototype;
 
         #region Constants
 
@@ -55,13 +52,25 @@ namespace RealGrass
 
         #endregion
 
+        #region Properties
+
+        /// <summary>
+        /// Assets used by the terrain for grass.
+        /// </summary>
+        public DetailPrototype[] DetailPrototypes
+        {
+            get { return detailPrototype; }
+        }
+
+        #endregion
+
         #region Public Methods
 
         /// <summary>
         /// Initialize detail protoypes.
         /// </summary>
         /// <param name="settings">Mod settings.</param>
-        public DetailPrototypesCreator(ModSettings settings, bool waterPlants)
+        public DetailPrototypesCreator(ModSettings settings, bool waterPlants, bool terrainStones, bool flowers)
         {
             this.waterPlants = waterPlants;
 

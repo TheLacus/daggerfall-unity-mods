@@ -124,7 +124,7 @@ namespace RealGrass
             }
 
             // Assign detail prototypes to the terrain
-            terrainData.detailPrototypes = detailPrototypesCreator.detailPrototype;
+            terrainData.detailPrototypes = detailPrototypesCreator.DetailPrototypes;
 
             // Assign detail layers to the terrain
             terrainData.SetDetailLayer(0, 0, 0, detailPrototypesDensity.Grass); // Grass
@@ -168,7 +168,7 @@ namespace RealGrass
             flowers = settings.GetInt(stonesSection, "FlowersDensity", 0, 100) != 0;
 
             // Detail prototypes
-            detailPrototypesCreator = new DetailPrototypesCreator(settings, waterPlants);
+            detailPrototypesCreator = new DetailPrototypesCreator(settings, waterPlants, terrainStones, flowers);
             detailPrototypesDensity = new DetailPrototypesDensity(settings, waterPlants, terrainStones, flowers);
 
             // Terrain
