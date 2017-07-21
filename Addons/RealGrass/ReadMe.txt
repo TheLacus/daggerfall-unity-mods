@@ -1,28 +1,16 @@
 ﻿=================================================================================================
 REAL GRASS
 
-1.09 for DaggerFall Unity 0.4.12
+1.10 for DaggerFall Unity 0.4.36
 =================================================================================================
 
 **DESCRIPTION**
 -------------------------------------------------------------------------------------------------
-Adds grass and, optionally, water plants to the terrain of Daggerfall Unity.
-There are two variants of grass, varying for different regions.
-
-It's available in two versions:
-
-*RealGrass
-This is the original mod made by Uncanny_Valley and improved by midopa.
-
-*GrassAndPlants
-A revision by TheLacus which also adds water grass and plants, according to differents climates, 
-and little stones on farms ground.
-
-You can choose which version to use from the mod settings.
+Adds grass and, optionally, water plants ans stones to the terrain of Daggerfall Unity.
 
 **REQUIREMENTS**
 -------------------------------------------------------------------------------------------------
-Daggerfall Unity 0.4.12
+Daggerfall Unity 0.4.36
 
 **INSTALLATION**
 -------------------------------------------------------------------------------------------------
@@ -150,9 +138,10 @@ Be careful when installing other mods that affects terrain.
 **CHANGELOG**
 -------------------------------------------------------------------------------------------------
 1.10
-* Added options for terrain.
-* Use a terrain-specific seed for random methods
-* Added option for Grass shader instead of GrassBillboard
+* Support Grass shader in addition to GrassBillboard shader
+* The max distance for detail render can be customized for different performance requirements
+* Plants and grass position remains unchanged between sessions for the same terrain
+* Experimental support for flowers
 
 1.09
 * Added presets.

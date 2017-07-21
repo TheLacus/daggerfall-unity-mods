@@ -19,7 +19,7 @@ In 2016, and more in 2017, TheLacus expanded it, adding [water plants](https://i
 At the same time, while it was still hosted alongside the Daggerfall Unity project, it received [contributions](https://twitter.com/zottgrammes/status/810390248647696384) from Midopa.
 
 ## Info
-+ Version: 1.09
-+ Daggerfall Unity Version: 0.4.12
++ Version: 1.10
++ Daggerfall Unity Version: 0.4.36
 + [RealGrass on Daggerfall Unity forums](http://forums.dfworkshop.net/viewtopic.php?f=14&t=17)
 + [Download](http://forums.dfworkshop.net/viewtopic.php?f=22&t=456)
