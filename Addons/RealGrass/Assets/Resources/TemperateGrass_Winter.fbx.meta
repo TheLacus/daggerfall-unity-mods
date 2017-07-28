@@ -1,22 +1,15 @@
 fileFormatVersion: 2
-guid: d1a42ede7b2896a4fb71dd66494f739f
-timeCreated: 1483266224
+guid: 24925e6cc33de2d44ac21df6347eca5e
+timeCreated: 1500812790
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Plane
-    100004: Sun
     400000: //RootNode
-    400002: Plane
-    400004: Sun
     2300000: //RootNode
-    2300002: Plane
     3300000: //RootNode
-    3300002: Plane
-    4300000: Plane.000
-    4300002: Plane
+    4300000: Plane.003
   materials:
     importMaterials: 1
     materialName: 0
@@ -77,7 +70,7 @@ ModelImporter:
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
-    skeletonHasParents: 0
+    skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 0
   humanoidOversampling: 1

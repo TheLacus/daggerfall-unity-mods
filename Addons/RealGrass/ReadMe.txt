@@ -6,7 +6,7 @@ REAL GRASS
 
 **DESCRIPTION**
 -------------------------------------------------------------------------------------------------
-Adds grass and, optionally, water plants ans stones to the terrain of Daggerfall Unity.
+Adds grass and, optionally, water plants and stones to the terrain of Daggerfall Unity.
 
 **REQUIREMENTS**
 -------------------------------------------------------------------------------------------------
@@ -14,14 +14,14 @@ Daggerfall Unity 0.4.36
 
 **INSTALLATION**
 -------------------------------------------------------------------------------------------------
-Put the *.dfmod file 'DaggerfallUnity_Data/StreamingAssets/Mods'. 
+Put the *.dfmod file inside 'DaggerfallUnity_Data/StreamingAssets/Mods'. 
 Use the load order settings window to choose if you want water plants and stones or only grass, 
 and customize the size and shape of grass.
 
 **CUSTOMIZATION**
 -------------------------------------------------------------------------------------------------
 It is possible to customize this mod from the mod settings in-game. 
-Presets with default values are avilable, but it's possible to customize them individually.
+Presets with default values are available, but it's possible to customize them individually.
 If you create an interesting combination, do not forget to share your own preset!
 
 - WaterPlants

@@ -16,11 +16,11 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012485166834}
-  - 33: {fileID: 33000012889898476}
-  - 23: {fileID: 23000010382828702}
+  - component: {fileID: 4000012485166834}
+  - component: {fileID: 33000012889898476}
+  - component: {fileID: 23000010382828702}
   m_Layer: 0
   m_Name: WaterMountainGrass
   m_TagString: Untagged
@@ -36,11 +36,11 @@ Transform:
   m_GameObject: {fileID: 1000013248471630}
   m_LocalRotation: {x: 6.6097587e-12, y: 1, z: -0.0000018099951, w: 0.0000036517765}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.57611525, y: 0.57611525, z: 0.57611525}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23000010382828702
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -55,7 +55,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_Materials:
   - {fileID: 2100000, guid: 018bf1b7774318d4b820f28e539a58c8, type: 2}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -63,7 +65,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 0
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -76,4 +78,4 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013248471630}
-  m_Mesh: {fileID: 4300000, guid: d1a42ede7b2896a4fb71dd66494f739f, type: 3}
+  m_Mesh: {fileID: 4300002, guid: d1a42ede7b2896a4fb71dd66494f739f, type: 3}
