@@ -70,6 +70,10 @@ namespace RealGrass
 
             // Subscribe to the onPromoteTerrainData
             DaggerfallTerrain.OnPromoteTerrainData += AddGrass;
+
+            // Print on log
+            string modInfo = RealGrassLoader.Mod.Title + " v." + RealGrassLoader.Mod.ModInfo.ModVersion;
+            Debug.LogFormat("{0} started: subscribed to terrain promotion.", modInfo);
         }
 
         #endregion
@@ -84,7 +88,6 @@ namespace RealGrass
 
 #if TEST_PERFORMANCE
 
-            // Used to check performance
             var stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
 
@@ -141,8 +144,7 @@ namespace RealGrass
 #if TEST_PERFORMANCE
 
             stopwatch.Stop();
-            // Write result
-            Debug.Log("RealGrass - Time elapsed: " + stopwatch.Elapsed);
+            Debug.LogFormat("RealGrass - Time elapsed: {0} ms.", stopwatch.Elapsed.Milliseconds);
 
 #endif
 

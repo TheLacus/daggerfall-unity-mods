@@ -20,6 +20,7 @@ namespace RealGrass
         readonly bool useGrassShader;
         readonly bool waterPlants;
         readonly DetailPrototype[] detailPrototype;
+        int currentkey = 0;
 
         #region Constants
 
@@ -49,6 +50,8 @@ namespace RealGrass
 
         // Flowers
         const string Flowers = "Flowers";
+
+        struct UpdateType { public const short Summer = 0, Winter = 1, Desert = 2; }
 
         #endregion
 
@@ -162,6 +165,9 @@ namespace RealGrass
         /// </summary>
         public void UpdateClimateSummer(int currentClimate)
         {
+            if (!NeedsUpdate(UpdateType.Summer, currentClimate))
+                return;
+
             switch (currentClimate)
             {
                 case Climate.Mountain:
@@ -218,6 +224,9 @@ namespace RealGrass
         /// </summary>
         public void UpdateClimateWinter(int currentClimate)
         {
+            if (!NeedsUpdate(UpdateType.Winter, currentClimate))
+                return;
+
             switch (currentClimate)
             {
                 case Climate.Mountain:
@@ -253,6 +262,9 @@ namespace RealGrass
         /// </summary>
         public void UpdateClimateDesert()
         {
+            if (!NeedsUpdate(UpdateType.Desert, Climate.None))
+                return;
+
             detailPrototype[1].prototype = LoadGameObject(DesertGrass);
         }
 
@@ -300,6 +312,20 @@ namespace RealGrass
 
             Debug.LogError("Real Grass: Failed to load model " + name);
             return null;
+        }
+
+        /// <summary>
+        /// True if season or climate changed and detail prototypes should be updated.
+        /// </summary>
+        private bool NeedsUpdate(short updateType, int climate)
+        {
+            int key = (updateType << 16) + (short)climate;
+
+            if (key == currentkey)
+                return false;
+
+            currentkey = key;
+            return true;
         }
 
         #endregion
