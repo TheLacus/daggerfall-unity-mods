@@ -82,7 +82,7 @@ namespace VibrantWind
 
         #endregion
 
-        #region Setup
+        #region Unity
 
         [Invoke(StateManager.StateTypes.Start, 0)]
         public static void Init(InitParams initParams)
@@ -98,13 +98,16 @@ namespace VibrantWind
             mod.IsReady = true;
         }
 
-        private void Awake()
+        void Awake()
         {
+            if (instance != null && this != instance)
+                Destroy(this.gameObject);
+
             // Add commands to console
             VibrantWindConsoleCommands.RegisterCommands();
         }
 
-        private void Start()
+        void Start()
         {
             // Get Daggerfall Unity components
             streamingWorld = GameManager.Instance.StreamingWorld;
@@ -114,17 +117,21 @@ namespace VibrantWind
             ModSettings settings = new ModSettings(mod);
             const string speedSection = "Speed", bendingSection = "Bending", sizeSection = "Size";
 
-            Tuple<float, float> speedRange = settings.GetTupleFloat(speedSection, "Range");
-            int speedInt = settings.GetInt(speedSection, "Interpolation", 0, 4);
-
-            Tuple<float, float> bendingRange = settings.GetTupleFloat(bendingSection, "Range");
-            int bendingInt = settings.GetInt(bendingSection, "Interpolation", 0, 4);
-
-            Tuple<float, float> sizeRange = settings.GetTupleFloat(sizeSection, "Range");
-            int sizeInt = settings.GetInt(sizeSection, "Interpolation", 0, 4);
-
             // Get all wind values
-            windStrength = new WindStrengths().GetStrengths(speedRange, speedInt, bendingRange, bendingInt, sizeRange, sizeInt);
+            var Speed = new StrengthSettings() {
+                Range = settings.GetTupleFloat(speedSection, "Range"),
+                Interpolation = settings.GetInt(speedSection, "Interpolation", 0, 4)
+            };
+            var Bending = new StrengthSettings() {
+                Range = settings.GetTupleFloat(bendingSection, "Range"),
+                Interpolation = settings.GetInt(bendingSection, "Interpolation", 0, 4)
+            };
+            var Size = new StrengthSettings()
+            {
+                Range = settings.GetTupleFloat(sizeSection, "Range"),
+                Interpolation = settings.GetInt(sizeSection, "Interpolation", 0, 4)
+            };
+            windStrength = new WindStrengths().GetStrengths(Speed, Bending, Size);
 
             // Subscribe to events
             ToggleMod(true);

@@ -10,20 +10,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using DaggerfallWorkshop.Utility;
 
 namespace VibrantWind
 {
-    public struct Interpolation
-    {
-        public const int
-
-            Lerp = 0,
-            Sinerp = 1,
-            Coserp = 2,
-            SmoothStep = 3;
-    }
-
     public class WindStrengths
     {
         List<float> speed, bending, size;
@@ -35,19 +24,11 @@ namespace VibrantWind
         /// </summary>
         /// <param name="range">Min and max value.</param>
         /// <param name="interpolation">Interpolation to use.</param>
-        public WindStrength GetStrengths
-            (
-            Tuple<float, float> speedRange, 
-            int speedInterpolation,
-            Tuple<float, float> bendingRange,
-            int bendingInterpolation,
-            Tuple<float, float> sizeRange,
-            int sizeInterpolation
-            )
+        public WindStrength GetStrengths (StrengthSettings speedSettings, StrengthSettings bendingSettings, StrengthSettings sizeSettings)
         {
-            speed = InitList(speedRange, speedInterpolation);
-            bending = InitList(bendingRange, bendingInterpolation);
-            size = InitList(sizeRange, sizeInterpolation);
+            speed = InitList(speedSettings);
+            bending = InitList(bendingSettings);
+            size = InitList(sizeSettings);
 
 #if TEST_VALUES
             Debug.Log(string.Format("VibrantWind: Speed {0}\nBending {1}\nSize {2}", 
@@ -64,12 +45,12 @@ namespace VibrantWind
         /// <summary>
         /// Get all values for one property.
         /// </summary>
-        private List<float> InitList(Tuple<float, float> range, int interpolation)
+        private List<float> InitList(StrengthSettings settings)
         {
             const uint times = WindStrength.Items - 1;
 
             List<float> list = new List<float>();
-            var sV = new ScaledValues(range.First, range.Second, times, interpolation);
+            var sV = new ScaledValues(settings.Range.First, settings.Range.Second, times, settings.Interpolation);
 
             for (int i = 0; i < WindStrength.Items; i++)
                 list.Add(sV.NextValue());
