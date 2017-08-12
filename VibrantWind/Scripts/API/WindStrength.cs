@@ -11,32 +11,38 @@ namespace VibrantWind
 {
     /// <summary>
     /// Values for the terrainData properties that affects wind.
-    /// Note that there is a naming discrepancy between Unity API and Unity Editor.
-    /// Here we use the latter ones because they are more meaningful.
+    /// Note that there is a naming discrepancy between Unity API and Unity Editor;
+    /// This class uses the latter ones because they are more meaningful.
     /// </summary>
-    public class WindValues
+    public class WindStrength
     {
+        #region Constructors
+
         /// <summary>
         /// Values for the terrain wind.
         /// </summary>
-        public WindValues() {}
+        public WindStrength() {}
         
         /// <summary>
         /// Values for the terrain wind.
         /// Uses <paramref name="strength"/> for Speed, Bending and Size.
         /// </summary>
         /// <param name="strength"></param>
-        public WindValues(float strength) : this(strength, strength, strength) { }
+        public WindStrength(float strength) : this(strength, strength, strength) { }
 
         /// <summary>
         /// Values for the terrain wind.
         /// </summary>
-        public WindValues(float speed, float bending, float size)
+        public WindStrength(float speed, float bending, float size)
         {
             this.Speed = speed;
             this.Bending = bending;
             this.Size = size;
         }
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// The speed of the wind as it blows grass.
@@ -62,19 +68,38 @@ namespace VibrantWind
         /// </value>
         public float Size { get; set; }
 
+        #endregion
+        
+        #region Public Methods
+
+        /// <summary>
+        /// Set Wind Strength to TerrainData.
+        /// </summary>
+        public void Assign(TerrainData terrainData)
+        {
+            terrainData.wavingGrassStrength = Speed;
+            terrainData.wavingGrassAmount = Bending;
+            terrainData.wavingGrassSpeed = Size;
+        }
+
+        /// <summary>
+        /// Returns a nicely formatted string with all wind values.
+        /// </summary>
         public override string ToString()
         {
             return string.Format("Speed: {0}, Bending: {1}, Size {2}", Speed, Bending, Size);
         }
 
-        public static implicit operator Vector3(WindValues wind)
+        public static implicit operator Vector3(WindStrength wind)
         {
             return new Vector3(wind.Speed, wind.Bending, wind.Size);
         }
 
-        public static implicit operator WindValues(Vector3 wind)
+        public static implicit operator WindStrength(Vector3 wind)
         {
-            return new WindValues(wind.x, wind.y, wind.z);
+            return new WindStrength(wind.x, wind.y, wind.z);
         }
+        
+        #endregion
     }
 }

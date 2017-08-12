@@ -47,7 +47,7 @@ namespace VibrantWind
                 if (vibrantWind == null)
                     return noInstanceMessage;
 
-                vibrantWind.ToggleMod(!VibrantWind.IsEnabled);
+                vibrantWind.ToggleMod();
                 return vibrantWind.GetStatusMessage();
             }
         }
@@ -64,7 +64,7 @@ namespace VibrantWind
                 if (vibrantWind == null)
                     return noInstanceMessage;
 
-                return vibrantWind.CurrentWindStrength.ToString();
+                return vibrantWind.WindStrength.ToString();
             }
         }
 
@@ -105,8 +105,8 @@ namespace VibrantWind
                     return noInstanceMessage;
 
                 // Apply new value for wind strength
-                vibrantWind.ApplyWindStrength(new WindValues(speed, bending, size));
-                return string.Format("Wind strength is now {0}", vibrantWind.CurrentWindStrength.ToString());
+                vibrantWind.ApplyWindStrength(new WindStrength(speed, bending, size));
+                return string.Format("Wind strength is now {0}", vibrantWind.WindStrength.ToString());
             }
         }
 

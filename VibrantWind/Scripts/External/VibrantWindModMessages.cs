@@ -29,7 +29,7 @@ namespace VibrantWind
                     if (callBack != null)
                     {
                         // Return wind strength as Vector3 (x: speed, y: bending, z: size)
-                        callBack(GetStrength, (Vector3)VibrantWind.Instance.CurrentWindStrength);
+                        callBack(GetStrength, (Vector3)VibrantWind.Instance.WindStrength);
                     }
                     else
                         Debug.LogError("VibrantWind: Failed to send strength value to mod; callBack is null");

@@ -8,115 +8,97 @@
 // #define TEST_VALUES
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
+using Conditional = System.Diagnostics.ConditionalAttribute;
 using UnityEngine;
 
 namespace VibrantWind
 {
-    public class WindStrengths
+    public static class WindProfilesCreator
     {
-        List<float> speed, bending, size;
-
-        int n = -1;
+        #region Methods
 
         /// <summary>
-        /// Get all wind values.
+        /// Get wind profiles.
         /// </summary>
         /// <param name="range">Min and max value.</param>
         /// <param name="interpolation">Interpolation to use.</param>
-        public WindStrength GetStrengths (StrengthSettings speedSettings, StrengthSettings bendingSettings, StrengthSettings sizeSettings)
+        public static WindProfiles Get (StrengthSettings speedSettings, StrengthSettings bendingSettings, StrengthSettings sizeSettings)
         {
-            speed = InitList(speedSettings);
-            bending = InitList(bendingSettings);
-            size = InitList(sizeSettings);
+            List<float> speed = NewList(speedSettings);
+            List<float> bending = NewList(bendingSettings);
+            List<float> size = NewList(sizeSettings);
+            PrintValuesToLog(speed, bending, size);
 
-#if TEST_VALUES
-            Debug.Log(string.Format("VibrantWind: Speed {0}\nBending {1}\nSize {2}", 
-                AllValues(speed), AllValues(bending), AllValues(size)));
-#endif
-
-            var windStrength = new WindStrength();
-            for (int i = 0; i < WindStrength.Items; i++)
-                windStrength[i] = NextValues();
-
-            return windStrength;
+            var wind = new WindProfiles();
+            for (int i = 0; i < WindProfiles.Items; i++)
+                wind[i] = new WindStrength(speed[i], bending[i], size[i]);
+            return wind;
         }
 
         /// <summary>
-        /// Get all values for one property.
+        /// Create a list with all values interpolated as per settings.
         /// </summary>
-        private List<float> InitList(StrengthSettings settings)
+        private static List<float> NewList(StrengthSettings settings)
         {
-            const uint times = WindStrength.Items - 1;
-
-            List<float> list = new List<float>();
-            var sV = new ScaledValues(settings.Range.First, settings.Range.Second, times, settings.Interpolation);
-
-            for (int i = 0; i < WindStrength.Items; i++)
-                list.Add(sV.NextValue());
-
-            return list;
+            var sV = new ScaledValues(settings.Range.First, settings.Range.Second, WindProfiles.Items, settings.Interpolation);
+            return sV.GetValues().ToList();
         }
 
-        /// <summary>
-        /// Create a set of strength, amount and speed values.
-        /// </summary>
-        private WindValues NextValues()
+        [Conditional("TEST_VALUES")]
+        private static void PrintValuesToLog(List<float> speed, List<float> bending, List<float> size)
         {
-            return new WindValues(speed[++n], bending[n], size[n]);
+            Func<List<float>, string> allValues = x => string.Join(",", x.Select(y => y.ToString()).ToArray());
+
+            Debug.LogFormat("VibrantWind interpolated values:\nSpeed {0}\nBending {1}\nSize {2}",
+                allValues(speed), allValues(bending), allValues(size));
         }
 
-#if TEST_VALUES
-        private string AllValues(List<float> list)
-        {
-            return string.Join(",", list.Select(x => x.ToString()).ToArray());
-        }
-#endif
+        #endregion
+
+        #region Private Classes
 
         /// <summary>
         /// Scales a group of values between min and max.
         /// </summary>
-        public class ScaledValues
+        private class ScaledValues
         {
             readonly float min, max;
-            readonly uint times;
+            readonly int count, maxStep;
             readonly int interpolation;
-
-            uint current = 0;
 
             /// <summary>
             /// Get values between min and max using interpolation.
             /// </summary>
-            /// <param name="min">0 on 0-1</param>
-            /// <param name="max">1 on 0-1</param>
-            /// <param name="times">Total number of values.</param>
+            /// <param name="min">Minimum value.</param>
+            /// <param name="max">maximum value.</param>
+            /// <param name="count">Number of values to generate.</param>
             /// <param name="interpolation">Type of interpolation to use.</param>
-            public ScaledValues(float min, float max, uint times, int interpolation)
+            public ScaledValues(float min, float max, int count, int interpolation)
             {
                 this.min = min;
                 this.max = max;
-                this.times = times;
+                this.count = count;
+                this.maxStep = count - 1;
                 this.interpolation = interpolation;
-
-#if TEST_VALUES
-                Debug.Log(string.Format("VibrantWind: interpolation {0}", interpolation));
-#endif
             }
 
-            public float NextValue()
+            /// <summary>
+            /// Get interpolated values.
+            /// </summary>
+            public IEnumerable<float> GetValues()
             {
-                float t = (current != 0) ? (current / (float)times) : 0;
-                float value = (float)Math.Round(GetValue(t), 2);
-
-#if TEST_VALUES
-                Debug.Log(string.Format("VibrantWind: item {0}, rel {1}, value {2}", current, t, value));
-#endif
-
-                current++;
-                return value;
+                return Enumerable.Range(0, count).Select(x => GetValue(x));
             }
 
-            private float GetValue(float t)
+            private float GetValue(int step)
+            {
+                float t = (step != 0) ? (step / (float)maxStep) : 0;
+                return (float)Math.Round(Interpolate(t), 2);
+            }
+
+            private float Interpolate(float t)
             {
                 switch (interpolation)
                 {
@@ -137,5 +119,7 @@ namespace VibrantWind
                 }
             }
         }
+        
+        #endregion
     }
 }

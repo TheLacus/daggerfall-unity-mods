@@ -10,17 +10,17 @@ using UnityEngine;
 namespace VibrantWind
 {
     /// <summary>
-    /// Strengths for the wind. 
-    /// Every strength is composed of three values, defined as <see cref="WindValues"/>.
+    /// Possible values for the wind strength. 
+    /// Every strength is composed of three values, defined as <see cref="WindStrength"/>.
     /// </summary>
-    public class WindStrength
+    public class WindProfiles
     {
         /// <summary>
         /// Number of possible wind strengths.
         /// </summary>
-        public const uint Items = 6;
+        public const int Items = 6;
 
-        public WindValues
+        public WindStrength
 
             None,
             VeryLight,
@@ -32,7 +32,7 @@ namespace VibrantWind
         /// <summary>
         /// Gets or sets the <see cref="WindValues"/> for the specified index.
         /// </summary>
-        public WindValues this[int i]
+        public WindStrength this[int i]
         {
             get { return GetValue(i); }
             set { SetValue(i, value); }
@@ -41,7 +41,7 @@ namespace VibrantWind
         /// <summary>
         /// Gets the <see cref="WindValues"/> for the specified relative index in range 0-1.
         /// </summary>
-        public WindValues this[float i]
+        public WindStrength this[float i]
         {
             get { return GetValue(RelToIndex(i)); }
         }
@@ -56,7 +56,7 @@ namespace VibrantWind
 
         #region Private Methods
 
-        private WindValues GetValue(int i)
+        private WindStrength GetValue(int i)
         {
             switch (i)
             {
@@ -77,7 +77,7 @@ namespace VibrantWind
             return GetValue(Mathf.Clamp(i, 0, 5));
         }
 
-        private void SetValue(int i, WindValues values)
+        private void SetValue(int i, WindStrength values)
         {
             switch (i)
             {
