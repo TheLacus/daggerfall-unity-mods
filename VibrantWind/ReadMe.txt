@@ -8,7 +8,7 @@ Change strength of wind according to current weather.
 
 Prerequisites
 -------------
-Daggerfall Unity 0.4.12 or higher.
+Daggerfall Unity 0.4.36 or higher.
 While there are no other technical requirements, this mod is 
 supposed to be a complementary to a vegetation mod, such as RealGrass.
 
