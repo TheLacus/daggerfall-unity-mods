@@ -8,10 +8,15 @@
 
 // #define TEST_PERFORMANCE
 
+using System.Collections;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 using DaggerfallWorkshop;
-using DaggerfallWorkshop.Utility;
+using DaggerfallWorkshop.Game;
+using DaggerfallWorkshop.Game.Utility.ModSupport;
 using DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings;
+using DaggerfallWorkshop.Utility;
 
 namespace RealGrass
 {
@@ -43,42 +48,160 @@ namespace RealGrass
     {
         #region Fields
 
+        static RealGrass instance;
+        static Mod mod;
+        static ModSettings settings;
+
+        // Resources folder on disk
+        static string resourcesFolder;
+
+        bool isEnabled;
+
         DetailPrototypesCreator detailPrototypesCreator;
         DetailPrototypesDensity detailPrototypesDensity;
 
         // Optional details
-        static bool waterPlants; // Enable plants
-        static bool winterPlants; // Enable plants during winter
-        static bool terrainStones; // Enable stones on terrain
-        static bool flowers; // Enable flowers
+        bool waterPlants, winterPlants, terrainStones, flowers;
 
         // Terrain settings
-        static float detailObjectDistance;
-        static float detailObjectDensity;
+        float detailObjectDistance;
+        float detailObjectDensity;
+
+        #endregion
+
+        #region Properties
+
+        // Singleton
+        public static RealGrass Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = FindObjectOfType<RealGrass>();
+                return instance;
+            }
+        }
+
+        public static Mod Mod
+        {
+            get { return mod; }
+        }
+
+        public static ModSettings Settings
+        {
+            get { return settings; }
+        }
+
+        /// <summary>
+        /// Resources folder on disk.
+        /// </summary>
+        public static string ResourcesFolder
+        {
+            get { return resourcesFolder; }
+        }
+
+        // Details status
+        public bool WaterPlants { get { return waterPlants; } }
+        public bool WinterPlants { get { return winterPlants; } }
+        public bool TerrainStones { get { return terrainStones; } }
+        public bool Flowers { get { return flowers; } }
+
+        /// <summary>
+        /// Details will be rendered up to this distance from the player.
+        /// </summary>
+        public float DetailObjectDistance
+        {
+            get { return detailObjectDistance; }
+            set { detailObjectDistance = value; }
+        }
 
         #endregion
 
         #region Unity
 
         /// <summary>
-        /// Awake mod and set up vegetation settings
+        /// Mod loader.
         /// </summary>
-        private void Awake()
+        [Invoke(StateManager.StateTypes.Start, 0)]
+        public static void Init(InitParams initParams)
         {
-            // Load settings
-            LoadSettings();
+            // Get mod
+            mod = initParams.Mod;
 
-            // Subscribe to the onPromoteTerrainData
-            DaggerfallTerrain.OnPromoteTerrainData += AddGrass;
+            // Get resources folder
+            resourcesFolder = Path.Combine(mod.DirPath, "Resources");
 
-            // Print on log
-            string modInfo = RealGrassLoader.Mod.Title + " v." + RealGrassLoader.Mod.ModInfo.ModVersion;
-            Debug.LogFormat("{0} started: subscribed to terrain promotion.", modInfo);
+            // Add script to the scene.
+            GameObject go = new GameObject("RealGrass");
+            instance = go.AddComponent<RealGrass>();
+
+            // After finishing, set the mod's IsReady flag to true.
+            mod.IsReady = true;
+        }
+
+        void Awake()
+        {
+            if (instance != null && this != instance)
+                Destroy(this.gameObject);
+
+            Debug.LogFormat("{0} started.", mod.Title + " v." + mod.ModInfo.ModVersion);
+        }
+
+        void Start()
+        {
+            StartMod(true, false);
+            isEnabled = true;
+
+            RealGrassConsoleCommands.RegisterCommands();
         }
 
         #endregion
 
-        #region Add Grass
+        #region Public Methods
+
+        /// <summary>
+        /// Toggle mod and add/remove grass on existing terrains.
+        /// </summary>
+        /// <returns>New status of mod.</returns>
+        public bool ToggleMod()
+        {
+            ToggleMod(!isEnabled);
+            return isEnabled;
+        }
+
+        /// <summary>
+        /// Set status of mod and add/remove grass on existing terrains.
+        /// </summary>
+        /// <param name="enable">New status to set.</param>
+        public void ToggleMod(bool enable)
+        {
+            if (isEnabled == enable)
+                return;
+
+            if (enable)
+                StartMod(false, true);
+            else
+                StopMod();
+
+            isEnabled = enable;
+        }
+
+        /// <summary>
+        /// Restart mod to apply changes.
+        /// </summary>
+        public void RestartMod()
+        {
+            if (enabled)
+                StopMod();
+
+            StartMod(false, true);
+
+            isEnabled = true;
+        }
+
+        #endregion
+
+        #region Mod Logic
 
         /// <summary>
         /// Add Grass and other details on terrain.
@@ -150,35 +273,6 @@ namespace RealGrass
 
         }
 
-        #endregion
-
-        #region Setup Methods
-
-        /// <summary>
-        /// Load settings.
-        /// </summary>
-        private void LoadSettings()
-        {
-            const string waterPlantsSection = "WaterPlants", stonesSection = "TerrainStones", flowersSection = "Flowers";
-
-            ModSettings settings = RealGrassLoader.Settings;
-
-            // Optional details
-            waterPlants = settings.GetBool(waterPlantsSection, "Enable");
-            winterPlants = settings.GetBool(waterPlantsSection, "EnableWinter");
-            terrainStones = settings.GetBool(stonesSection, "Enable");
-            flowers = settings.GetInt(flowersSection, "Density", 0, 100) != 0;
-
-            // Detail prototypes
-            detailPrototypesCreator = new DetailPrototypesCreator(settings, waterPlants, terrainStones, flowers);
-            detailPrototypesDensity = new DetailPrototypesDensity(settings, waterPlants, terrainStones, flowers);
-
-            // Terrain
-            const string terrainSection = "Terrain";
-            detailObjectDistance = settings.GetFloat(terrainSection, "DetailDistance", 10f);
-            detailObjectDensity = settings.GetFloat(terrainSection, "DetailDensity", 0.1f, 1f);
-        }
-
         /// <summary>
         /// Set settings for terrain.
         /// </summary>
@@ -197,6 +291,95 @@ namespace RealGrass
 
             // Set seed for terrain
             Random.InitState(TerrainHelper.MakeTerrainKey(daggerTerrain.MapPixelX, daggerTerrain.MapPixelY));
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Start mod and optionally add grass to existing terrains.
+        /// </summary>
+        /// <param name="loadSettings">Load user settings.</param>
+        /// <param name="initTerrains">Add Grass to existing terrains (unnecessary at startup).</param>
+        private void StartMod(bool loadSettings, bool initTerrains)
+        {
+            if(loadSettings)
+            {
+                try
+                {
+                    // Load settings and setup components
+                    LoadSettings();
+                    detailPrototypesCreator = new DetailPrototypesCreator();
+                    detailPrototypesDensity = new DetailPrototypesDensity();
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogErrorFormat("RealGrass: Failed to setup mod as per user settings!\n{0}", e.Message);
+                    return;
+                }
+            }
+
+            // Subscribe to onPromoteTerrainData
+            DaggerfallTerrain.OnPromoteTerrainData += AddGrass;
+
+            // Place details on existing terrains
+            if(initTerrains)
+                StartCoroutine(InitTerrains());
+
+            Debug.Log("Real Grass is now enabled; subscribed to terrain promotion.");
+        }
+
+        private IEnumerator InitTerrains()
+        {
+            var terrains = GameManager.Instance.StreamingWorld.StreamingTarget.GetComponentsInChildren<DaggerfallTerrain>();
+            foreach (DaggerfallTerrain daggerTerrain in terrains)
+            {
+                AddGrass(daggerTerrain, daggerTerrain.gameObject.GetComponent<Terrain>().terrainData);
+                yield return new WaitForEndOfFrame();
+            }
+        }
+
+        /// <summary>
+        /// Stop mod and remove grass fom existing terrains.
+        /// </summary>
+        private void StopMod()
+        {
+            // Unsubscribe from onPromoteTerrainData
+            DaggerfallTerrain.OnPromoteTerrainData -= AddGrass;
+
+            // Remove details from terrains
+            Terrain[] terrains = GameManager.Instance.StreamingWorld.StreamingTarget.GetComponentsInChildren<Terrain>();
+            foreach (TerrainData terrainData in terrains.Select(x => x.terrainData))
+            {
+                for (int i = 0; i < 5; i++)
+                    terrainData.SetDetailLayer(0, 0, i, detailPrototypesDensity.Empty);
+                terrainData.detailPrototypes = null;
+            }
+
+            Debug.Log("Real Grass is now disabled; unsubscribed from terrain promotion.");
+        }
+
+        /// <summary>
+        /// Load settings.
+        /// </summary>
+        private void LoadSettings()
+        {
+            const string waterPlantsSection = "WaterPlants", stonesSection = "TerrainStones", flowersSection = "Flowers";
+
+            // Load settings
+            settings = new ModSettings(mod);
+
+            // Optional details
+            waterPlants = settings.GetBool(waterPlantsSection, "Enable");
+            winterPlants = settings.GetBool(waterPlantsSection, "EnableWinter");
+            terrainStones = settings.GetBool(stonesSection, "Enable");
+            flowers = settings.GetInt(flowersSection, "Density", 0, 100) != 0;
+
+            // Terrain
+            const string terrainSection = "Terrain";
+            detailObjectDistance = settings.GetFloat(terrainSection, "DetailDistance", 10f);
+            detailObjectDensity = settings.GetFloat(terrainSection, "DetailDensity", 0.1f, 1f);
         }
 
         #endregion

@@ -42,6 +42,7 @@ namespace RealGrass
         int[,] details0, details1, details2, details3, details4;
 
         // Properties
+        public int[,] Empty { get { return EmptyMap(); } }
         public int[,] Grass { get { return details0; } }
         public int[,] WaterPlants { get { return details1; } }
         public int[,] Waterlilies { get { return details2; } }
@@ -52,13 +53,14 @@ namespace RealGrass
 
         #region Public Methods
 
-        public DetailPrototypesDensity(ModSettings settings, bool waterPlants, bool terrainStones, bool flowers)
+        public DetailPrototypesDensity()
         {
-            this.waterPlants = waterPlants;
-            this.terrainStones = terrainStones;
-            this.flowers = flowers;
+            RealGrass realGrass = RealGrass.Instance;
+            this.waterPlants = realGrass.WaterPlants;
+            this.terrainStones = realGrass.TerrainStones;
+            this.flowers = realGrass.Flowers;
 
-            LoadSettings(settings);
+            LoadSettings(RealGrass.Settings);
         }
 
         public void InitDetailsLayers()

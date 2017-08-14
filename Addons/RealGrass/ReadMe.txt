@@ -137,6 +137,10 @@ Be careful when installing other mods that affects terrain.
 
 **CHANGELOG**
 -------------------------------------------------------------------------------------------------
+dev
+* Graphic enhancements of water plants.
+* Added console commands: realgrass_toggle, realgrass_distance.
+
 1.10
 * Support Grass shader in addition to GrassBillboard shader
 * The max distance for detail render can be customized for different performance requirements

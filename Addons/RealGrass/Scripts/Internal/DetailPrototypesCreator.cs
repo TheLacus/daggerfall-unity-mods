@@ -7,7 +7,6 @@
 
 using UnityEngine;
 using DaggerfallWorkshop.Utility.AssetInjection;
-using DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings;
 
 namespace RealGrass
 {
@@ -17,10 +16,10 @@ namespace RealGrass
     public class DetailPrototypesCreator
     {
         // Fields
-        readonly bool useGrassShader;
-        readonly bool waterPlants;
         readonly DetailPrototype[] detailPrototype;
-        int currentkey = 0;
+        readonly bool waterPlants;      
+        bool useGrassShader;
+        int currentkey = default(int);
 
         #region Constants
 
@@ -73,10 +72,10 @@ namespace RealGrass
         /// Initialize detail protoypes.
         /// </summary>
         /// <param name="settings">Mod settings.</param>
-        public DetailPrototypesCreator(ModSettings settings, bool waterPlants, bool terrainStones, bool flowers)
+        public DetailPrototypesCreator()
         {
-            this.waterPlants = waterPlants;
-
+            this.waterPlants = RealGrass.Instance.WaterPlants;
+            var settings = RealGrass.Settings;
             Color detailColor = new Color(0.70f, 0.70f, 0.70f);
 
             // Grass
@@ -214,7 +213,7 @@ namespace RealGrass
 
                 default:
                     Debug.LogError(string.Format("RealGrass: {0} is not a valid climate (Summer)", currentClimate));
-                    RealGrassLoader.Mod.Enabled = false;
+                    RealGrass.Instance.ToggleMod(false);
                     break;
             }
         }
@@ -252,7 +251,7 @@ namespace RealGrass
 
                 default:
                     Debug.LogError(string.Format("RealGrass: {0} is not a valid climate (Winter)", currentClimate));
-                    RealGrassLoader.Mod.Enabled = false;
+                    RealGrass.Instance.ToggleMod(false);
                     break;
             }
         }
@@ -280,8 +279,8 @@ namespace RealGrass
         {
             Texture2D tex;
 
-            if (!TextureReplacement.ImportTextureFromDisk(RealGrassLoader.ResourcesFolder, name, out tex))
-                tex = RealGrassLoader.Mod.GetAsset<Texture2D>(name);
+            if (!TextureReplacement.ImportTextureFromDisk(RealGrass.ResourcesFolder, name, out tex))
+                tex = RealGrass.Mod.GetAsset<Texture2D>(name);
 
             if (tex != null)
                 return tex;
@@ -297,14 +296,14 @@ namespace RealGrass
         /// <param name="name">Name of gameobject.</param>
         private static GameObject LoadGameObject(string name)
         {
-            var go = RealGrassLoader.Mod.GetAsset<GameObject>(name);
+            var go = RealGrass.Mod.GetAsset<GameObject>(name);
 
             if (go != null)
             {
                 Texture2D tex;
                 Material material = go.GetComponent<MeshRenderer>().material;
 
-                if (TextureReplacement.ImportTextureFromDisk(RealGrassLoader.ResourcesFolder, material.mainTexture.name, out tex))
+                if (TextureReplacement.ImportTextureFromDisk(RealGrass.ResourcesFolder, material.mainTexture.name, out tex))
                     material.mainTexture = tex;
 
                 return go;
