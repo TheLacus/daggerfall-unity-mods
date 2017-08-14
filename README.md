@@ -1,6 +1,8 @@
 # Vibrant Wind
 Changes strength of wind according to current weather.
 
+![Vibrant Wind](https://i.imgur.com/dVH1uY7.png)
+
 ## Features
 * Dynamically change wind strength, from a calm breeze for a sunny day to a violent wind for snowstorms.
 * Set a custom range and interpolation: choose a wide range of speeds or a light breeze with minor variations.
