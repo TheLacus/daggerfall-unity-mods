@@ -37,6 +37,7 @@ namespace RealGrass
         // Flowers
         bool flowers; // Enable flowers
         int flowersDensity; // Density of flowers
+        readonly Range<int> flowersDisposition = new Range<int>(0, 4);
 
         // Details layers
         int[,] details0, details1, details2, details3, details4;
@@ -94,8 +95,12 @@ namespace RealGrass
                             details0[(y * 2) + 1, (x * 2) + 1] = RandomThick();
                             if (flowers)
                             {
-                                var index = RandomPosition(y, x);
-                                details4[index.First, index.Second] = RandomFlowers();
+                                int randomFlowers = RandomFlowers();
+                                if (randomFlowers != 0)
+                                {
+                                    var index = RandomPosition(y, x);
+                                    details4[index.First, index.Second] = RandomFlowers();
+                                }
                             }
                             break;
 
@@ -524,7 +529,10 @@ namespace RealGrass
         /// </summary>
         private int RandomFlowers()
         {
-            return Random.Range(0, 100) < flowersDensity ? 1 : 0;
+            if (Random.Range(0, 100) < flowersDensity)
+                return flowersDisposition.Random();
+
+            return 0;
         }
 
         /// <summary>
@@ -573,7 +581,7 @@ namespace RealGrass
             flowersDensity = settings.GetInt(flowersSection, "Density", 0, 100);
         }
 
-        private int[,] EmptyMap()
+        private static int[,] EmptyMap()
         {
             const int size = 256;
             return new int[size, size];
