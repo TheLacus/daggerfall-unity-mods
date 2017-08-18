@@ -138,6 +138,7 @@ Be careful when installing other mods that affects terrain.
 **CHANGELOG**
 -------------------------------------------------------------------------------------------------
 dev
+* Optimization of DetailPrototypes terrain setting.
 * Graphic enhancements of water plants.
 * Added console commands: realgrass_toggle, realgrass_distance.
 

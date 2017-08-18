@@ -26,4 +26,15 @@ namespace RealGrass
             Temperate = 231,
             Temperate2 = 232;
     }
+
+    public class Indices
+    {
+        public int
+
+            Grass,
+            WaterPlants,
+            Waterlilies,
+            Stones,
+            Flowers;
+    }
 }

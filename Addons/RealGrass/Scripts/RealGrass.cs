@@ -251,18 +251,19 @@ namespace RealGrass
 
             // Assign detail prototypes to the terrain
             terrainData.detailPrototypes = detailPrototypesCreator.DetailPrototypes;
+            Indices indices = detailPrototypesCreator.Indices;
 
             // Assign detail layers to the terrain
-            terrainData.SetDetailLayer(0, 0, 0, detailPrototypesDensity.Grass); // Grass
+            terrainData.SetDetailLayer(0, 0, indices.Grass, detailPrototypesDensity.Grass); // Grass
             if (waterPlants)
             {
-                terrainData.SetDetailLayer(0, 0, 1, detailPrototypesDensity.WaterPlants); // Water plants near water
-                terrainData.SetDetailLayer(0, 0, 2, detailPrototypesDensity.Waterlilies); // Waterlilies and grass inside water
+                terrainData.SetDetailLayer(0, 0, indices.WaterPlants, detailPrototypesDensity.WaterPlants); // Water plants near water
+                terrainData.SetDetailLayer(0, 0, indices.Waterlilies, detailPrototypesDensity.Waterlilies); // Waterlilies and grass inside water
             }
             if (terrainStones)
-                terrainData.SetDetailLayer(0, 0, 3, detailPrototypesDensity.Stones); // Stones
+                terrainData.SetDetailLayer(0, 0, indices.Stones, detailPrototypesDensity.Stones); // Stones
             if (flowers)
-                terrainData.SetDetailLayer(0, 0, 4, detailPrototypesDensity.Flowers); // Flowers
+                terrainData.SetDetailLayer(0, 0, indices.Flowers, detailPrototypesDensity.Flowers); // Flowers 
 
 #if TEST_PERFORMANCE
 
@@ -270,7 +271,6 @@ namespace RealGrass
             Debug.LogFormat("RealGrass - Time elapsed: {0} ms.", stopwatch.Elapsed.Milliseconds);
 
 #endif
-
         }
 
         /// <summary>

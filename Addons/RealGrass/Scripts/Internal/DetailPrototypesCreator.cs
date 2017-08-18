@@ -5,6 +5,7 @@
 // Original Author: TheLacus
 // Contributors:    
 
+using System.Collections.Generic;
 using UnityEngine;
 using DaggerfallWorkshop.Utility.AssetInjection;
 
@@ -17,8 +18,11 @@ namespace RealGrass
     {
         // Fields
         readonly DetailPrototype[] detailPrototype;
+        readonly Indices indices = new Indices();
+
         readonly bool waterPlants;      
         bool useGrassShader;
+
         int currentkey = default(int);
 
         #region Constants
@@ -64,6 +68,14 @@ namespace RealGrass
             get { return detailPrototype; }
         }
 
+        /// <summary>
+        /// Indices of detail prototypes layers.
+        /// </summary>
+        public Indices Indices
+        {
+            get { return indices; }
+        }
+
         #endregion
 
         #region Public Methods
@@ -95,11 +107,12 @@ namespace RealGrass
             float noiseSpreadStones = settings.GetFloat("TerrainStones", "NoiseSpread");
 
             // Create a holder for our grass and plants
-            detailPrototype = new DetailPrototype[5];
+            List<DetailPrototype> detailPrototypes = new List<DetailPrototype>();
+            int index = 0;
 
             // Grass settings
             // We use GrassBillboard or Grass rendermode
-            detailPrototype[0] = new DetailPrototype()
+            var grassPrototypes = new DetailPrototype()
             {
                 minHeight = grassHeight.Min,
                 maxHeight = grassHeight.Max,
@@ -111,52 +124,73 @@ namespace RealGrass
                 renderMode = useGrassShader ? DetailRenderMode.Grass : DetailRenderMode.GrassBillboard,
                 usePrototypeMesh = useGrassShader
             };
+            detailPrototypes.Add(grassPrototypes);
+            indices.Grass = index;
 
-            // Near-water plants settings
-            // Here we use the Grass shader which support meshes, and textures with transparency.
-            // This allow us to have more realistic plants which still bend in the wind.
-            detailPrototype[1] = new DetailPrototype()
+            if (waterPlants)
             {
-                usePrototypeMesh = true,
-                noiseSpread = noiseSpreadPlants,
-                healthyColor = detailColor,
-                dryColor = detailColor,
-                renderMode = DetailRenderMode.Grass
-            };
+                // Near-water plants settings
+                // Here we use the Grass shader which support meshes, and textures with transparency.
+                // This allow us to have more realistic plants which still bend in the wind.
+                var waterPlantsNear = new DetailPrototype()
+                {
+                    usePrototypeMesh = true,
+                    noiseSpread = noiseSpreadPlants,
+                    healthyColor = detailColor,
+                    dryColor = detailColor,
+                    renderMode = DetailRenderMode.Grass
+                };
+                detailPrototypes.Add(waterPlantsNear);
+                indices.WaterPlants = ++index;
 
-            // In-water plants settings
-            // We use Grass as above
-            detailPrototype[2] = new DetailPrototype()
-            {
-                usePrototypeMesh = true,
-                noiseSpread = noiseSpreadPlants,
-                healthyColor = detailColor,
-                dryColor = detailColor,
-                renderMode = DetailRenderMode.Grass
-            };
+                // In-water plants settings
+                // We use Grass as above
+                var waterPlantsInside = new DetailPrototype()
+                {
+                    usePrototypeMesh = true,
+                    noiseSpread = noiseSpreadPlants,
+                    healthyColor = detailColor,
+                    dryColor = detailColor,
+                    renderMode = DetailRenderMode.Grass
+                };
+                detailPrototypes.Add(waterPlantsInside);
+                indices.Waterlilies = ++index;
+            }
 
-            // Little stones settings
-            // For stones we use VertexLit as we are placing 3d static models.
-            detailPrototype[3] = new DetailPrototype()
+            if (RealGrass.Instance.TerrainStones)
             {
-                usePrototypeMesh = true,
-                noiseSpread = noiseSpreadStones,
-                healthyColor = detailColor,
-                dryColor = detailColor,
-                renderMode = DetailRenderMode.VertexLit,
-                prototype = LoadGameObject(Stone)
-            };
+                // Little stones
+                // For stones we use VertexLit as we are placing 3d static models.
+                var stonesPrototypes = new DetailPrototype()
+                {
+                    usePrototypeMesh = true,
+                    noiseSpread = noiseSpreadStones,
+                    healthyColor = detailColor,
+                    dryColor = detailColor,
+                    renderMode = DetailRenderMode.VertexLit,
+                    prototype = LoadGameObject(Stone)
+                };
+                detailPrototypes.Add(stonesPrototypes);
+                indices.Stones = ++index;
+            }
 
-            // Flowers
-            detailPrototype[4] = new DetailPrototype()
+            if (RealGrass.Instance.Flowers)
             {
-                usePrototypeMesh = true,
-                noiseSpread = 0.4f,
-                healthyColor = detailColor,
-                dryColor = detailColor,
-                renderMode = DetailRenderMode.Grass,
-                prototype = LoadGameObject(Flowers)
-            };
+                // Flowers
+                var flowerPrototypes = new DetailPrototype()
+                {
+                    usePrototypeMesh = true,
+                    noiseSpread = 0.4f,
+                    healthyColor = detailColor,
+                    dryColor = detailColor,
+                    renderMode = DetailRenderMode.Grass,
+                    prototype = LoadGameObject(Flowers)
+                };
+                detailPrototypes.Add(flowerPrototypes);
+                indices.Flowers = ++index;
+            }
+
+            detailPrototype = detailPrototypes.ToArray();
         }
 
         /// <summary>
@@ -174,13 +208,13 @@ namespace RealGrass
 
                     // Mountain
                     if (!useGrassShader)
-                        detailPrototype[0].prototypeTexture = LoadTexture(brownGrass);
+                        detailPrototype[indices.Grass].prototypeTexture = LoadTexture(brownGrass);
                     else
-                        detailPrototype[0].prototype = LoadGameObject(brownGrassMesh);
+                        detailPrototype[indices.Grass].prototype = LoadGameObject(brownGrassMesh);
                     if (waterPlants)
                     {
-                        detailPrototype[1].prototype = LoadGameObject(MountainGrass);
-                        detailPrototype[2].prototype = LoadGameObject(WaterMountainGrass);
+                        detailPrototype[indices.WaterPlants].prototype = LoadGameObject(MountainGrass);
+                        detailPrototype[indices.Waterlilies].prototype = LoadGameObject(WaterMountainGrass);
                     }
                     break;
 
@@ -189,11 +223,11 @@ namespace RealGrass
 
                     // Swamp
                     if (!useGrassShader)
-                        detailPrototype[0].prototypeTexture = LoadTexture(brownGrass);
+                        detailPrototype[indices.Grass].prototypeTexture = LoadTexture(brownGrass);
                     else
-                        detailPrototype[0].prototype = LoadGameObject(brownGrassMesh);
+                        detailPrototype[indices.Grass].prototype = LoadGameObject(brownGrassMesh);
                     if (waterPlants)
-                        detailPrototype[1].prototype = LoadGameObject(SwampGrass);
+                        detailPrototype[indices.WaterPlants].prototype = LoadGameObject(SwampGrass);
                     break;
 
                 case Climate.Temperate:
@@ -201,13 +235,13 @@ namespace RealGrass
 
                     // Temperate
                     if (!useGrassShader)
-                        detailPrototype[0].prototypeTexture = LoadTexture(greenGrass);
+                        detailPrototype[indices.Grass].prototypeTexture = LoadTexture(greenGrass);
                     else
-                        detailPrototype[0].prototype = LoadGameObject(greenGrassMesh);
+                        detailPrototype[indices.Grass].prototype = LoadGameObject(greenGrassMesh);
                     if (waterPlants)
                     {
-                        detailPrototype[1].prototype = LoadGameObject(TemperateGrass);
-                        detailPrototype[2].prototype = LoadGameObject(Waterlily);
+                        detailPrototype[indices.WaterPlants].prototype = LoadGameObject(TemperateGrass);
+                        detailPrototype[indices.Waterlilies].prototype = LoadGameObject(Waterlily);
                     }
                     break;
 
@@ -232,21 +266,21 @@ namespace RealGrass
                 case Climate.Mountain2:
 
                     // Mountain
-                    detailPrototype[1].prototype = LoadGameObject(MountainGrassWinter);
+                    detailPrototype[indices.WaterPlants].prototype = LoadGameObject(MountainGrassWinter);
                     break;
 
                 case Climate.Swamp:
                 case Climate.Swamp2:
 
                     // Swamp
-                    detailPrototype[1].prototype = LoadGameObject(SwampGrassWinter);
+                    detailPrototype[indices.WaterPlants].prototype = LoadGameObject(SwampGrassWinter);
                     break;
 
                 case Climate.Temperate:
                 case Climate.Temperate2:
 
                     // Temperate
-                    detailPrototype[1].prototype = LoadGameObject(TemperateGrassWinter);
+                    detailPrototype[indices.WaterPlants].prototype = LoadGameObject(TemperateGrassWinter);
                     break;
 
                 default:
