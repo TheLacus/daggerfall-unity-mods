@@ -1,7 +1,7 @@
 ﻿=================================================================================================
 REAL GRASS
 
-1.10 for DaggerFall Unity 0.4.36
+1.11 for DaggerFall Unity 0.4.36
 =================================================================================================
 
 **DESCRIPTION**
@@ -137,7 +137,7 @@ Be careful when installing other mods that affects terrain.
 
 **CHANGELOG**
 -------------------------------------------------------------------------------------------------
-dev
+1.11
 * Optimization of DetailPrototypes terrain setting.
 * Graphic enhancements of water plants.
 * Added console commands: realgrass_toggle, realgrass_distance.
