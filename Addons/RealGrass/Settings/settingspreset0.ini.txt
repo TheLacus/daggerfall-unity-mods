@@ -1,4 +1,5 @@
 ﻿[Internal]
+[Internal]
 PresetName = Low-profile
 PresetAuthor = Uncanny_Valley
 Description = Low-profile grass.
@@ -10,4 +11,6 @@ Width = 1.0<,>1.0
 NoiseSpread = 0.4
 ThickDensity = 8<,>24
 ThinDensity = 4<,>12
+HealthyColor = B2B2B2ff
+DryColor = B2B2B2ff
 UseGrassShader = False

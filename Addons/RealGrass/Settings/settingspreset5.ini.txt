@@ -5,7 +5,7 @@ Description = Colorful medium-sized grass.
 SettingsVersion = 1.2
 
 [Grass]
-Height = 0.75<,>2.1
+Height = 0.65<,>1.05
 Width = 0.8<,>1
 NoiseSpread = 0.4
 ThickDensity = 5<,>16

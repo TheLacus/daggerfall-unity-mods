@@ -10,4 +10,6 @@ Width = 0.8<,>1.3
 NoiseSpread = 0.4
 ThickDensity = 3<,>20
 ThinDensity = 0<,>7
+HealthyColor = B2B2B2ff
+DryColor = B2B2B2ff
 UseGrassShader = False
