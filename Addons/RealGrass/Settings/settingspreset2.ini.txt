@@ -1,9 +1,0 @@
-﻿[Internal]
-PresetName = Thick plants
-Description = High number of plants around water zones.
-SettingsVersion = 1.2
-
-[WaterPlants]
-NoiseSpread = 0.4
-Density = 8<,>12
-DesertDensity = 10<,>15
