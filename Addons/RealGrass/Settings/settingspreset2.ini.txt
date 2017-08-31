@@ -1,5 +1,5 @@
-﻿[Internal]
-PresetName = Vibrant vegetation
+[Internal]
+PresetName = Dense Grass
 PresetAuthor = TheLacus
 Description = Colorful medium-sized grass.
 SettingsVersion = 1.2

@@ -1,6 +1,5 @@
-﻿[Internal]
 [Internal]
-PresetName = Low-profile
+PresetName = Low Grass
 PresetAuthor = Uncanny_Valley
 Description = Low-profile grass.
 SettingsVersion = 1.2
