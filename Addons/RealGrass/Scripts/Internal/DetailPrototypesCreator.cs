@@ -5,6 +5,7 @@
 // Original Author: TheLacus
 // Contributors:    
 
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using DaggerfallWorkshop.Utility.AssetInjection;
@@ -16,14 +17,20 @@ namespace RealGrass
     /// </summary>
     public class DetailPrototypesCreator
     {
-        // Fields
+        #region Fields
+
         readonly DetailPrototype[] detailPrototype;
         readonly Indices indices = new Indices();
+
+        readonly bool import;
+        readonly string texturesPath;
 
         readonly bool waterPlants;      
         bool useGrassShader;
 
         int currentkey = default(int);
+
+        #endregion
 
         #region Constants
 
@@ -105,6 +112,12 @@ namespace RealGrass
 
             // Stones
             float noiseSpreadStones = settings.GetFloat("TerrainStones", "NoiseSpread");
+
+            // Texture import
+            const string texturesSection = "Textures";
+            import = settings.GetBool(texturesSection, "Import");
+            if (import)
+                texturesPath = Path.Combine(RealGrass.ResourcesFolder, settings.GetString(texturesSection, "Pack"));
 
             // Create a holder for our grass and plants
             List<DetailPrototype> detailPrototypes = new List<DetailPrototype>();
@@ -309,11 +322,11 @@ namespace RealGrass
         /// Get texture from disk or from mod.
         /// </summary>
         /// <param name="name">Name of texture.</param>
-        private static Texture2D LoadTexture(string name)
+        private Texture2D LoadTexture(string name)
         {
             Texture2D tex;
 
-            if (!TextureReplacement.ImportTextureFromDisk(RealGrass.ResourcesFolder, name, out tex))
+            if (!import || !TextureReplacement.ImportTextureFromDisk(texturesPath, name, out tex))
                 tex = RealGrass.Mod.GetAsset<Texture2D>(name);
 
             if (tex != null)
@@ -328,17 +341,20 @@ namespace RealGrass
         /// texture from disk asset (if present).
         /// </summary>
         /// <param name="name">Name of gameobject.</param>
-        private static GameObject LoadGameObject(string name)
+        private GameObject LoadGameObject(string name)
         {
             var go = RealGrass.Mod.GetAsset<GameObject>(name);
 
             if (go != null)
             {
-                Texture2D tex;
-                Material material = go.GetComponent<MeshRenderer>().material;
+                if (import)
+                {
+                    Texture2D tex;
+                    Material material = go.GetComponent<MeshRenderer>().material;
 
-                if (TextureReplacement.ImportTextureFromDisk(RealGrass.ResourcesFolder, material.mainTexture.name, out tex))
-                    material.mainTexture = tex;
+                    if (TextureReplacement.ImportTextureFromDisk(texturesPath, material.mainTexture.name, out tex))
+                        material.mainTexture = tex;
+                }
 
                 return go;
             }

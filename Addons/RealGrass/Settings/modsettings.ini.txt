@@ -49,3 +49,9 @@ Density = 0
 [Terrain]
 DetailDistance = 80
 DetailDensity = 1.0
+
+;Override default textures
+;Texture pack to import
+[Textures]
+Import = False
+Pack = 
