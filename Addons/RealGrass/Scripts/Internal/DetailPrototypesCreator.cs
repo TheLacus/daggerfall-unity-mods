@@ -1,4 +1,4 @@
-﻿// Project:         Real Grass for Daggerfall Unity
+// Project:         Real Grass for Daggerfall Unity
 // Web Site:        http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Source Code:     https://github.com/TheLacus/realgrass-du-mod
@@ -59,7 +59,10 @@ namespace RealGrass
         const string Stone = "Stone";
 
         // Flowers
-        const string Flowers = "Flowers";
+        const string Flowers = "Flowers"; // TEMP
+        const string FlowersMountain = "FlowersMountain";
+        const string FlowersTemperate = "FlowersTemperate";
+        const string FlowersSwamp = Flowers;
 
         struct UpdateType { public const short Summer = 0, Winter = 1, Desert = 2; }
 
@@ -197,7 +200,6 @@ namespace RealGrass
                     healthyColor = detailColor,
                     dryColor = detailColor,
                     renderMode = DetailRenderMode.Grass,
-                    prototype = LoadGameObject(Flowers)
                 };
                 detailPrototypes.Add(flowerPrototypes);
                 indices.Flowers = ++index;
@@ -229,6 +231,8 @@ namespace RealGrass
                         detailPrototype[indices.WaterPlants].prototype = LoadGameObject(MountainGrass);
                         detailPrototype[indices.Waterlilies].prototype = LoadGameObject(WaterMountainGrass);
                     }
+                    if (RealGrass.Instance.Flowers)
+                        detailPrototype[indices.Flowers].prototype = LoadGameObject(FlowersMountain);
                     break;
 
                 case Climate.Swamp:
@@ -241,6 +245,8 @@ namespace RealGrass
                         detailPrototype[indices.Grass].prototype = LoadGameObject(brownGrassMesh);
                     if (waterPlants)
                         detailPrototype[indices.WaterPlants].prototype = LoadGameObject(SwampGrass);
+                    if (RealGrass.Instance.Flowers)
+                        detailPrototype[indices.Flowers].prototype = LoadGameObject(FlowersSwamp);
                     break;
 
                 case Climate.Temperate:
@@ -256,6 +262,8 @@ namespace RealGrass
                         detailPrototype[indices.WaterPlants].prototype = LoadGameObject(TemperateGrass);
                         detailPrototype[indices.Waterlilies].prototype = LoadGameObject(Waterlily);
                     }
+                    if (RealGrass.Instance.Flowers)
+                        detailPrototype[indices.Flowers].prototype = LoadGameObject(FlowersTemperate);
                     break;
 
                 default:
