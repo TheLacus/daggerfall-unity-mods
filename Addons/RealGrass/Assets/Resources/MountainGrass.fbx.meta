@@ -13,7 +13,7 @@ ModelImporter:
     4300002: Plane.002
     4300004: Plane.001
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
