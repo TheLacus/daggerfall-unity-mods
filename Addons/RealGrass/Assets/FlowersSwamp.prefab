@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33738991056539048}
   - component: {fileID: 23649811737372388}
   m_Layer: 0
-  m_Name: Flowers
+  m_Name: FlowersSwamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,7 +54,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: fab1b519a528d854598be749ca26ebc9, type: 2}
+  - {fileID: 2100000, guid: 6bd92ecaa1875534eac72662a0ab502c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
