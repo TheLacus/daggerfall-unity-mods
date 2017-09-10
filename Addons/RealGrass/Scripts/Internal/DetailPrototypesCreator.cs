@@ -25,8 +25,7 @@ namespace RealGrass
         readonly bool import;
         readonly string texturesPath;
 
-        readonly bool waterPlants;      
-        bool useGrassShader;
+        readonly bool useGrassShader;
 
         int currentkey = default(int);
 
@@ -59,10 +58,9 @@ namespace RealGrass
         const string Stone = "Stone";
 
         // Flowers
-        const string Flowers = "Flowers"; // TEMP
         const string FlowersMountain = "FlowersMountain";
+        const string FlowersSwamp = "FlowersSwamp";
         const string FlowersTemperate = "FlowersTemperate";
-        const string FlowersSwamp = Flowers;
 
         struct UpdateType { public const short Summer = 0, Winter = 1, Desert = 2; }
 
@@ -93,28 +91,10 @@ namespace RealGrass
         /// <summary>
         /// Initialize detail protoypes.
         /// </summary>
-        /// <param name="settings">Mod settings.</param>
         public DetailPrototypesCreator()
         {
-            this.waterPlants = RealGrass.Instance.WaterPlants;
             var settings = RealGrass.Settings;
             Color detailColor = new Color(0.70f, 0.70f, 0.70f);
-
-            // Grass
-            const string grassSection = "Grass";
-            Range<float> grassHeight = settings.GetTupleFloat(grassSection, "Height");
-            Range<float> grassWidth = settings.GetTupleFloat(grassSection, "Width");
-            float noiseSpread = settings.GetFloat(grassSection, "NoiseSpread");
-            Color grassHealthyColor = settings.GetColor(grassSection, "HealthyColor");
-            Color grassDryColor = settings.GetColor(grassSection, "DryColor");
-            useGrassShader = settings.GetBool(grassSection, "UseGrassShader");
-
-            // Water plants
-            const string waterPlantsSection = "WaterPlants";
-            float noiseSpreadPlants = settings.GetFloat(waterPlantsSection, "NoiseSpread");
-
-            // Stones
-            float noiseSpreadStones = settings.GetFloat("TerrainStones", "NoiseSpread");
 
             // Texture import
             const string texturesSection = "Textures";
@@ -127,6 +107,14 @@ namespace RealGrass
             int index = 0;
 
             // Grass settings
+            const string grassSection = "Grass";
+            Range<float> grassHeight = settings.GetTupleFloat(grassSection, "Height");
+            Range<float> grassWidth = settings.GetTupleFloat(grassSection, "Width");
+            float noiseSpread = settings.GetFloat(grassSection, "NoiseSpread");
+            Color grassHealthyColor = settings.GetColor(grassSection, "HealthyColor");
+            Color grassDryColor = settings.GetColor(grassSection, "DryColor");
+            useGrassShader = settings.GetBool(grassSection, "UseGrassShader");
+
             // We use GrassBillboard or Grass rendermode
             var grassPrototypes = new DetailPrototype()
             {
@@ -143,8 +131,11 @@ namespace RealGrass
             detailPrototypes.Add(grassPrototypes);
             indices.Grass = index;
 
-            if (waterPlants)
+            if (RealGrass.Instance.WaterPlants)
             {
+                const string waterPlantsSection = "WaterPlants";
+                float noiseSpreadPlants = settings.GetFloat(waterPlantsSection, "NoiseSpread");
+
                 // Near-water plants settings
                 // Here we use the Grass shader which support meshes, and textures with transparency.
                 // This allow us to have more realistic plants which still bend in the wind.
@@ -175,6 +166,8 @@ namespace RealGrass
 
             if (RealGrass.Instance.TerrainStones)
             {
+                float noiseSpreadStones = settings.GetFloat("TerrainStones", "NoiseSpread");
+
                 // Little stones
                 // For stones we use VertexLit as we are placing 3d static models.
                 var stonesPrototypes = new DetailPrototype()
@@ -226,11 +219,13 @@ namespace RealGrass
                         detailPrototype[indices.Grass].prototypeTexture = LoadTexture(brownGrass);
                     else
                         detailPrototype[indices.Grass].prototype = LoadGameObject(brownGrassMesh);
-                    if (waterPlants)
+
+                    if (RealGrass.Instance.WaterPlants)
                     {
                         detailPrototype[indices.WaterPlants].prototype = LoadGameObject(MountainGrass);
                         detailPrototype[indices.Waterlilies].prototype = LoadGameObject(WaterMountainGrass);
                     }
+
                     if (RealGrass.Instance.Flowers)
                         detailPrototype[indices.Flowers].prototype = LoadGameObject(FlowersMountain);
                     break;
@@ -243,8 +238,10 @@ namespace RealGrass
                         detailPrototype[indices.Grass].prototypeTexture = LoadTexture(brownGrass);
                     else
                         detailPrototype[indices.Grass].prototype = LoadGameObject(brownGrassMesh);
-                    if (waterPlants)
+
+                    if (RealGrass.Instance.WaterPlants)
                         detailPrototype[indices.WaterPlants].prototype = LoadGameObject(SwampGrass);
+
                     if (RealGrass.Instance.Flowers)
                         detailPrototype[indices.Flowers].prototype = LoadGameObject(FlowersSwamp);
                     break;
@@ -257,11 +254,13 @@ namespace RealGrass
                         detailPrototype[indices.Grass].prototypeTexture = LoadTexture(greenGrass);
                     else
                         detailPrototype[indices.Grass].prototype = LoadGameObject(greenGrassMesh);
-                    if (waterPlants)
+
+                    if (RealGrass.Instance.WaterPlants)
                     {
                         detailPrototype[indices.WaterPlants].prototype = LoadGameObject(TemperateGrass);
                         detailPrototype[indices.Waterlilies].prototype = LoadGameObject(Waterlily);
                     }
+
                     if (RealGrass.Instance.Flowers)
                         detailPrototype[indices.Flowers].prototype = LoadGameObject(FlowersTemperate);
                     break;
