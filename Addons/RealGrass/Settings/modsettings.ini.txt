@@ -41,8 +41,10 @@ NoiseSpread = 0.4
 Density = 4<,>12
 
 ;Flowers (0: no flowers - 100: max density) [Experimental]
+;Number of flowers in a bush
 [Flowers]
 Density = 0
+BushDensity = 1<,>8
 
 ;Grass will be displayed up to this distance
 ;Max density of grass (0.0-1.0)

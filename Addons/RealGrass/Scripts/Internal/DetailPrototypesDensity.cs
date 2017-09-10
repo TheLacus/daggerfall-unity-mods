@@ -31,13 +31,13 @@ namespace RealGrass
         Range<int> desertDensity;
 
         // Stones
-        bool terrainStones; // Enable stones on terrain
+        bool terrainStones;
         Range<int> stonesDensity;
 
         // Flowers
-        bool flowers; // Enable flowers
-        int flowersDensity; // Density of flowers
-        readonly Range<int> flowersDisposition = new Range<int>(0, 4);
+        bool flowers;
+        int flowersDensity;
+        Range<int> flowersBushDensity;
 
         // Details layers
         int[,] details0, details1, details2, details3, details4;
@@ -99,7 +99,7 @@ namespace RealGrass
                                 if (randomFlowers != 0)
                                 {
                                     var index = RandomPosition(y, x);
-                                    details4[index.First, index.Second] = RandomFlowers();
+                                    details4[index.First, index.Second] = randomFlowers;
                                 }
                             }
                             break;
@@ -530,7 +530,7 @@ namespace RealGrass
         private int RandomFlowers()
         {
             if (Random.Range(0, 100) < flowersDensity)
-                return flowersDisposition.Random();
+                return flowersBushDensity.Random();
 
             return 0;
         }
@@ -579,6 +579,7 @@ namespace RealGrass
 
             // Flowers
             flowersDensity = settings.GetInt(flowersSection, "Density", 0, 100);
+            flowersBushDensity = settings.GetTupleInt(flowersSection, "BushDensity");
         }
 
         private static int[,] EmptyMap()
