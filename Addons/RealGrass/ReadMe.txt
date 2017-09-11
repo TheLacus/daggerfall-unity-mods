@@ -6,7 +6,7 @@ REAL GRASS
 
 **DESCRIPTION**
 -------------------------------------------------------------------------------------------------
-Adds grass and, optionally, water plants and stones to the terrain of Daggerfall Unity.
+Adds grass and, optionally, water plants, stones and flowers to the terrain of Daggerfall Unity.
 
 **REQUIREMENTS**
 -------------------------------------------------------------------------------------------------
@@ -87,31 +87,22 @@ You don't need to include all sections or keys.
 When you created your preset, call it 'realgrasspreset*.ini' (use any number or name instead of *)
 and place it in the same folder with realgrass.ini.
 
-**RESOURCES FOLDER**
+**IMPORT TEXTURES**
 -------------------------------------------------------------------------------------------------
 It's possible to create a subfolder called 'Resources' to further customize the grass
-and import custom textures. For example:
+and import custom textures. Inside this folder you can have as many subfolder as you want.
+For example:
 
 - Mods/RealGrass/realgrass.dfmod
-- Mods/RealGrass/Resources
+- Mods/RealGrass/Resources/MyTexturePack
 
-These are the names for the textures:
-- tex_BrownGrass.png
-- tex_GreenGrass.png
-- tex_DesertGrass.png
-- tex_MountainGrass.png
-- tex_MountainGrassWinter.png
-- tex_stone.png
-- tex_SwampGrass.png
-- tex_SwampGrassWinter.png
-- tex_TemperateGrass.png
-- tex_TemperateGrassWinter.png
-- tex_waterlilies.png
-- tex_WaterMountainGrass.png
+In settings, enable Textures Import and write the name of folder (ex: Pack = MyTexturePack).
+You can find textures names on github:
+https://github.com/TheLacus/realgrass-du-mod/tree/master/Addons/RealGrass/Assets/Resources
 
 **FAQ**
 -------------------------------------------------------------------------------------------------
-- How can i improve performance?
+- How can I improve performance?
 * Reducing 'DetailDistance' is the single most impactful option on game performance.
 * Disable 'UseGrassShader'
 * Reduce density of grass through *Lower and *Higher and/or with the general setting 'DetailDensity'.
@@ -122,21 +113,32 @@ These are the names for the textures:
 If you wish to uninstall, you can safely remove the mod from the StreamingAssets folder. 
 It won't affect saves.
 
-**CREDITS**
--------------------------------------------------------------------------------------------------
-Main developer: Uncanny_Valley
-Additional changes: midopa
-GrassAndPlants, conversion to mod-system and improvements: TheLacus
-
-Real Grass on Daggerfall Unity forums: http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
-
 **COMPATIBILITY**
 -------------------------------------------------------------------------------------------------
-This mod is compatible with Nystul Distant Terrain. 
+This mod is compatible with vegetation retextures as well as mods that replace existing vegetation
+with 3d models, while it may be incompatible with mods that add new vegetation.
 Be careful when installing other mods that affects terrain.
+
+Known compatible mods:
+* Distant Terrain, Nystul
+* Vibrant Wind, TheLacus
+
+**CREDITS**
+-------------------------------------------------------------------------------------------------
+Uncanny_Valley - creator, original developer
+TheLacus - developer, maintainer
+Midopa - additional changes
+
+Daggerfall Unity forums: http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
+Github: https://github.com/TheLacus/realgrass-du-mod
 
 **CHANGELOG**
 -------------------------------------------------------------------------------------------------
+dev
+* Support for flowers
+* Settings presets are more user-friendly
+* Texture import is more user-friendly
+
 1.11
 * Optimization of DetailPrototypes terrain setting.
 * Graphic enhancements of water plants.
