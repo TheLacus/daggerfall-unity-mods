@@ -42,17 +42,17 @@ namespace RealGrass
         const string greenGrassMesh = "GreenGrass";
 
         // Models for water plants
-        const string TemperateGrass = "TemperateGrass"; // water plants for temperate
+        const string PlantsTemperate = "PlantsTemperate"; // water plants for temperate
         const string Waterlily = "Waterlily"; // waterlilies for temperate
-        const string SwampGrass = "SwampGrass"; // water plants for swamp
-        const string MountainGrass = "MountainGrass"; // grass for mountain near water
+        const string PlantsSwamp = "PlantsSwamp"; // water plants for swamp
+        const string PlantsMountain = "PlantsMountain"; // grass for mountain near water
         const string WaterMountainGrass = "WaterMountainGrass"; // grass for mountain inside water
-        const string DesertGrass = "DesertGrass"; // grass near water for desert
+        const string PlantsDesert = "PlantsDesert"; // grass near water for desert
 
         // Winter models for water plants
-        const string TemperateGrassWinter = "TemperateGrassWinter"; // water plants for temperate
-        const string SwampGrassWinter = "SwampGrassWinter"; // water plants for swamp
-        const string MountainGrassWinter = "MountainGrassWinter"; // grass for mountain near water
+        const string PlantsTemperateWinter = "PlantsTemperateWinter"; // water plants for temperate
+        const string PlantsSwampWinter = "PlantsSwampWinter"; // water plants for swamp
+        const string PlantsMountainWinter = "PlantsMountainWinter"; // grass for mountain near water
 
         // Little stones for farms
         const string Stone = "Stone";
@@ -222,7 +222,7 @@ namespace RealGrass
 
                     if (RealGrass.Instance.WaterPlants)
                     {
-                        detailPrototype[indices.WaterPlants].prototype = LoadGameObject(MountainGrass);
+                        detailPrototype[indices.WaterPlants].prototype = LoadGameObject(PlantsMountain);
                         detailPrototype[indices.Waterlilies].prototype = LoadGameObject(WaterMountainGrass);
                     }
 
@@ -240,7 +240,7 @@ namespace RealGrass
                         detailPrototype[indices.Grass].prototype = LoadGameObject(brownGrassMesh);
 
                     if (RealGrass.Instance.WaterPlants)
-                        detailPrototype[indices.WaterPlants].prototype = LoadGameObject(SwampGrass);
+                        detailPrototype[indices.WaterPlants].prototype = LoadGameObject(PlantsSwamp);
 
                     if (RealGrass.Instance.Flowers)
                         detailPrototype[indices.Flowers].prototype = LoadGameObject(FlowersSwamp);
@@ -257,7 +257,7 @@ namespace RealGrass
 
                     if (RealGrass.Instance.WaterPlants)
                     {
-                        detailPrototype[indices.WaterPlants].prototype = LoadGameObject(TemperateGrass);
+                        detailPrototype[indices.WaterPlants].prototype = LoadGameObject(PlantsTemperate);
                         detailPrototype[indices.Waterlilies].prototype = LoadGameObject(Waterlily);
                     }
 
@@ -286,21 +286,21 @@ namespace RealGrass
                 case Climate.Mountain2:
 
                     // Mountain
-                    detailPrototype[indices.WaterPlants].prototype = LoadGameObject(MountainGrassWinter);
+                    detailPrototype[indices.WaterPlants].prototype = LoadGameObject(PlantsMountainWinter);
                     break;
 
                 case Climate.Swamp:
                 case Climate.Swamp2:
 
                     // Swamp
-                    detailPrototype[indices.WaterPlants].prototype = LoadGameObject(SwampGrassWinter);
+                    detailPrototype[indices.WaterPlants].prototype = LoadGameObject(PlantsSwampWinter);
                     break;
 
                 case Climate.Temperate:
                 case Climate.Temperate2:
 
                     // Temperate
-                    detailPrototype[indices.WaterPlants].prototype = LoadGameObject(TemperateGrassWinter);
+                    detailPrototype[indices.WaterPlants].prototype = LoadGameObject(PlantsTemperateWinter);
                     break;
 
                 default:
@@ -318,7 +318,7 @@ namespace RealGrass
             if (!NeedsUpdate(UpdateType.Desert, Climate.None))
                 return;
 
-            detailPrototype[1].prototype = LoadGameObject(DesertGrass);
+            detailPrototype[1].prototype = LoadGameObject(PlantsDesert);
         }
 
         #endregion
