@@ -376,7 +376,7 @@ namespace RealGrass
             waterPlants = settings.GetBool(waterPlantsSection, "Enable");
             winterPlants = settings.GetBool(waterPlantsSection, "EnableWinter");
             terrainStones = settings.GetBool(stonesSection, "Enable");
-            flowers = settings.GetInt(flowersSection, "Density", 0, 100) != 0;
+            flowers = settings.GetBool(flowersSection, "Enable");
 
             // Terrain
             const string terrainSection = "Terrain";
