@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33000011158112298}
   - component: {fileID: 23000011311067384}
   m_Layer: 0
-  m_Name: TemperateGrass
+  m_Name: PlantsTemperate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

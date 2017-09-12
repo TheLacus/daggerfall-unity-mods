@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33985823432406266}
   - component: {fileID: 23930424871474312}
   m_Layer: 0
-  m_Name: DesertGrass
+  m_Name: PlantsDesert
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33000011010118472}
   - component: {fileID: 23000014233378632}
   m_Layer: 0
-  m_Name: MountainGrass
+  m_Name: PlantsMountain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

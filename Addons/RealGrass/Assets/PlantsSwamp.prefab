@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33000013898486088}
   - component: {fileID: 23000012464334316}
   m_Layer: 0
-  m_Name: SwampGrass
+  m_Name: PlantsSwamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
