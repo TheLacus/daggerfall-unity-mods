@@ -52,9 +52,6 @@ namespace RealGrass
         static Mod mod;
         static ModSettings settings;
 
-        // Resources folder on disk
-        static string resourcesFolder;
-
         bool isEnabled;
 
         DetailPrototypesCreator detailPrototypesCreator;
@@ -97,7 +94,7 @@ namespace RealGrass
         /// </summary>
         public static string ResourcesFolder
         {
-            get { return resourcesFolder; }
+            get { return Path.Combine(mod.DirPath, "Resources"); }
         }
 
         // Details status
@@ -128,9 +125,6 @@ namespace RealGrass
             // Get mod
             mod = initParams.Mod;
 
-            // Get resources folder
-            resourcesFolder = Path.Combine(mod.DirPath, "Resources");
-
             // Add script to the scene.
             GameObject go = new GameObject("RealGrass");
             instance = go.AddComponent<RealGrass>();
@@ -144,7 +138,7 @@ namespace RealGrass
             if (instance != null && this != instance)
                 Destroy(this.gameObject);
 
-            Debug.LogFormat("{0} started.", mod.Title + " v." + mod.ModInfo.ModVersion);
+            Debug.LogFormat("{0} started.", this);
         }
 
         void Start()
@@ -158,6 +152,14 @@ namespace RealGrass
         #endregion
 
         #region Public Methods
+
+        public override string ToString()
+        {
+            if (mod == null)
+                return base.ToString();
+
+            return string.Format("{0} v.{1}", mod.Title, mod.ModInfo.ModVersion);
+        }
 
         /// <summary>
         /// Toggle mod and add/remove grass on existing terrains.
@@ -315,7 +317,7 @@ namespace RealGrass
                 }
                 catch (System.Exception e)
                 {
-                    Debug.LogErrorFormat("RealGrass: Failed to setup mod as per user settings!\n{0}", e.Message);
+                    Debug.LogErrorFormat("RealGrass: Failed to setup mod as per user settings!\n{0}", e.ToString());
                     return;
                 }
             }
