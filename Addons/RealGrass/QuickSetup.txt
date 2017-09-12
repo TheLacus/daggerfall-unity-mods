@@ -13,13 +13,13 @@ Quick Setup
 	
 	a. If you want a billboard/sprite grass for classic look:
 	
-		- Low-profile (low grass)
+		- Low Grass
 		
-		- Tall grass (height-varied grass)
+		- Tall grass
 
 	b. If you want a more realistic mesh grass:
 	
-		- Vibrant vegetation
+		- Dense Grass
 
 4)	(optional) If you want simple water plants:
 

@@ -1,7 +1,7 @@
 ﻿=================================================================================================
 REAL GRASS
 
-1.11 for DaggerFall Unity 0.4.36
+2.0 for DaggerFall Unity 0.4.36
 =================================================================================================
 
 **DESCRIPTION**
@@ -76,7 +76,7 @@ Such ini file should have this section as an header:
 PresetName = MyPreset
 PresetAuthor = MyName
 Description = Short Description.
-SettingsVersion = 1.2
+SettingsVersion = 1.3
 
 Settings version is not the version of the preset but the version of this mod settings
 the preset is made for.
@@ -134,7 +134,7 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 
 **CHANGELOG**
 -------------------------------------------------------------------------------------------------
-dev
+2.0
 * Support for flowers
 * Settings presets are more user-friendly
 * Texture import is more user-friendly
