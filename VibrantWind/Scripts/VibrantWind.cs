@@ -131,7 +131,7 @@ namespace VibrantWind
             wind = WindProfilesCreator.Get(Speed, Bending, Size);
 
             // Start mod
-            Debug.Log(string.Format("{0} version {1} started. {2}", mod.Title, mod.ModInfo.ModVersion, wind));
+            Debug.Log(this.ToString());
             mod.MessageReceiver = VibrantWindModMessages.MessageReceiver;
             ToggleMod(true);
         }
@@ -139,6 +139,14 @@ namespace VibrantWind
         #endregion
 
         #region Public Methods
+
+        public override string ToString()
+        {
+            if (mod == null || wind == null)
+                return base.ToString();
+
+            return string.Format("{0} v.{1} - {2}", mod.Title, mod.ModInfo.ModVersion, wind.ToString());
+        }
 
         /// <summary>
         /// Toggles Vibrant Wind mod.
@@ -179,7 +187,7 @@ namespace VibrantWind
         /// </summary>
         public string GetStatusMessage()
         {
-            return string.Format("Vibrant Wind is ", isEnabled ? "enabled" : "disabled");
+            return string.Format("Vibrant Wind is {0}", isEnabled ? "enabled" : "disabled");
         }
 
         /// <summary>
@@ -319,6 +327,5 @@ namespace VibrantWind
         }
 
         #endregion
-
     }
 }
