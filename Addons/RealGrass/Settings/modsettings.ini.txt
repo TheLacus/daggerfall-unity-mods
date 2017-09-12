@@ -30,7 +30,7 @@ Enable = False
 EnableWinter = False
 NoiseSpread = 0.4
 Density = 0<,>3
-DesertDensity = 3<,>6
+DesertDensity = 0<,>3
 
 ;Add little stones on farms ground
 ;The higher this is, the more varied the stones will look
