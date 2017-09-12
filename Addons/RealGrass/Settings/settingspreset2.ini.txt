@@ -2,7 +2,7 @@
 PresetName = Dense Grass
 PresetAuthor = TheLacus
 Description = Colorful medium-sized grass.
-SettingsVersion = 1.2
+SettingsVersion = 1.3
 
 [Grass]
 Height = 0.65<,>1.05

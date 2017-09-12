@@ -2,7 +2,7 @@
 PresetName = Low Grass
 PresetAuthor = Uncanny_Valley
 Description = Low-profile grass.
-SettingsVersion = 1.2
+SettingsVersion = 1.3
 
 [Grass]
 Height = 0.65<,>0.65
