@@ -6,6 +6,7 @@
 // Contributors:  
 
 using DaggerfallWorkshop.Utility;
+using DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings;
 
 namespace VibrantWind
 {
@@ -21,6 +22,14 @@ namespace VibrantWind
 
     public struct StrengthSettings
     {
+        public StrengthSettings(ModSettings settings, string section)
+        {
+            Field = section;
+            Range = settings.GetTupleFloat(section, "Range");
+            Interpolation = settings.GetInt(section, "Interpolation", 0, 4);
+        }
+
+        public string Field;
         public Tuple<float, float> Range;
         public int Interpolation;
     }

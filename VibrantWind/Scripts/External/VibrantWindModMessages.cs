@@ -7,6 +7,7 @@
 
 using System;
 using UnityEngine;
+using DaggerfallWorkshop.Game.Weather;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
 
 namespace VibrantWind
@@ -18,46 +19,19 @@ namespace VibrantWind
     {
         public static void MessageReceiver(string message, object data, DFModMessageCallback callBack)
         {
-            const string GetStrength = "GetStrength"; // Return current strength of wind.
-            const string SetStrength = "SetStrength"; // Set strength of wind.
-            const string SetStrengthRel = "SetStrengthRel"; // Set strength of wind with user settings.
+            const string ForceWeather = "ForceWeather"; // Set strength of wind with user settings.
 
             switch (message)
             {
-                case GetStrength:
-
-                    if (callBack != null)
-                    {
-                        // Return wind strength as Vector3 (x: speed, y: bending, z: size)
-                        callBack(GetStrength, (Vector3)VibrantWind.Instance.WindStrength);
-                    }
-                    else
-                        Debug.LogError("VibrantWind: Failed to send strength value to mod; callBack is null");
-                    break;
-
-                case SetStrength:
+                case ForceWeather:
 
                     try
                     {
-                        // Set wind strength with float values from Vector3 (as GetStrength)
-                        VibrantWind.Instance.ApplyWindStrength((Vector3)data);
+                        VibrantWind.Instance.ForceWeather((WeatherType)data);
                     }
                     catch (InvalidCastException)
                     {
-                        Debug.LogError("VibrantWind: Failed to set strength value as requested by mod; data is not Vector3 of float");
-                    }
-                    break;
-
-                case SetStrengthRel:
-
-                    try
-                    {
-                        // Set strength with user settings. 'data' is a float from 0 (0% of strength) to 1 (100% of strength)
-                        VibrantWind.Instance.ApplyWindStrength((float)data);
-                    }
-                    catch (InvalidCastException)
-                    {
-                        Debug.LogError("VibrantWind: Failed to set strength value as requested by mod; data is not float");
+                        Debug.LogError("VibrantWind: Failed to set strength value as requested by mod; data is not WeatherType");
                     }
                     break;
 

@@ -19,3 +19,9 @@ Interpolation = 3
 [Size]
 Range = 0.1<,>0.8
 Interpolation = 2
+
+;Force of the wind as it blows trees and particles (min-max)
+;0: Lerp, 1: Sinerp, 2: Coserp, 3: SmoothStep
+[Force]
+Range = 0.1<,>1
+Interpolation = 0

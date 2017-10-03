@@ -12,47 +12,43 @@ using System.Linq;
 using System.Collections.Generic;
 using Conditional = System.Diagnostics.ConditionalAttribute;
 using UnityEngine;
+using DaggerfallWorkshop.Game.Weather;
 
 namespace VibrantWind
 {
     public static class WindProfilesCreator
     {
+        // Number of weathers.
+        static readonly int precision = Enum.GetValues(typeof(WeatherType)).Cast<WeatherType>().Distinct().Count();
+
         #region Methods
 
-        /// <summary>
-        /// Get wind profiles.
-        /// </summary>
-        /// <param name="range">Min and max value.</param>
-        /// <param name="interpolation">Interpolation to use.</param>
-        public static WindProfiles Get (StrengthSettings speedSettings, StrengthSettings bendingSettings, StrengthSettings sizeSettings)
+        public static WindStrength[] Get (StrengthSettings speedSettings, StrengthSettings bendingSettings, StrengthSettings sizeSettings)
         {
-            List<float> speed = NewList(speedSettings);
-            List<float> bending = NewList(bendingSettings);
-            List<float> size = NewList(sizeSettings);
-            PrintValuesToLog(speed, bending, size);
+            float[] speed = Get(speedSettings);
+            float[] bending = Get(bendingSettings);
+            float[] size = Get(sizeSettings);
 
-            var wind = new WindProfiles();
-            for (int i = 0; i < WindProfiles.Items; i++)
+            var wind = new WindStrength[precision];
+            for (int i = 0; i < precision; i++)
                 wind[i] = new WindStrength(speed[i], bending[i], size[i]);
             return wind;
         }
 
-        /// <summary>
-        /// Create a list with all values interpolated as per settings.
-        /// </summary>
-        private static List<float> NewList(StrengthSettings settings)
+        public static float[] Get (StrengthSettings settings)
         {
-            var sV = new ScaledValues(settings.Range.First, settings.Range.Second, WindProfiles.Items, settings.Interpolation);
-            return sV.GetValues().ToList();
+            var sV = new ScaledValues(settings.Range.First, settings.Range.Second, precision, settings.Interpolation);
+            float[] values = sV.GetValues().ToArray();
+            PrintValuesToLog(values, settings.Field);
+            return values;
         }
 
         [Conditional("TEST_VALUES")]
-        private static void PrintValuesToLog(List<float> speed, List<float> bending, List<float> size)
+        private static void PrintValuesToLog(float[] values, string field)
         {
-            Func<List<float>, string> allValues = x => string.Join(",", x.Select(y => y.ToString()).ToArray());
+            Func<float[], string> allValues = x => string.Join(",", x.Select(y => y.ToString()).ToArray());
 
-            Debug.LogFormat("VibrantWind interpolated values:\nSpeed {0}\nBending {1}\nSize {2}",
-                allValues(speed), allValues(bending), allValues(size));
+            Debug.LogFormat("VibrantWind - {0}: {1}", field, allValues(values));
         }
 
         #endregion

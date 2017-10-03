@@ -5,7 +5,6 @@
 // Original Author: TheLacus
 // Contributors:    
 
-// #define TEST_WIND
 // #define TEST_PERFORMANCE
 
 using UnityEngine;
@@ -32,16 +31,20 @@ namespace VibrantWind
         // DU components
         StreamingWorld streamingWorld;
         PlayerWeather playerWeather;
+        WindZone windZone;
 
         /// <summary>
-        /// All possible values for the wind strength.
+        /// Wind settings for terrain wind (grass).
         /// </summary>
-        WindProfiles wind;
+        WindStrength[] terrainWind;
 
         /// <summary>
-        /// Current wind strength.
+        /// Wind settings for WindZone (trees, particles).
         /// </summary>
-        WindStrength windStrength;
+        float[] ambientWind;
+
+        // Index for current weather.
+        int _weather;
 
         #endregion
 
@@ -69,12 +72,23 @@ namespace VibrantWind
             get { return mod; }
         }
 
-        /// <summary>
-        /// Current wind strength.
-        /// </summary>
-        public WindStrength WindStrength
+        public WindStrength TerrainWindStrength
         {
-            get { return windStrength; }
+            get { return terrainWind[_weather]; }
+        }
+
+        public float AmbientWindStrength
+        {
+            get { return ambientWind[_weather]; }
+        }
+
+        /// <summary>
+        /// Current weather.
+        /// </summary>
+        public WeatherType Weather
+        {
+            get { return (WeatherType)_weather; }
+            internal set { _weather = (int)value; }
         }
 
         #endregion
@@ -109,31 +123,24 @@ namespace VibrantWind
             // Get Daggerfall Unity components
             streamingWorld = GameManager.Instance.StreamingWorld;
             playerWeather = GameManager.Instance.PlayerGPS.GetComponent<PlayerWeather>();
+            windZone = GameManager.Instance.WeatherManager.GetComponent<WindZone>();
 
             // Get settings
             ModSettings settings = new ModSettings(mod);
-            const string speedSection = "Speed", bendingSection = "Bending", sizeSection = "Size";
 
-            // Get all wind values
-            var Speed = new StrengthSettings() {
-                Range = settings.GetTupleFloat(speedSection, "Range"),
-                Interpolation = settings.GetInt(speedSection, "Interpolation", 0, 4)
-            };
-            var Bending = new StrengthSettings() {
-                Range = settings.GetTupleFloat(bendingSection, "Range"),
-                Interpolation = settings.GetInt(bendingSection, "Interpolation", 0, 4)
-            };
-            var Size = new StrengthSettings()
-            {
-                Range = settings.GetTupleFloat(sizeSection, "Range"),
-                Interpolation = settings.GetInt(sizeSection, "Interpolation", 0, 4)
-            };
-            wind = WindProfilesCreator.Get(Speed, Bending, Size);
+            // Get terrain wind values
+            var speed = new StrengthSettings(settings, "Speed");
+            var bending = new StrengthSettings(settings, "Bending");
+            var size = new StrengthSettings(settings, "Size");
+            terrainWind = WindProfilesCreator.Get(speed, bending, size);
+
+            // Get ambient wind values
+            var force = new StrengthSettings(settings, "Force");
+            ambientWind = WindProfilesCreator.Get(force);
 
             // Start mod
-            Debug.Log(this.ToString());
             mod.MessageReceiver = VibrantWindModMessages.MessageReceiver;
-            ToggleMod(true);
+            ToggleMod(true, false);
         }
 
         #endregion
@@ -142,25 +149,25 @@ namespace VibrantWind
 
         public override string ToString()
         {
-            if (mod == null || wind == null)
+            if (mod == null)
                 return base.ToString();
 
-            return string.Format("{0} v.{1} - {2}", mod.Title, mod.ModInfo.ModVersion, wind.ToString());
+            return string.Format("{0} v.{1} (running: {2}).", mod.Title, mod.ModInfo.ModVersion, isEnabled);
         }
 
         /// <summary>
         /// Toggles Vibrant Wind mod.
         /// </summary>
-        public void ToggleMod()
+        public void ToggleMod(bool applyImmediately = false)
         {
-            ToggleMod(!isEnabled);
+            ToggleMod(!isEnabled, applyImmediately);
         }
 
         /// <summary>
         /// Toggles Vibrant Wind mod.
         /// </summary>
         /// <param name="toggle">Enable or disable the mod.</param>
-        public void ToggleMod(bool toggle)
+        public void ToggleMod(bool toggle, bool applyImmediately = false)
         {
             if (toggle == isEnabled)
                 return;
@@ -170,6 +177,9 @@ namespace VibrantWind
                 StreamingWorld.OnInitWorld += StreamingWorld_OnInitWorld;
                 DaggerfallTerrain.OnPromoteTerrainData += DaggerfallTerrain_OnPromoteTerrainData;
                 WeatherManager.OnWeatherChange += WeatherManager_OnWeatherChange;
+
+                if (applyImmediately)
+                    ForceWeather(playerWeather.WeatherType);
             }
             else
             {
@@ -179,33 +189,12 @@ namespace VibrantWind
             }
 
             isEnabled = toggle;
-            Debug.Log(GetStatusMessage());
+            Debug.Log(this.ToString());
         }
 
-        /// <summary>
-        /// Gets a message for the current status.
-        /// </summary>
-        public string GetStatusMessage()
+        public void ForceWeather(WeatherType weather)
         {
-            return string.Format("Vibrant Wind is {0}", isEnabled ? "enabled" : "disabled");
-        }
-
-        /// <summary>
-        /// Applies immediately the wind strength on all active terrains.
-        /// </summary>
-        public void ApplyWindStrength(WindStrength strength)
-        {
-            UpdateWindStrength(strength);
-            SetWindStrength();
-        }
-
-        /// <summary>
-        /// Applies immediately the wind strength on all active terrains with user settings.
-        /// <paramref name="relativeStrength"/> is in range 0: no wind - 1: max wind.
-        /// </summary>
-        public void ApplyWindStrength(float relativeStrength)
-        {
-            ApplyWindStrength(wind[relativeStrength]);
+            WeatherManager_OnWeatherChange(weather);
         }
 
         #endregion
@@ -213,73 +202,31 @@ namespace VibrantWind
         #region Private Methods
 
         /// <summary>
-        /// Set current wind strength.
-        /// Use <see cref="SetWindStrength()"/> to apply.
-        /// </summary>
-        private void UpdateWindStrength(WindStrength windStrength)
-        {
-            this.windStrength = windStrength;
-        }
-
-        /// <summary>
-        /// Update wind strength for <paramref name="weather"/>.
-        /// Use <see cref="SetWindStrength()"/> to apply.
-        /// </summary>
-        /// <param name="weather">Current weather.</param>
-        private void UpdateWindStrength(WeatherType weather)
-        {
-            this.windStrength = GetWindStrength(weather);
-
-#if TEST_WIND
-            Debug.Log(string.Format("VibrantWind: weather [{0}], {1}", weather, currentStrength));
-#endif
-        }
-
-        /// <summary>
-        /// Gets the wind strength for <paramref name="weather"/>.
-        /// </summary>
-        /// <param name="weather">New weather.</param>
-        private WindStrength GetWindStrength(WeatherType weather)
-        {
-            switch (weather)
-            {
-                case WeatherType.Sunny:
-                default:
-                    return wind.None;
-
-                case WeatherType.Cloudy:
-                    return wind.VeryLight;
-
-                case WeatherType.Overcast:
-                case WeatherType.Fog:
-                    return wind.Light;
-
-                case WeatherType.Rain:
-                    return wind.Medium;
-
-                case WeatherType.Thunder:
-                    return wind.Strong;
-
-                case WeatherType.Snow:
-                    return wind.VeryStrong;
-            }
-        }
-
-        /// <summary>
         /// Set wind strength to all terrains.
         /// </summary>
-        private void SetWindStrength()
+        private void SetTerrainWindStrength()
         {
             foreach (Terrain terrain in streamingWorld.StreamingTarget.GetComponentsInChildren<Terrain>())
-                windStrength.Assign(terrain.terrainData);
+                terrainWind[_weather].Assign(terrain.terrainData);
         }
 
         /// <summary>
         /// Set wind strength to <paramref name="terrainData"/>.
         /// </summary>
-        private void SetWindStrength(TerrainData terrainData)
+        private void SetTerrainWindStrength(TerrainData terrainData)
         {
-            windStrength.Assign(terrainData);
+            terrainWind[_weather].Assign(terrainData);
+        }
+
+        /// <summary>
+        /// Set wind strength to WindZone (does nothing if not present).
+        /// </summary>
+        private void SetAmbientWindStrength()
+        {
+            if (!windZone)
+                return;
+
+            windZone.windMain = ambientWind[_weather];
         }
 
         #endregion
@@ -287,12 +234,16 @@ namespace VibrantWind
         #region Events Handlers
 
         /// <summary>
-        /// Update wind strength on terrain creation.
+        /// Update weather on terrain creation.
         /// This is called at startup and when player teleports.
         /// </summary>
         private void StreamingWorld_OnInitWorld()
         {
-            UpdateWindStrength(playerWeather.WeatherType);
+            if (Weather != playerWeather.WeatherType)
+            {
+                Weather = playerWeather.WeatherType;
+                SetAmbientWindStrength();
+            }
         }
 
         /// <summary>
@@ -303,7 +254,7 @@ namespace VibrantWind
         /// <param name="terrainData">New terrain.</param>
         private void DaggerfallTerrain_OnPromoteTerrainData(DaggerfallTerrain daggerTerrain, TerrainData terrainData)
         {
-            SetWindStrength(terrainData);
+            SetTerrainWindStrength(terrainData);
         }
 
         /// <summary>
@@ -317,8 +268,11 @@ namespace VibrantWind
             var stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
 #endif
-            UpdateWindStrength(weather);
-            SetWindStrength();
+
+            Weather = weather;
+
+            SetTerrainWindStrength();
+            SetAmbientWindStrength();
 
 #if TEST_PERFORMANCE
             stopwatch.Stop();
