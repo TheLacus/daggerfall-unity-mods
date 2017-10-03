@@ -1,16 +1,20 @@
-﻿VIBRANT WIND
-
-Version: 0.3
+=================================================================================================
+ __     ___ _                     _    __        ___           _ 
+ \ \   / (_) |__  _ __ __ _ _ __ | |_  \ \      / (_)_ __   __| |
+  \ \ / /| | '_ \| '__/ _` | '_ \| __|  \ \ /\ / /| | '_ \ / _` |
+   \ V / | | |_) | | | (_| | | | | |_    \ V  V / | | | | | (_| |
+    \_/  |_|_.__/|_|  \__,_|_| |_|\__|    \_/\_/  |_|_| |_|\__,_|
+                                                                 
+v0.3 for DaggerFall Unity 0.4.75
+=================================================================================================
 
 Description 
 -----------
-Change strength of wind according to current weather.
+This mod changes strength of wind according to current weather.
 
-Prerequisites
--------------
-Daggerfall Unity 0.4.36 or higher.
-While there are no other technical requirements, this mod is 
-supposed to be a complementary to a vegetation mod, such as RealGrass.
+Purpose is to add more realism to Daggerfall weather system, bending grass,
+tree leaves and particle systems (chimney smog on buildings etc.) with a
+different intensity for different conditions.
 
 Installation
 ------------
@@ -31,7 +35,7 @@ The size of the 'ripples' on grassy areas. An higher value means a bigger zone
 affected by the wind at the same time.
 
 - Force
-The force of the wind as it blows trees and particles.
+The force (or intensity) of the wind as it blows trees and particles.
 
 Settings keys
 -------------
@@ -40,7 +44,7 @@ Min: The strength of the wind when there is light/no wind. Must be bigger than z
 Max: The highest strength of the wind, used during strong storms. Should be lower than one.
 
 - Interpolation
-Affects how the values for each climate are chosen.
+Affects how the values for each weather are chosen.
 * 0: Lerp
 A simple linear interpolation; the difference between each value is the same.
 * 1: Sinerp
@@ -53,28 +57,35 @@ middle values have the biggest variations while the start and the end are 'smoot
 
 Console Commands
 ----------------
-- set_weather {0-6}
-Daggerfall Unity; Changes weather with index from pleasants to non pleasants (0: sunny, 6: snow).
-
-- vwind_getstrength
-Get current strength of wind.
-
-- vwind_forceweather
-Set a weather for this mod; does not affect game weather.
+- set_weather {index}
+Changes weather with index from pleasants to non pleasants (0: sunny, 6: snow).
 
 - vwind_toggle
 Disable mod. When the game loads new terrains, they will use a default of 0.5 for all values.
-Use the same command to re-enable it; changes are applied immediately.
+Use the same command to re-enable it; new values are applied immediately.
+
+- vwind_debug {mode}
+0: Get current wind strength.
+1: Set weather for wind strength; does not affet game weather.
+2: Test all weathers in succession and print all values to log.
 
 Compatibility
 -------------
-This mod is compatible with every mod, including eventual weather mods, 
-provided that it doesn't affect terrainData wind settings or WindZone.
+Vibrant Wind show its best with mods that add terrain details (grass)
+and wind-supported models for the Trees system.
+Works great with RealGrass by Uncanny_Valley and TheLacus.
+
+Particle systems must include "External Forces" module to support
+wind (and be affected by this mod).
+
+It's probably not compatible with other mods that affect TerrainData waving
+settings or WindZone settings.
 
 Changelog
 ---------
 * 0.4
 - Support for WindZone (trees, particles).
+- Reorganization of console commands.
 
 * 0.3
 - Set speed, bending and size separately.
