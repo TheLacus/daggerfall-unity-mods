@@ -6,8 +6,11 @@
 // Contributors:    
 
 using System;
+using System.Linq;
+using System.Collections;
 using UnityEngine;
 using Wenzil.Console;
+using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Weather;
 
 namespace VibrantWind
@@ -24,9 +27,7 @@ namespace VibrantWind
             try
             {
                 ConsoleCommandsDatabase.RegisterCommand(ToggleVibrantWind.name, ToggleVibrantWind.description, ToggleVibrantWind.usage, ToggleVibrantWind.Execute);
-                ConsoleCommandsDatabase.RegisterCommand(GetWindStrength.name, GetWindStrength.description, GetWindStrength.usage, GetWindStrength.Execute);
-                ConsoleCommandsDatabase.RegisterCommand(ForceWeather.name, ForceWeather.description, ForceWeather.usage, ForceWeather.Execute);
-
+                ConsoleCommandsDatabase.RegisterCommand(VibrantWindDebug.name, VibrantWindDebug.description, VibrantWindDebug.usage, VibrantWindDebug.Execute);
             }
             catch (Exception e)
             {
@@ -51,11 +52,11 @@ namespace VibrantWind
             }
         }
 
-        private static class GetWindStrength
+        private static class VibrantWindDebug
         {
-            public static readonly string name = "vwind_getstrength";
-            public static readonly string description = "Get current wind strength.";
-            public static readonly string usage = "vwind_getstrength";
+            public static readonly string name = "vwind_debug";
+            public static readonly string description = "Debug tools.";
+            public static readonly string usage = Usage();
 
             public static string Execute(params string[] args)
             {
@@ -63,29 +64,65 @@ namespace VibrantWind
                 if (vibrantWind == null)
                     return noInstanceMessage;
 
-                return string.Format("Terrain: {0}\nAmbient: {1}", vibrantWind.TerrainWindStrength, vibrantWind.AmbientWindStrength);
+                int mode;
+                if (args.Length < 1 || !int.TryParse(args[0], out mode))
+                    return usage;
+
+                switch (mode)
+                {
+                    case 0:
+                        return string.Format("Terrain: {0}\nAmbient: {1}", vibrantWind.TerrainWindStrength, vibrantWind.AmbientWindStrength);
+
+                    case 1:
+                        try
+                        {
+                            vibrantWind.ForceWeather((WeatherType)int.Parse(args[1]));
+                            return "weather set.";
+                        }
+                        catch { return usage; }
+
+                    case 2:
+                        WeathersTest weathersTest = new WeathersTest();
+                        vibrantWind.StartCoroutine(weathersTest.StartTest());
+                        return "Close console to start test; current values will be logged on disk.";
+                }
+
+                return usage;
+            }
+
+            private static string Usage()
+            {
+                string usage = "vwind_debug {mode}";
+                usage += "\n0: Get current wind strength";
+                usage += "\n1: Set weather for wind strength.";
+                usage += "\n2: Test all weathers in succession.";
+                return usage;
             }
         }
+    }
 
-        private static class ForceWeather
+    public class WeathersTest
+    {
+        public IEnumerator StartTest()
         {
-            public static readonly string name = "vwind_forceweather";
-            public static readonly string description = "Set weather for wind strength.";
-            public static readonly string usage = "vwind_forceweather {weather index}";
+            var vibrantWind = VibrantWind.Instance;
+            var currentWeather = vibrantWind.Weather;
+            string log = "################";
 
-            public static string Execute(params string[] args)
+            foreach (var weather in Enum.GetValues(typeof(WeatherType)).Cast<WeatherType>().Distinct())
             {
-                var vibrantWind = VibrantWind.Instance;
-                if (vibrantWind == null)
-                    return noInstanceMessage;
+                vibrantWind.ForceWeather(weather);
 
-                try
-                {
-                    vibrantWind.ForceWeather((WeatherType)int.Parse(args[0]));
-                    return "weather set.";
-                }
-                catch { return usage; }
+                string message = string.Format("{0}\n{1}\n{2}", weather.ToString(), vibrantWind.TerrainWindStrength, vibrantWind.AmbientWindStrength);
+                DaggerfallUI.Instance.PopupMessage(message);
+                log += "\n* " + message;
+
+                yield return new WaitForSeconds(6);
             }
+
+            vibrantWind.ForceWeather(currentWeather);
+            DaggerfallUI.Instance.PopupMessage("test ended");
+            Debug.Log(log + "\n################");
         }
     }
 }
