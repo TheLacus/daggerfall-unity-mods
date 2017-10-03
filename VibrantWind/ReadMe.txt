@@ -30,6 +30,9 @@ Excessively high values deform the grass mesh, while too low values make it look
 The size of the 'ripples' on grassy areas. An higher value means a bigger zone 
 affected by the wind at the same time.
 
+- Force
+The force of the wind as it blows trees and particles.
+
 Settings keys
 -------------
 - Range
@@ -56,32 +59,23 @@ Daggerfall Unity; Changes weather with index from pleasants to non pleasants (0:
 - vwind_getstrength
 Get current strength of wind.
 
-- vwind_setstrength {speed} {bending} {size}
-Set new values for the strength of wind. Changes are applied immediately.
-All values must be higher than zero and lower than one.
-
-- vwind_setstrength {speed} {bending} {size} -force
-Allow values higher than one.
+- vwind_forceweather
+Set a weather for this mod; does not affect game weather.
 
 - vwind_toggle
 Disable mod. When the game loads new terrains, they will use a default of 0.5 for all values.
-Use the same command to re-enable it. Changes are applied for new terrains or on weather change.
+Use the same command to re-enable it; changes are applied immediately.
 
 Compatibility
 -------------
 This mod is compatible with every mod, including eventual weather mods, 
-provided that it doesn't affect terrainData wind settings.
-
-Mod Messages
-------------
-- ("GetStrength", null, callback)
-Get the current strength (on callback).
-
-- ("SetStrength", new Vector3{speed, bending, size}, null)
-Set a new strength. Changes are applied immediately.
+provided that it doesn't affect terrainData wind settings or WindZone.
 
 Changelog
 ---------
+* 0.4
+- Support for WindZone (trees, particles).
+
 * 0.3
 - Set speed, bending and size separately.
 
