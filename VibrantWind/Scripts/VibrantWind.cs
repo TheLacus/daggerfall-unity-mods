@@ -50,7 +50,7 @@ namespace VibrantWind
         float[] ambientWind;
 
         // Index for current weather.
-        int _weather;
+        int _weather = -1;
 
         #endregion
 
@@ -128,7 +128,7 @@ namespace VibrantWind
         {
             // Get Daggerfall Unity components
             streamingWorld = GameManager.Instance.StreamingWorld;
-            playerWeather = GameManager.Instance.PlayerGPS.GetComponent<PlayerWeather>();
+            playerWeather = GameManager.Instance.WeatherManager.PlayerWeather;
             windZone = GameManager.Instance.WeatherManager.GetComponent<WindZone>();
 
             // Setup mod

@@ -84,7 +84,7 @@ namespace VibrantWind
                     case 2:
                         WeathersTest weathersTest = new WeathersTest();
                         vibrantWind.StartCoroutine(weathersTest.StartTest());
-                        return "Close console to start test; current values will be logged on disk.";
+                        return "Close console to start test; values will be logged on disk.";
                 }
 
                 return usage;
@@ -98,31 +98,34 @@ namespace VibrantWind
                 usage += "\n2: Test all weathers in succession.";
                 return usage;
             }
-        }
-    }
 
-    public class WeathersTest
-    {
-        public IEnumerator StartTest()
-        {
-            var vibrantWind = VibrantWind.Instance;
-            var currentWeather = vibrantWind.Weather;
-            string log = "################";
-
-            foreach (var weather in Enum.GetValues(typeof(WeatherType)).Cast<WeatherType>().Distinct())
+            private class WeathersTest
             {
-                vibrantWind.ForceWeather(weather);
+                public IEnumerator StartTest()
+                {
+                    const string spacer = "#####################################";
 
-                string message = string.Format("{0}\n{1}\n{2}", weather.ToString(), vibrantWind.TerrainWindStrength, vibrantWind.AmbientWindStrength);
-                DaggerfallUI.Instance.PopupMessage(message);
-                log += "\n* " + message;
+                    var vibrantWind = VibrantWind.Instance;
+                    var weatherManager = GameManager.Instance.WeatherManager;
+                    WeatherType currentWeather = vibrantWind.Weather;
+                    string log = spacer;
 
-                yield return new WaitForSeconds(6);
+                    foreach (var weather in Enum.GetValues(typeof(WeatherType)).Cast<WeatherType>().Distinct())
+                    {
+                        weatherManager.SetWeather(weather);
+
+                        DaggerfallUI.Instance.PopupMessage(weather.ToString());
+                        log += string.Format("\n* {0}\nTerrain: {1}\nAmbient: {2}",
+                            weather.ToString(), vibrantWind.TerrainWindStrength, vibrantWind.AmbientWindStrength);
+
+                        yield return new WaitForSeconds(6);
+                    }
+
+                    weatherManager.SetWeather(currentWeather);
+                    DaggerfallUI.Instance.PopupMessage("Test ended");
+                    Debug.Log(log + "\n" + spacer);
+                }
             }
-
-            vibrantWind.ForceWeather(currentWeather);
-            DaggerfallUI.Instance.PopupMessage("test ended");
-            Debug.Log(log + "\n################");
         }
     }
 }
