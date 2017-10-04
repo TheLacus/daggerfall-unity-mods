@@ -5,117 +5,80 @@
 // Original Author: TheLacus
 // Contributors:    
 
-// #define TEST_VALUES
-
 using System;
 using System.Linq;
-using System.Collections.Generic;
-using Conditional = System.Diagnostics.ConditionalAttribute;
 using UnityEngine;
-using DaggerfallWorkshop.Game.Weather;
 
 namespace VibrantWind
 {
-    public static class WindProfilesCreator
+    public struct InterpolationType
     {
-        // Number of weathers.
-        static readonly int precision = Enum.GetValues(typeof(WeatherType)).Cast<WeatherType>().Distinct().Count();
+        public const int
 
-        #region Methods
+            Lerp = 0,
+            Sinerp = 1,
+            Coserp = 2,
+            SmoothStep = 3;
+    }
 
-        public static WindStrength[] Get (StrengthSettings speedSettings, StrengthSettings bendingSettings, StrengthSettings sizeSettings)
-        {
-            float[] speed = Get(speedSettings);
-            float[] bending = Get(bendingSettings);
-            float[] size = Get(sizeSettings);
-
-            var wind = new WindStrength[precision];
-            for (int i = 0; i < precision; i++)
-                wind[i] = new WindStrength(speed[i], bending[i], size[i]);
-            return wind;
-        }
-
-        public static float[] Get (StrengthSettings settings)
-        {
-            var sV = new ScaledValues(settings.Range.First, settings.Range.Second, precision, settings.Interpolation);
-            float[] values = sV.GetValues().ToArray();
-            PrintValuesToLog(values, settings.Field);
-            return values;
-        }
-
-        [Conditional("TEST_VALUES")]
-        private static void PrintValuesToLog(float[] values, string field)
-        {
-            Func<float[], string> allValues = x => string.Join(",", x.Select(y => y.ToString()).ToArray());
-
-            Debug.LogFormat("VibrantWind - {0}: {1}", field, allValues(values));
-        }
-
-        #endregion
-
-        #region Private Classes
+    /// <summary>
+    /// Interpolate a group of values between min and max.
+    /// </summary>
+    public class Interpolation
+    {
+        readonly float min, max;
+        readonly int count, maxStep;
+        readonly int interpolation;
 
         /// <summary>
-        /// Scales a group of values between min and max.
+        /// Get values between min and max using interpolation.
         /// </summary>
-        private class ScaledValues
+        /// <param name="min">Minimum value.</param>
+        /// <param name="max">maximum value.</param>
+        /// <param name="count">Number of values to generate.</param>
+        /// <param name="interpolation">Type of interpolation to use.</param>
+        public Interpolation(float min, float max, int count, int interpolation)
         {
-            readonly float min, max;
-            readonly int count, maxStep;
-            readonly int interpolation;
+            this.min = min;
+            this.max = max;
+            this.count = count;
+            this.maxStep = count - 1;
+            this.interpolation = interpolation;
+        }
 
-            /// <summary>
-            /// Get values between min and max using interpolation.
-            /// </summary>
-            /// <param name="min">Minimum value.</param>
-            /// <param name="max">maximum value.</param>
-            /// <param name="count">Number of values to generate.</param>
-            /// <param name="interpolation">Type of interpolation to use.</param>
-            public ScaledValues(float min, float max, int count, int interpolation)
+        /// <summary>
+        /// Get interpolated values.
+        /// </summary>
+        public float[] GetValues()
+        {
+            return Enumerable.Range(0, count).Select(x => GetValue(x)).ToArray();
+        }
+
+        private float GetValue(int step)
+        {
+            float t = (step != 0) ? (step / (float)maxStep) : 0;
+            return (float)Math.Round(Interpolate(t), 2);
+        }
+
+        private float Interpolate(float t)
+        {
+            switch (interpolation)
             {
-                this.min = min;
-                this.max = max;
-                this.count = count;
-                this.maxStep = count - 1;
-                this.interpolation = interpolation;
-            }
+                case InterpolationType.Lerp:
+                default:
+                    return Mathf.Lerp(min, max, t);
 
-            /// <summary>
-            /// Get interpolated values.
-            /// </summary>
-            public IEnumerable<float> GetValues()
-            {
-                return Enumerable.Range(0, count).Select(x => GetValue(x));
-            }
+                case InterpolationType.Sinerp:
+                    t = Mathf.Sin(t * Mathf.PI * 0.5f);
+                    return Mathf.Lerp(min, max, t);
 
-            private float GetValue(int step)
-            {
-                float t = (step != 0) ? (step / (float)maxStep) : 0;
-                return (float)Math.Round(Interpolate(t), 2);
-            }
+                case InterpolationType.Coserp:
+                    t = 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
+                    return Mathf.Lerp(min, max, t);
 
-            private float Interpolate(float t)
-            {
-                switch (interpolation)
-                {
-                    case Interpolation.Lerp:
-                    default:
-                        return Mathf.Lerp(min, max, t);
-
-                    case Interpolation.Sinerp:
-                        t = Mathf.Sin(t * Mathf.PI * 0.5f);
-                        return Mathf.Lerp(min, max, t);
-
-                    case Interpolation.Coserp:
-                        t = 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
-                        return Mathf.Lerp(min, max, t);
-
-                    case Interpolation.SmoothStep:
-                        return Mathf.SmoothStep(min, max, t);
-                }
+                case InterpolationType.SmoothStep:
+                    return Mathf.SmoothStep(min, max, t);
             }
         }
-        
-        #endregion
     }
 }

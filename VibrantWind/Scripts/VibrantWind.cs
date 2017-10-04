@@ -6,7 +6,10 @@
 // Contributors:    
 
 // #define TEST_PERFORMANCE
+// #define TEST_VALUES
 
+using System;
+using System.Linq;
 using UnityEngine;
 using DaggerfallWorkshop;
 using DaggerfallWorkshop.Game;
@@ -22,6 +25,9 @@ namespace VibrantWind
     public class VibrantWind : MonoBehaviour
     {
         #region Fields
+
+        // Number of weathers.
+        static readonly int precision = Enum.GetValues(typeof(WeatherType)).Cast<WeatherType>().Distinct().Count();
 
         // This mod
         static Mod mod;
@@ -125,21 +131,11 @@ namespace VibrantWind
             playerWeather = GameManager.Instance.PlayerGPS.GetComponent<PlayerWeather>();
             windZone = GameManager.Instance.WeatherManager.GetComponent<WindZone>();
 
-            // Get settings
-            ModSettings settings = new ModSettings(mod);
-
-            // Get terrain wind values
-            var speed = new StrengthSettings(settings, "Speed");
-            var bending = new StrengthSettings(settings, "Bending");
-            var size = new StrengthSettings(settings, "Size");
-            terrainWind = WindProfilesCreator.Get(speed, bending, size);
-
-            // Get ambient wind values
-            var force = new StrengthSettings(settings, "Force");
-            ambientWind = WindProfilesCreator.Get(force);
+            // Setup mod
+            Setup();
+            mod.MessageReceiver = VibrantWindModMessages.MessageReceiver;
 
             // Start mod
-            mod.MessageReceiver = VibrantWindModMessages.MessageReceiver;
             ToggleMod(true, false);
         }
 
@@ -192,6 +188,9 @@ namespace VibrantWind
             Debug.Log(this.ToString());
         }
 
+        /// <summary>
+        /// Set wind values for this weather.
+        /// </summary>
         public void ForceWeather(WeatherType weather)
         {
             WeatherManager_OnWeatherChange(weather);
@@ -200,6 +199,26 @@ namespace VibrantWind
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// Create wind values with user settings.
+        /// </summary>
+        private void Setup()
+        {
+            // Get settings
+            ModSettings settings = new ModSettings(mod);
+
+            // Get terrain wind values
+            float[] speed = GetValuesFromSettings(settings, "Speed");
+            float[] bending = GetValuesFromSettings(settings, "Bending");
+            float[] size = GetValuesFromSettings(settings, "Size");
+            terrainWind = new WindStrength[precision];
+            for (int i = 0; i < precision; i++)
+                terrainWind[i] = new WindStrength(speed[i], bending[i], size[i]);
+
+            // Get ambient wind values
+            ambientWind = GetValuesFromSettings(settings, "Force");
+        }
 
         /// <summary>
         /// Set wind strength to all terrains.
@@ -227,6 +246,28 @@ namespace VibrantWind
                 return;
 
             windZone.windMain = ambientWind[_weather];
+        }
+
+        #endregion
+
+        #region Static Methods
+
+        private static float[] GetValuesFromSettings(ModSettings settings, string section)
+        {
+            var range = settings.GetTupleFloat(section, "Range");
+            int interpolationType = settings.GetInt(section, "Interpolation", 0, 4);
+
+            var interpolation = new Interpolation(range.First, range.Second, precision, interpolationType);
+            float[] values = interpolation.GetValues();
+
+#if TEST_VALUES
+
+            Func<float[], string> allValues = x => string.Join(",", x.Select(y => y.ToString()).ToArray());
+            Debug.LogFormat("VibrantWind - {0}: {1}", settings.Field, allValues(values));
+
+#endif
+
+            return values;
         }
 
         #endregion
