@@ -1,4 +1,4 @@
-﻿// Project:         Real Grass for Daggerfall Unity
+// Project:         Real Grass for Daggerfall Unity
 // Web Site:        http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Source Code:     https://github.com/TheLacus/realgrass-du-mod

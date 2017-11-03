@@ -9,6 +9,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using DaggerfallWorkshop.Utility.AssetInjection;
+using DaggerfallWorkshop;
 
 namespace RealGrass
 {
@@ -26,6 +27,15 @@ namespace RealGrass
         readonly string texturesPath;
 
         readonly bool useGrassShader;
+
+        Color springHealthy;
+        Color springDry;
+        Color summerHealty;
+        Color summerDry;
+        Color fallHealty;
+        Color fallDry;
+
+        Range<float> grassHeight;
 
         int currentkey = default(int);
 
@@ -108,23 +118,25 @@ namespace RealGrass
 
             // Grass settings
             const string grassSection = "Grass";
-            Range<float> grassHeight = settings.GetTupleFloat(grassSection, "Height");
+            grassHeight = settings.GetTupleFloat(grassSection, "Height");
             Range<float> grassWidth = settings.GetTupleFloat(grassSection, "Width");
             float noiseSpread = settings.GetFloat(grassSection, "NoiseSpread");
-            Color grassHealthyColor = settings.GetColor(grassSection, "HealthyColor");
-            Color grassDryColor = settings.GetColor(grassSection, "DryColor");
+
+            springHealthy = settings.GetColor(grassSection, "SpringHealthy");
+            springDry = settings.GetColor(grassSection, "SpringDry");
+            summerHealty = settings.GetColor(grassSection, "SummerHealty");
+            summerDry = settings.GetColor(grassSection, "SummerDry");
+            fallHealty = settings.GetColor(grassSection, "FallHealty");
+            fallDry = settings.GetColor(grassSection, "FallDry");
+
             useGrassShader = settings.GetBool(grassSection, "UseGrassShader");
 
             // We use GrassBillboard or Grass rendermode
             var grassPrototypes = new DetailPrototype()
             {
-                minHeight = grassHeight.Min,
-                maxHeight = grassHeight.Max,
                 minWidth = grassWidth.Min,
                 maxWidth = grassWidth.Max,
                 noiseSpread = noiseSpread,
-                healthyColor = grassHealthyColor,
-                dryColor = grassDryColor,
                 renderMode = useGrassShader ? DetailRenderMode.Grass : DetailRenderMode.GrassBillboard,
                 usePrototypeMesh = useGrassShader
             };
@@ -206,6 +218,9 @@ namespace RealGrass
         /// </summary>
         public void UpdateClimateSummer(int currentClimate)
         {
+            SetGrassColor(detailPrototype[indices.Grass]);
+            SetGrassSize(detailPrototype[indices.Grass]);
+
             if (!NeedsUpdate(UpdateType.Summer, currentClimate))
                 return;
 
@@ -382,6 +397,80 @@ namespace RealGrass
 
             currentkey = key;
             return true;
+        }
+
+        /// <summary>
+        /// Set grass color according to day of year.
+        /// </summary>
+        private void SetGrassColor(DetailPrototype detailPrototype)
+        {
+            const int
+                spring = 2 * 30 + 1,
+                midSummer = 6 * 30 + 15,
+                fall = 10 * 30 + 30;
+
+            int day = DaggerfallUnity.Instance.WorldTime.Now.DayOfYear;
+
+            if (day <= midSummer)
+            {
+                // Sprint to Summer
+                float t = Mathf.InverseLerp(spring, midSummer, day);
+
+                detailPrototype.healthyColor = Color.Lerp(springHealthy, summerHealty, t);
+                detailPrototype.dryColor = Color.Lerp(springDry, summerDry, t);
+            }
+            else
+            {
+                // Summer to Fall
+                float t = Mathf.InverseLerp(midSummer, fall, day);
+
+                detailPrototype.healthyColor = Color.Lerp(summerHealty, fallHealty, t);
+                detailPrototype.dryColor = Color.Lerp(summerDry, fallDry, t);
+            }
+        }
+
+        /// <summary>
+        /// Set grass size according to day of year.
+        /// </summary>
+        private void SetGrassSize(DetailPrototype detailPrototype)
+        {
+            // Settings size is size on summer (max size).
+            // Height increase on spring and decrease on fall up to this amount(%).
+            const int seasonalModifier = 65;
+
+            const int
+                spring = 2 * 30 + 1,
+                summer = 5 * 30 + 1,
+                fall = 8 * 30 + 1,
+                winter = 11 * 30 + 1;
+            const float minScale = 1 - (float)seasonalModifier / 100;
+
+            int day = DaggerfallUnity.Instance.WorldTime.Now.DayOfYear;
+
+            if (day < summer)
+            {
+                // Spring
+                float t = Mathf.InverseLerp(spring, summer, day);
+                float scale = Mathf.SmoothStep(minScale, 1, t);
+
+                detailPrototype.minHeight = grassHeight.Min * scale;
+                detailPrototype.maxHeight = grassHeight.Max * scale;
+            }
+            else if (day < fall)
+            {
+                // Summer
+                detailPrototype.minHeight = grassHeight.Min;
+                detailPrototype.maxHeight = grassHeight.Max;
+            }
+            else
+            {
+                // Fall
+                float t = Mathf.InverseLerp(fall, winter, day);
+                float scale = Mathf.SmoothStep(minScale, 1, 1 - t);
+
+                detailPrototype.minHeight = grassHeight.Min * scale;
+                detailPrototype.maxHeight = grassHeight.Max * scale;
+            }
         }
 
         #endregion
