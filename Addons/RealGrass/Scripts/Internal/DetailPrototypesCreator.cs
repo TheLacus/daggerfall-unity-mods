@@ -129,7 +129,7 @@ namespace RealGrass
             fallHealty = settings.GetColor(grassSection, "FallHealty");
             fallDry = settings.GetColor(grassSection, "FallDry");
 
-            useGrassShader = settings.GetBool(grassSection, "UseGrassShader");
+            useGrassShader = settings.GetInt(grassSection, "Shader", 0, 1) == 1;
 
             // We use GrassBillboard or Grass rendermode
             var grassPrototypes = new DetailPrototype()

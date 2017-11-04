@@ -373,8 +373,9 @@ namespace RealGrass
             settings = new ModSettings(mod);
 
             // Optional details
-            waterPlants = settings.GetBool(waterPlantsSection, "Enable");
-            winterPlants = settings.GetBool(waterPlantsSection, "EnableWinter");
+            int waterPlantsMode = settings.GetInt(waterPlantsSection, "Mode", 0, 2);
+            waterPlants = waterPlantsMode != 0;
+            winterPlants = waterPlantsMode == 2;
             terrainStones = settings.GetBool(stonesSection, "Enable");
             flowers = settings.GetBool(flowersSection, "Enable");
 

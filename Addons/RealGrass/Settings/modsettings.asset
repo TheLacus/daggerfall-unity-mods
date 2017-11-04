@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 777877c5744df1e4a92ff95f5a7ce8aa, type: 3}
   m_Name: modsettings
   m_EditorClassIdentifier: 
-  version: 1.3
+  version: 1.4
   isPreset: 0
   presetSettings:
     name: 
@@ -107,7 +107,7 @@ MonoBehaviour:
           serializedVersion: 2
           rgba: 0
     - name: ThickDensity
-      description: Number of grass billboards per terrain tile
+      description: Number of grass patches per terrain tile
       type: 4
       toggle:
         value: 0
@@ -123,8 +123,8 @@ MonoBehaviour:
         min: 0
         max: 0
       tuple:
-        first: 5
-        second: 16
+        first: 8
+        second: 20
       floatTuple:
         first: 0
         second: 0
@@ -135,7 +135,7 @@ MonoBehaviour:
           serializedVersion: 2
           rgba: 0
     - name: ThinDensity
-      description: Number of grass billboards per terrain tile
+      description: Number of grass patches per terrain tile
       type: 4
       toggle:
         value: 0
@@ -151,8 +151,8 @@ MonoBehaviour:
         min: 0
         max: 0
       tuple:
-        first: 1
-        second: 6
+        first: 3
+        second: 7
       floatTuple:
         first: 0
         second: 0
@@ -330,14 +330,16 @@ MonoBehaviour:
         color:
           serializedVersion: 2
           rgba: 4280103785
-    - name: UseGrassShader
-      description: Use Grass instead of GrassBillboard
-      type: 0
+    - name: Shader
+      description: Shader used to render grass on terrain
+      type: 1
       toggle:
-        value: 1
+        value: 0
       multipleChoice:
-        selected: 0
-        choices: []
+        selected: 1
+        choices:
+        - Billboard
+        - Mesh
       slider:
         value: 0
         min: 0
@@ -360,42 +362,17 @@ MonoBehaviour:
           rgba: 0
   - name: WaterPlants
     keys:
-    - name: Enable
+    - name: Mode
       description: Add water plants near river and lakes
-      type: 0
+      type: 1
       toggle:
         value: 0
       multipleChoice:
         selected: 0
-        choices: []
-      slider:
-        value: 0
-        min: 0
-        max: 0
-      floatSlider:
-        value: 0
-        min: 0
-        max: 0
-      tuple:
-        first: 0
-        second: 0
-      floatTuple:
-        first: 0
-        second: 0
-      text:
-        text: 
-      color:
-        color:
-          serializedVersion: 2
-          rgba: 0
-    - name: EnableWinter
-      description: Show winter version of plants during winter season
-      type: 0
-      toggle:
-        value: 0
-      multipleChoice:
-        selected: 0
-        choices: []
+        choices:
+        - Disabled
+        - SummerOnly
+        - Enabled
       slider:
         value: 0
         min: 0
