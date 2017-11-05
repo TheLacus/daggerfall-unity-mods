@@ -449,6 +449,34 @@ MonoBehaviour:
         color:
           serializedVersion: 2
           rgba: 0
+    - name: DesertDensity
+      description: 
+      type: 4
+      toggle:
+        value: 0
+      multipleChoice:
+        selected: 0
+        choices: []
+      slider:
+        value: 0
+        min: 0
+        max: 0
+      floatSlider:
+        value: 0
+        min: 0
+        max: 0
+      tuple:
+        first: 0
+        second: 3
+      floatTuple:
+        first: 0
+        second: 0
+      text:
+        text: 
+      color:
+        color:
+          serializedVersion: 2
+          rgba: 0
   - name: TerrainStones
     keys:
     - name: Enable

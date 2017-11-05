@@ -1,9 +1,0 @@
-﻿[Internal]
-PresetName = Medium plants
-Description = Medium number of plants around water zones.
-SettingsVersion = 1.3
-
-[WaterPlants]
-NoiseSpread = 0.4
-Density = 5<,>9
-DesertDensity = 5<,>9

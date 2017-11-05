@@ -9,14 +9,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 777877c5744df1e4a92ff95f5a7ce8aa, type: 3}
-  m_Name: TallGrass
+  m_Name: DenseGrass
   m_EditorClassIdentifier: 
   version: 1.4
   isPreset: 1
   presetSettings:
-    name: Tall grass
-    author: Midopa
-    description: More varieties of grass size.
+    name: Dense Grass
+    author: TheLacus
+    description: Thick medium-sized grass.
   presets: []
   sections:
   - name: Grass
@@ -41,8 +41,8 @@ MonoBehaviour:
         first: 0
         second: 0
       floatTuple:
-        first: 0.5
-        second: 2.5
+        first: 0.65
+        second: 1.05
       text:
         text: 
       color:
@@ -70,7 +70,7 @@ MonoBehaviour:
         second: 0
       floatTuple:
         first: 0.8
-        second: 1.3
+        second: 1
       text:
         text: 
       color:
@@ -122,8 +122,8 @@ MonoBehaviour:
         min: 0
         max: 0
       tuple:
-        first: 3
-        second: 20
+        first: 5
+        second: 16
       floatTuple:
         first: 0
         second: 0
@@ -150,8 +150,8 @@ MonoBehaviour:
         min: 0
         max: 0
       tuple:
-        first: 0
-        second: 7
+        first: 1
+        second: 6
       floatTuple:
         first: 0
         second: 0
@@ -167,7 +167,7 @@ MonoBehaviour:
       toggle:
         value: 0
       multipleChoice:
-        selected: 0
+        selected: 1
         choices:
         - Billboard
         - Mesh

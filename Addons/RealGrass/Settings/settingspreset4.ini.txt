@@ -1,9 +1,0 @@
-﻿[Internal]
-PresetName = Thin plants
-Description = Low number of plants around water zones.
-SettingsVersion = 1.3
-
-[WaterPlants]
-NoiseSpread = 0.4
-Density = 0<,>3
-DesertDensity = 0<,>3
