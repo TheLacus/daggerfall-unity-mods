@@ -1,4 +1,5 @@
 ﻿// Project:         Real Grass for Daggerfall Unity
+// Project:         Real Grass for Daggerfall Unity
 // Web Site:        http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Source Code:     https://github.com/TheLacus/realgrass-du-mod
@@ -7,7 +8,7 @@
 
 using UnityEngine;
 using DaggerfallWorkshop.Utility;
-using DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings;
+using DaggerfallWorkshop;
 
 namespace RealGrass
 {
@@ -21,26 +22,20 @@ namespace RealGrass
         // Size of tile map
         const int tilemapSize = 128;
 
-        // Grass
-        Range<int> thickDensity;
-        Range<int> thinDensity;
-
-        // Water plants
         bool waterPlants;
-        Range<int> waterPlantsDensity;
-        Range<int> desertDensity;
-
-        // Stones
         bool terrainStones;
-        Range<int> stonesDensity;
-
-        // Flowers
         bool flowers;
-        int flowersDensity;
-        Range<int> flowersBushDensity;
+
+        Density density;
 
         // Details layers
         int[,] details0, details1, details2, details3, details4;
+
+        public Density Density
+        {
+            get { return density; }
+            set { density = value; }
+        }
 
         // Properties
         public int[,] Empty { get { return EmptyMap(); } }
@@ -54,14 +49,14 @@ namespace RealGrass
 
         #region Public Methods
 
-        public DetailPrototypesDensity()
+        public DetailPrototypesDensity(Density density)
         {
             RealGrass realGrass = RealGrass.Instance;
             this.waterPlants = realGrass.WaterPlants;
             this.terrainStones = realGrass.TerrainStones;
             this.flowers = realGrass.Flowers;
 
-            LoadSettings(RealGrass.Settings);
+            this.density = density;
         }
 
         public void InitDetailsLayers()
@@ -76,7 +71,7 @@ namespace RealGrass
         /// <summary>
         /// Set density for Summer.
         /// </summary>
-        public void SetDensitySummer(Color32[] tilemap, int currentClimate)
+        public void SetDensitySummer(Color32[] tilemap, ClimateBases currentClimate)
         {
             for (int y = 0; y < tilemapSize; y++)
             {
@@ -341,13 +336,13 @@ namespace RealGrass
                             if (waterPlants)
                             {
                                 // Mountain: grass
-                                if (currentClimate == Climate.Mountain || currentClimate == Climate.Mountain2)
+                                if (currentClimate == ClimateBases.Mountain)
                                 {
                                     details2[y * 2, x * 2] = Random.Range(1, 2);
                                     details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(1, 2);
                                 }
                                 // Temperate: waterlilies
-                                else if (currentClimate == Climate.Temperate || currentClimate == Climate.Temperate2)
+                                else if (currentClimate == ClimateBases.Temperate)
                                 {
                                     details2[y * 2, x * 2] = 1;
                                     details2[(y * 2) + 1, (x * 2) + 1] = 1;
@@ -489,7 +484,7 @@ namespace RealGrass
         /// </summary>
         private int RandomThin()
         {
-            return thinDensity.Random();
+            return density.grassThin.Random();
         }
 
         /// <summary>
@@ -497,7 +492,7 @@ namespace RealGrass
         /// </summary>
         private int RandomThick()
         {
-            return thickDensity.Random();
+            return density.grassThick.Random();
         }
 
         /// <summary>
@@ -505,7 +500,7 @@ namespace RealGrass
         /// </summary>
         private int RandomWaterPlants()
         {
-            return waterPlantsDensity.Random();
+            return density.waterPlants.Random();
         }
 
         /// <summary>
@@ -513,7 +508,7 @@ namespace RealGrass
         /// </summary>
         private int RandomDesert()
         {
-            return desertDensity.Random();
+            return density.desertPlants.Random();
         }
 
         /// <summary>
@@ -521,7 +516,7 @@ namespace RealGrass
         /// </summary>
         private int RandomStones()
         {
-            return stonesDensity.Random();
+            return density.stones.Random();
         }
 
         /// <summary>
@@ -529,8 +524,8 @@ namespace RealGrass
         /// </summary>
         private int RandomFlowers()
         {
-            if (Random.Range(0, 100) < flowersDensity)
-                return flowersBushDensity.Random();
+            if (Random.Range(0, 100) < density.flowers)
+                return density.flowersBush.Random();
 
             return 0;
         }
@@ -560,27 +555,6 @@ namespace RealGrass
         #endregion
 
         #region Private Methods
-
-        private void LoadSettings(ModSettings settings)
-        {
-            const string grassSection = "Grass", waterPlantsSection = "WaterPlants", 
-                stonesSection = "TerrainStones", flowersSection = "Flowers";
-
-            // Grass
-            thickDensity = settings.GetTupleInt(grassSection, "ThickDensity");
-            thinDensity = settings.GetTupleInt(grassSection, "ThinDensity");
-
-            // Water plants
-            waterPlantsDensity = settings.GetTupleInt(waterPlantsSection, "Density");
-            desertDensity = settings.GetTupleInt(waterPlantsSection, "DesertDensity");
-
-            // Stones
-            stonesDensity = settings.GetTupleInt(stonesSection, "Density");
-
-            // Flowers
-            flowersDensity = settings.GetInt(flowersSection, "Density", 0, 100);
-            flowersBushDensity = settings.GetTupleInt(flowersSection, "BushDensity");
-        }
 
         private static int[,] EmptyMap()
         {

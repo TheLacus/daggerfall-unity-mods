@@ -5,28 +5,10 @@
 // Original Author: TheLacus
 // Contributors:
 
+using UnityEngine;
+
 namespace RealGrass
 {
-    /// <summary>
-    /// Daggerfall climates.
-    /// </summary>
-    public struct Climate
-    {
-        public const int
-
-            None = 0,
-            Ocean = 223,
-            Desert = 224,
-            Desert2 = 225,
-            Mountain = 226,
-            Swamp = 227,
-            Swamp2 = 228,
-            Desert3 = 229,
-            Mountain2 = 230,
-            Temperate = 231,
-            Temperate2 = 232;
-    }
-
     public class Indices
     {
         public int
@@ -36,5 +18,40 @@ namespace RealGrass
             Waterlilies,
             Stones,
             Flowers;
+    }
+
+    public class GrassColors
+    {
+        public Color
+            springHealthy,
+            springDry,
+            summerHealty,
+            summerDry,
+            fallHealty,
+            fallDry;
+    }
+
+    public class PrototypesProperties
+    {
+        public bool import;
+        public string packName;
+        public Range<float> grassHeight;
+        public Range<float> grassWidth;
+        public float noiseSpread;
+        public GrassColors grassColors;
+        public bool useGrassShader;
+        public float noiseSpreadPlants;
+        public float noiseSpreadStones;
+    }
+
+    public class Density
+    {
+        public Range<int> grassThick;
+        public Range<int> grassThin;
+        public Range<int> waterPlants;
+        public Range<int> desertPlants;
+        public Range<int> stones;
+        public int flowers;
+        public Range<int> flowersBush;
     }
 }

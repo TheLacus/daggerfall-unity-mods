@@ -17,6 +17,7 @@ using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
 using DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings;
 using DaggerfallWorkshop.Utility;
+using Climates = DaggerfallConnect.Arena2.MapsFile.Climates;
 
 namespace RealGrass
 {
@@ -82,11 +83,6 @@ namespace RealGrass
         public static Mod Mod
         {
             get { return mod; }
-        }
-
-        public static ModSettings Settings
-        {
-            get { return settings; }
         }
 
         /// <summary>
@@ -224,38 +220,43 @@ namespace RealGrass
 
             // Get the current season and climate
             var currentSeason = DaggerfallUnity.Instance.WorldTime.Now.SeasonValue;
-            int currentClimate = daggerTerrain.MapData.worldClimate;
+            ClimateBases climate = GetClimate(daggerTerrain.MapData.worldClimate);
 
             // Update detail layers
             detailPrototypesDensity.InitDetailsLayers();
-            if (currentClimate > 225 && currentClimate != Climate.Desert3)
+            switch (climate)
             {
-                if (currentSeason != DaggerfallDateTime.Seasons.Winter)
-                {
-                    // Summer
-                    detailPrototypesCreator.UpdateClimateSummer(currentClimate);
-                    detailPrototypesDensity.SetDensitySummer(tilemap, currentClimate);
-                }
-                else if (waterPlants && winterPlants)
-                {
-                    // Winter
-                    detailPrototypesCreator.UpdateClimateWinter(currentClimate);
-                    detailPrototypesDensity.SetDensityWinter(tilemap);
-                }
-            }
-            else if (waterPlants && 
-                (currentClimate == Climate.Desert || currentClimate == Climate.Desert2 || currentClimate == Climate.Desert3))
-            {
-                // Desert
-                detailPrototypesCreator.UpdateClimateDesert();
-                detailPrototypesDensity.SetDensityDesert(tilemap);
+                case ClimateBases.Temperate:
+                case ClimateBases.Mountain:
+                case ClimateBases.Swamp:
+                    if (currentSeason != DaggerfallDateTime.Seasons.Winter)
+                    {
+                        // Summer
+                        detailPrototypesCreator.UpdateClimateSummer(climate);
+                        detailPrototypesDensity.SetDensitySummer(tilemap, climate);
+                    }
+                    else if (waterPlants && winterPlants)
+                    {
+                        // Winter
+                        detailPrototypesCreator.UpdateClimateWinter(climate);
+                        detailPrototypesDensity.SetDensityWinter(tilemap);
+                    }
+                    break;
+
+                case ClimateBases.Desert:
+                    if (waterPlants)
+                    {
+                        detailPrototypesCreator.UpdateClimateDesert();
+                        detailPrototypesDensity.SetDensityDesert(tilemap);
+                    }
+                    break;
             }
 
             // Assign detail prototypes to the terrain
             terrainData.detailPrototypes = detailPrototypesCreator.DetailPrototypes;
-            Indices indices = detailPrototypesCreator.Indices;
 
             // Assign detail layers to the terrain
+            Indices indices = detailPrototypesCreator.Indices;
             terrainData.SetDetailLayer(0, 0, indices.Grass, detailPrototypesDensity.Grass); // Grass
             if (waterPlants)
             {
@@ -311,9 +312,11 @@ namespace RealGrass
                 try
                 {
                     // Load settings and setup components
-                    LoadSettings();
-                    detailPrototypesCreator = new DetailPrototypesCreator();
-                    detailPrototypesDensity = new DetailPrototypesDensity();
+                    PrototypesProperties properties;
+                    Density density;
+                    LoadSettings(out properties, out density);
+                    detailPrototypesCreator = new DetailPrototypesCreator(properties);
+                    detailPrototypesDensity = new DetailPrototypesDensity(density);
                 }
                 catch (System.Exception e)
                 {
@@ -365,9 +368,10 @@ namespace RealGrass
         /// <summary>
         /// Load settings.
         /// </summary>
-        private void LoadSettings()
+        private void LoadSettings(out PrototypesProperties properties, out Density density)
         {
-            const string waterPlantsSection = "WaterPlants", stonesSection = "TerrainStones", flowersSection = "Flowers";
+            const string waterPlantsSection = "WaterPlants", stonesSection = "TerrainStones",
+                flowersSection = "Flowers", grassSection = "Grass", texturesSection = "Textures";
 
             // Load settings
             settings = new ModSettings(mod);
@@ -383,6 +387,67 @@ namespace RealGrass
             const string terrainSection = "Terrain";
             detailObjectDistance = settings.GetFloat(terrainSection, "DetailDistance", 10f);
             detailObjectDensity = settings.GetFloat(terrainSection, "DetailDensity", 0.1f, 1f);
+
+            // Detail prototypes settings
+            properties = new PrototypesProperties()
+            {
+                import = settings.GetBool(texturesSection, "Import"),
+                packName = settings.GetString(texturesSection, "Pack"),
+                grassHeight = settings.GetTupleFloat(grassSection, "Height"),
+                grassWidth = settings.GetTupleFloat(grassSection, "Width"),
+                noiseSpread = settings.GetFloat(grassSection, "NoiseSpread"),
+                grassColors = new GrassColors()
+                {
+                    springHealthy = settings.GetColor(grassSection, "SpringHealthy"),
+                    springDry = settings.GetColor(grassSection, "SpringDry"),
+                    summerHealty = settings.GetColor(grassSection, "SummerHealty"),
+                    summerDry = settings.GetColor(grassSection, "SummerDry"),
+                    fallHealty = settings.GetColor(grassSection, "FallHealty"),
+                    fallDry = settings.GetColor(grassSection, "FallDry"),
+                },
+                useGrassShader = settings.GetInt(grassSection, "Shader", 0, 1) == 1,
+                noiseSpreadPlants = settings.GetFloat(waterPlantsSection, "NoiseSpread"),
+                noiseSpreadStones = settings.GetFloat("TerrainStones", "NoiseSpread")
+            };
+
+            // Detail prototypes density
+            density = new Density()
+            {
+                grassThick = settings.GetTupleInt(grassSection, "ThickDensity"),
+                grassThin = settings.GetTupleInt(grassSection, "ThinDensity"),
+                waterPlants = settings.GetTupleInt(waterPlantsSection, "Density"),
+                desertPlants = settings.GetTupleInt(waterPlantsSection, "DesertDensity"),
+                stones = settings.GetTupleInt(stonesSection, "Density"),
+                flowers = settings.GetInt(flowersSection, "Density", 0, 100),
+                flowersBush = settings.GetTupleInt(flowersSection, "BushDensity")
+            };
+        }
+
+        private static ClimateBases GetClimate(int climateIndex)
+        {
+            switch ((Climates)climateIndex)
+            {
+                case Climates.Swamp:
+                case Climates.Rainforest:
+                    return ClimateBases.Swamp;
+
+                case Climates.Desert:
+                case Climates.Desert2:
+                case Climates.Subtropical:
+                    return ClimateBases.Desert;
+
+                case Climates.Mountain:
+                case Climates.MountainWoods:
+                    return ClimateBases.Mountain;
+
+                case Climates.Woodlands:
+                case Climates.HauntedWoodlands:
+                    return ClimateBases.Temperate;
+
+                case Climates.Ocean:
+                default:
+                    return (ClimateBases)(-1);
+            }
         }
 
         #endregion
