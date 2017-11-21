@@ -1,7 +1,7 @@
-﻿=================================================================================================
+=================================================================================================
 REAL GRASS
 
-2.0 for DaggerFall Unity 0.4.36
+2.1 for DaggerFall Unity 0.4.36
 =================================================================================================
 
 **DESCRIPTION**
@@ -132,8 +132,16 @@ Midopa - additional changes
 Daggerfall Unity forums: http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
 Github: https://github.com/TheLacus/realgrass-du-mod
 
+Additional art:
+    - Free Handpainted Plants by yughues (License: CC0) at
+        https://opengameart.org/content/free-handpainted-plants
+
 **CHANGELOG**
 -------------------------------------------------------------------------------------------------
+2.1
+* Seasonal changes (grass color and size).
+* Graphical improvements for plants and flowers.
+
 2.0
 * Support for flowers
 * Settings presets are more user-friendly
