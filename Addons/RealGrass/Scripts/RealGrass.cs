@@ -266,7 +266,10 @@ namespace RealGrass
             if (terrainStones)
                 terrainData.SetDetailLayer(0, 0, indices.Stones, detailPrototypesDensity.Stones); // Stones
             if (flowers)
-                terrainData.SetDetailLayer(0, 0, indices.Flowers, detailPrototypesDensity.Flowers); // Flowers 
+            {
+                terrainData.SetDetailLayer(0, 0, indices.Flowers, detailPrototypesDensity.Flowers); // Flowers
+                terrainData.SetDetailLayer(0, 0, indices.CommonFlowers, detailPrototypesDensity.CommonFlowers);
+            }
 
 #if TEST_PERFORMANCE
 

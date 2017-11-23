@@ -65,6 +65,9 @@ namespace RealGrass
         const string FlowersMountain = "FlowersMountain";
         const string FlowersSwamp = "FlowersSwamp";
         const string FlowersTemperate = "FlowersTemperate";
+        static readonly string[] CommonFlowers = {
+            "FlowersCommonRed", "FlowersCommonPink" ,
+            "FlowersCommonBlue" , "FlowersCommonYellow" };
 
         struct UpdateType { public const short Summer = 0, Winter = 1, Desert = 2; }
 
@@ -185,6 +188,17 @@ namespace RealGrass
                 };
                 detailPrototypes.Add(flowerPrototypes);
                 indices.Flowers = ++index;
+
+                var commonFlowerPrototypes = new DetailPrototype()
+                {
+                    usePrototypeMesh = true,
+                    noiseSpread = 0.4f,
+                    healthyColor = detailColor,
+                    dryColor = detailColor,
+                    renderMode = DetailRenderMode.Grass,
+                };
+                detailPrototypes.Add(commonFlowerPrototypes);
+                indices.CommonFlowers = ++index;
             }
 
             detailPrototype = detailPrototypes.ToArray();
@@ -218,7 +232,10 @@ namespace RealGrass
                     }
 
                     if (RealGrass.Instance.Flowers)
+                    {
                         detailPrototype[indices.Flowers].prototype = LoadGameObject(FlowersMountain);
+                        detailPrototype[indices.CommonFlowers].prototype = LoadGameObject(CommonFlower());
+                    }
                     break;
 
                 case ClimateBases.Swamp:
@@ -233,7 +250,10 @@ namespace RealGrass
                         detailPrototype[indices.WaterPlants].prototype = LoadGameObject(PlantsSwamp);
 
                     if (RealGrass.Instance.Flowers)
+                    {
                         detailPrototype[indices.Flowers].prototype = LoadGameObject(FlowersSwamp);
+                        detailPrototype[indices.CommonFlowers].prototype = LoadGameObject(CommonFlower());
+                    }
                     break;
 
                 case ClimateBases.Temperate:
@@ -251,7 +271,10 @@ namespace RealGrass
                     }
 
                     if (RealGrass.Instance.Flowers)
+                    {
                         detailPrototype[indices.Flowers].prototype = LoadGameObject(FlowersTemperate);
+                        detailPrototype[indices.CommonFlowers].prototype = LoadGameObject(CommonFlower());
+                    }
                     break;
 
                 default:
@@ -442,6 +465,11 @@ namespace RealGrass
                 detailPrototype.minHeight = grassHeight.Min * scale;
                 detailPrototype.maxHeight = grassHeight.Max * scale;
             }
+        }
+
+        private static string CommonFlower()
+        {
+            return CommonFlowers[Random.Range(0, CommonFlowers.Length)];
         }
 
         #endregion

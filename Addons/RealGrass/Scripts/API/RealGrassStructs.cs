@@ -17,7 +17,8 @@ namespace RealGrass
             WaterPlants,
             Waterlilies,
             Stones,
-            Flowers;
+            Flowers,
+            CommonFlowers;
     }
 
     public class GrassColors

@@ -1,5 +1,6 @@
 ﻿// Project:         Real Grass for Daggerfall Unity
 // Project:         Real Grass for Daggerfall Unity
+// Project:         Real Grass for Daggerfall Unity
 // Web Site:        http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Source Code:     https://github.com/TheLacus/realgrass-du-mod
@@ -29,7 +30,7 @@ namespace RealGrass
         Density density;
 
         // Details layers
-        int[,] details0, details1, details2, details3, details4;
+        int[,] details0, details1, details2, details3, details4, details5;
 
         public Density Density
         {
@@ -44,6 +45,7 @@ namespace RealGrass
         public int[,] Waterlilies { get { return details2; } }
         public int[,] Stones { get { return details3; } }
         public int[,] Flowers { get { return details4; } }
+        public int[,] CommonFlowers { get { return details5; } }
 
         #endregion
 
@@ -66,6 +68,7 @@ namespace RealGrass
             details2 = EmptyMap();
             details3 = EmptyMap();
             details4 = EmptyMap();
+            details5 = EmptyMap();
         }
                 
         /// <summary>
@@ -95,6 +98,13 @@ namespace RealGrass
                                 {
                                     var index = RandomPosition(y, x);
                                     details4[index.First, index.Second] = randomFlowers;
+                                }
+
+                                int commonFlowers = RandomFlowers();
+                                if (commonFlowers != 0)
+                                {
+                                    var index = RandomPosition(y, x);
+                                    details5[index.First, index.Second] = commonFlowers;
                                 }
                             }
                             break;
@@ -338,13 +348,15 @@ namespace RealGrass
                                 // Mountain: grass
                                 if (currentClimate == ClimateBases.Mountain)
                                 {
-                                    details2[y * 2, x * 2] = Random.Range(1, 2);
-                                    details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(1, 2);
+                                    if (Random.Range(0, 100) < 5)
+                                    {
+                                        details2[y * 2, x * 2] = Random.Range(1, 2);
+                                        details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(1, 2);
+                                    }
                                 }
                                 // Temperate: waterlilies
                                 else if (currentClimate == ClimateBases.Temperate)
                                 {
-                                    details2[y * 2, x * 2] = 1;
                                     details2[(y * 2) + 1, (x * 2) + 1] = 1;
                                     details2[(y * 2) + 1, x * 2] = 1;
                                     details2[y * 2, (x * 2) + 1] = 1;

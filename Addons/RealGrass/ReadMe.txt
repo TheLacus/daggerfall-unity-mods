@@ -135,6 +135,8 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 Additional art:
     - Free Handpainted Plants by yughues (License: CC0) at
         https://opengameart.org/content/free-handpainted-plants
+	- Tropical plant 02 by yughues (License: CC0) at
+		https://opengameart.org/content/tropical-plant-02-0
 
 **CHANGELOG**
 -------------------------------------------------------------------------------------------------
