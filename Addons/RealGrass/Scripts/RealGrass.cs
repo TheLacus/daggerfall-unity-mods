@@ -264,9 +264,13 @@ namespace RealGrass
                 terrainData.SetDetailLayer(0, 0, indices.Waterlilies, detailPrototypesDensity.Waterlilies); // Waterlilies and grass inside water
             }
             if (terrainStones)
+            {
                 terrainData.SetDetailLayer(0, 0, indices.Stones, detailPrototypesDensity.Stones); // Stones
+                terrainData.SetDetailLayer(0, 0, indices.Rocks, detailPrototypesDensity.Rocks);
+            }
             if (flowers)
             {
+                terrainData.SetDetailLayer(0, 0, indices.Bushes, detailPrototypesDensity.Bushes);
                 terrainData.SetDetailLayer(0, 0, indices.Flowers, detailPrototypesDensity.Flowers); // Flowers
                 terrainData.SetDetailLayer(0, 0, indices.CommonFlowers, detailPrototypesDensity.CommonFlowers);
             }

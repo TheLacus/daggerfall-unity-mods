@@ -125,24 +125,35 @@ Known compatible mods:
 
 **CREDITS**
 -------------------------------------------------------------------------------------------------
+* Developers and contributors
 Uncanny_Valley - creator, original developer
 TheLacus - developer, maintainer
 Midopa - additional changes
 
-Daggerfall Unity forums: http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
-Github: https://github.com/TheLacus/realgrass-du-mod
+* Additional art:
+Some meshes and/or textures have been picked from the following free licensed packs:
 
-Additional art:
     - Free Handpainted Plants by yughues (License: CC0) at
         https://opengameart.org/content/free-handpainted-plants
 	- Tropical plant 02 by yughues (License: CC0) at
 		https://opengameart.org/content/tropical-plant-02-0
+    - Tropical shrubs by yughues (License: CC0) at
+        https://opengameart.org/content/tropical-shrubs
+    - Bushes by yughues (License: CC0) at
+        https://opengameart.org/content/bushes
+	- Rocks by yughues (License: CC0) at
+		https://opengameart.org/content/rocks-0
+
+* Contacts
+Daggerfall Unity forums: http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
+Github: https://github.com/TheLacus/realgrass-du-mod
 
 **CHANGELOG**
 -------------------------------------------------------------------------------------------------
 2.1
 * Seasonal changes (grass color and size).
 * Graphical improvements for plants and flowers.
+* Additional vegetation (bushes and stones).
 
 2.0
 * Support for flowers

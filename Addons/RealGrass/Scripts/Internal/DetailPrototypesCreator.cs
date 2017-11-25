@@ -58,8 +58,13 @@ namespace RealGrass
         const string PlantsSwampWinter = "PlantsSwampWinter"; // water plants for swamp
         const string PlantsMountainWinter = "PlantsMountainWinter"; // grass for mountain near water
 
-        // Little stones for farms
+        const string BushSwamp = "BushSwamp";
+        const string BushTemperate = "BushTemperate";
+        const string BushMountain = "BushMountain";
+
+        // Stones
         const string Stone = "Stone";
+        const string Rock = "Rock";
 
         // Flowers
         const string FlowersMountain = "FlowersMountain";
@@ -173,11 +178,35 @@ namespace RealGrass
                 };
                 detailPrototypes.Add(stonesPrototypes);
                 indices.Stones = ++index;
+
+                var rocksPrototypes = new DetailPrototype()
+                {
+                    usePrototypeMesh = true,
+                    noiseSpread = properties.noiseSpreadStones,
+                    healthyColor = detailColor,
+                    dryColor = detailColor,
+                    renderMode = DetailRenderMode.VertexLit,
+                    prototype = LoadGameObject(Rock)
+                };
+                detailPrototypes.Add(rocksPrototypes);
+                indices.Rocks = ++index;
             }
 
             if (RealGrass.Instance.Flowers)
             {
-                // Flowers
+                // Medium-sized vegetation
+                var bushesPrototypes = new DetailPrototype()
+                {
+                    usePrototypeMesh = true,
+                    noiseSpread = 0.4f,
+                    healthyColor = detailColor,
+                    dryColor = detailColor,
+                    renderMode = DetailRenderMode.Grass,
+                };
+                detailPrototypes.Add(bushesPrototypes);
+                indices.Bushes = ++index;
+
+                // Specific to climate
                 var flowerPrototypes = new DetailPrototype()
                 {
                     usePrototypeMesh = true,
@@ -189,6 +218,7 @@ namespace RealGrass
                 detailPrototypes.Add(flowerPrototypes);
                 indices.Flowers = ++index;
 
+                // For all climates
                 var commonFlowerPrototypes = new DetailPrototype()
                 {
                     usePrototypeMesh = true,
@@ -233,6 +263,7 @@ namespace RealGrass
 
                     if (RealGrass.Instance.Flowers)
                     {
+                        detailPrototype[indices.Bushes].prototype = LoadGameObject(BushMountain);
                         detailPrototype[indices.Flowers].prototype = LoadGameObject(FlowersMountain);
                         detailPrototype[indices.CommonFlowers].prototype = LoadGameObject(CommonFlower());
                     }
@@ -251,6 +282,7 @@ namespace RealGrass
 
                     if (RealGrass.Instance.Flowers)
                     {
+                        detailPrototype[indices.Bushes].prototype = LoadGameObject(BushSwamp);
                         detailPrototype[indices.Flowers].prototype = LoadGameObject(FlowersSwamp);
                         detailPrototype[indices.CommonFlowers].prototype = LoadGameObject(CommonFlower());
                     }
@@ -272,6 +304,7 @@ namespace RealGrass
 
                     if (RealGrass.Instance.Flowers)
                     {
+                        detailPrototype[indices.Bushes].prototype = LoadGameObject(BushTemperate);
                         detailPrototype[indices.Flowers].prototype = LoadGameObject(FlowersTemperate);
                         detailPrototype[indices.CommonFlowers].prototype = LoadGameObject(CommonFlower());
                     }

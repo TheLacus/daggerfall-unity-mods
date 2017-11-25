@@ -1,4 +1,3 @@
-﻿// Project:         Real Grass for Daggerfall Unity
 // Project:         Real Grass for Daggerfall Unity
 // Project:         Real Grass for Daggerfall Unity
 // Web Site:        http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
@@ -30,7 +29,7 @@ namespace RealGrass
         Density density;
 
         // Details layers
-        int[,] details0, details1, details2, details3, details4, details5;
+        int[,] details0, details1, details2, details3, details4, details5, details6, details7;
 
         public Density Density
         {
@@ -44,8 +43,10 @@ namespace RealGrass
         public int[,] WaterPlants { get { return details1; } }
         public int[,] Waterlilies { get { return details2; } }
         public int[,] Stones { get { return details3; } }
+        public int[,] Rocks { get { return details7; } }
         public int[,] Flowers { get { return details4; } }
         public int[,] CommonFlowers { get { return details5; } }
+        public int[,] Bushes { get { return details6; } }
 
         #endregion
 
@@ -69,6 +70,8 @@ namespace RealGrass
             details3 = EmptyMap();
             details4 = EmptyMap();
             details5 = EmptyMap();
+            details6 = EmptyMap();
+            details7 = EmptyMap();
         }
                 
         /// <summary>
@@ -82,6 +85,21 @@ namespace RealGrass
                 {
                     switch (tilemap[(y * tilemapSize) + x].r)
                     {
+                        case 4:
+                        case 5:
+                        case 6:
+                        case 7:
+                            if (terrainStones)
+                            {
+                                int rocks = RandomRocks();
+                                if (rocks != 0)
+                                {
+                                    var index = RandomPosition(y, x);
+                                    details7[index.First, index.Second] = rocks;
+                                }
+                            }
+                            break;
+
                         // Four corner tiles
                         case 8:
                         case 9:
@@ -93,11 +111,11 @@ namespace RealGrass
                             details0[(y * 2) + 1, (x * 2) + 1] = RandomThick();
                             if (flowers)
                             {
-                                int randomFlowers = RandomFlowers();
-                                if (randomFlowers != 0)
+                                int flowers = RandomFlowers();
+                                if (flowers != 0)
                                 {
                                     var index = RandomPosition(y, x);
-                                    details4[index.First, index.Second] = randomFlowers;
+                                    details4[index.First, index.Second] = flowers;
                                 }
 
                                 int commonFlowers = RandomFlowers();
@@ -105,6 +123,22 @@ namespace RealGrass
                                 {
                                     var index = RandomPosition(y, x);
                                     details5[index.First, index.Second] = commonFlowers;
+                                }
+
+                                int bushes = RandomBushes();
+                                if (bushes != 0)
+                                {
+                                    var index = RandomPosition(y, x);
+                                    details6[index.First, index.Second] = bushes;
+                                }
+                            }
+                            if (terrainStones)
+                            {
+                                int rocks = RandomRocks();
+                                if (rocks != 0)
+                                {
+                                    var index = RandomPosition(y, x);
+                                    details7[index.First, index.Second] = rocks;
                                 }
                             }
                             break;
@@ -531,6 +565,11 @@ namespace RealGrass
             return density.stones.Random();
         }
 
+        private int RandomRocks()
+        {
+            return Random.Range(0, 100) < 4 ? 1 : 0;
+        }
+
         /// <summary>
         /// Generate random values for the placement of flowers. 
         /// </summary>
@@ -540,6 +579,11 @@ namespace RealGrass
                 return density.flowersBush.Random();
 
             return 0;
+        }
+
+        private int RandomBushes()
+        {
+            return Random.Range(0, 100) < 15 ? Random.Range(0, 4) : 0;
         }
 
         /// <summary>
