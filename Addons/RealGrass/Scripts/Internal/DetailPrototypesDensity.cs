@@ -567,7 +567,7 @@ namespace RealGrass
 
         private int RandomRocks()
         {
-            return Random.Range(0, 100) < 4 ? 1 : 0;
+            return Random.Range(0, 100) < density.rocks ? 1 : 0;
         }
 
         /// <summary>
@@ -576,7 +576,7 @@ namespace RealGrass
         private int RandomFlowers()
         {
             if (Random.Range(0, 100) < density.flowers)
-                return density.flowersBush.Random();
+                return Random.Range(1, 8);
 
             return 0;
         }

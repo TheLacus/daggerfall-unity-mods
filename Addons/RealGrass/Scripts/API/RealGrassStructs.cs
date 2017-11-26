@@ -44,7 +44,6 @@ namespace RealGrass
         public GrassColors grassColors;
         public bool useGrassShader;
         public float noiseSpreadPlants;
-        public float noiseSpreadStones;
     }
 
     public class Density
@@ -54,7 +53,9 @@ namespace RealGrass
         public Range<int> waterPlants;
         public Range<int> desertPlants;
         public Range<int> stones;
+        public int rocks;
         public int flowers;
-        public Range<int> flowersBush;
+        public int bushes;
+        //public Range<int> flowersBush;
     }
 }

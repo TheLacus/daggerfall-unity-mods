@@ -170,7 +170,7 @@ namespace RealGrass
                 var stonesPrototypes = new DetailPrototype()
                 {
                     usePrototypeMesh = true,
-                    noiseSpread = properties.noiseSpreadStones,
+                    noiseSpread = 0.4f,
                     healthyColor = detailColor,
                     dryColor = detailColor,
                     renderMode = DetailRenderMode.VertexLit,
@@ -182,7 +182,7 @@ namespace RealGrass
                 var rocksPrototypes = new DetailPrototype()
                 {
                     usePrototypeMesh = true,
-                    noiseSpread = properties.noiseSpreadStones,
+                    noiseSpread = 0.4f,
                     healthyColor = detailColor,
                     dryColor = detailColor,
                     renderMode = DetailRenderMode.VertexLit,

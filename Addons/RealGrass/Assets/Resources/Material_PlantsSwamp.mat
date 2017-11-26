@@ -105,14 +105,23 @@ Material:
         name: _Parallax
       second: 0.02
     - first:
+        name: _ShadowStrength
+      second: 1
+    - first:
         name: _SmoothnessTextureChannel
       second: 0
     - first:
         name: _SpecularHighlights
       second: 1
     - first:
+        name: _SquashAmount
+      second: 1
+    - first:
         name: _SrcBlend
       second: 1
+    - first:
+        name: _TranslucencyViewDependency
+      second: 0.7
     - first:
         name: _UVSec
       second: 0
@@ -126,3 +135,12 @@ Material:
     - first:
         name: _EmissionColor
       second: {r: 0, g: 0, b: 0, a: 1}
+    - first:
+        name: _TranslucencyColor
+      second: {r: 0.73, g: 0.85, b: 0.41, a: 1}
+    - first:
+        name: _TreeInstanceColor
+      second: {r: 1, g: 1, b: 1, a: 1}
+    - first:
+        name: _TreeInstanceScale
+      second: {r: 1, g: 1, b: 1, a: 1}

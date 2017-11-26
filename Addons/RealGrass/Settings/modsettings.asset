@@ -19,6 +19,8 @@ MonoBehaviour:
     description: 
   presets:
   - LowGrass
+  - TallGrass
+  - DenseGrass
   sections:
   - name: Grass
     keys:
@@ -477,16 +479,20 @@ MonoBehaviour:
         color:
           serializedVersion: 2
           rgba: 0
-  - name: TerrainStones
+  - name: Others
     keys:
-    - name: Enable
-      description: Add little stones on farms ground
-      type: 0
+    - name: Flowers
+      description: Flowers and bushes [Experimental]
+      type: 1
       toggle:
         value: 0
       multipleChoice:
         selected: 0
-        choices: []
+        choices:
+        - Disabled
+        - Low
+        - Medium
+        - High
       slider:
         value: 0
         min: 0
@@ -507,72 +513,17 @@ MonoBehaviour:
         color:
           serializedVersion: 2
           rgba: 0
-    - name: NoiseSpread
-      description: The higher this is, the more varied the stones will look
-      type: 3
+    - name: Stones
+      description: Stones and rock [Experimental]
+      type: 1
       toggle:
         value: 0
       multipleChoice:
         selected: 0
-        choices: []
-      slider:
-        value: 0
-        min: 0
-        max: 0
-      floatSlider:
-        value: 0.4
-        min: 0
-        max: 1
-      tuple:
-        first: 0
-        second: 0
-      floatTuple:
-        first: 0
-        second: 0
-      text:
-        text: 
-      color:
-        color:
-          serializedVersion: 2
-          rgba: 0
-    - name: Density
-      description: Number of stones per terrain tile
-      type: 4
-      toggle:
-        value: 0
-      multipleChoice:
-        selected: 0
-        choices: []
-      slider:
-        value: 0
-        min: 0
-        max: 0
-      floatSlider:
-        value: 0
-        min: 0
-        max: 0
-      tuple:
-        first: 4
-        second: 12
-      floatTuple:
-        first: 0
-        second: 0
-      text:
-        text: 
-      color:
-        color:
-          serializedVersion: 2
-          rgba: 0
-  - name: Flowers
-    keys:
-    - name: Enable
-      description: Add flowers [Experimental]
-      type: 0
-      toggle:
-        value: 0
-      multipleChoice:
-        selected: 0
-        choices: []
+        choices:
+        - Disabled
+        - Reduced
+        - Full
       slider:
         value: 0
         min: 0
@@ -593,63 +544,7 @@ MonoBehaviour:
         color:
           serializedVersion: 2
           rgba: 0
-    - name: Density
-      description: Chance a bush appears on terrain
-      type: 2
-      toggle:
-        value: 0
-      multipleChoice:
-        selected: 0
-        choices: []
-      slider:
-        value: 5
-        min: 0
-        max: 100
-      floatSlider:
-        value: 0
-        min: 0
-        max: 0
-      tuple:
-        first: 0
-        second: 0
-      floatTuple:
-        first: 0
-        second: 0
-      text:
-        text: 
-      color:
-        color:
-          serializedVersion: 2
-          rgba: 0
-    - name: BushDensity
-      description: Number of flowers in a bush
-      type: 4
-      toggle:
-        value: 0
-      multipleChoice:
-        selected: 0
-        choices: []
-      slider:
-        value: 0
-        min: 0
-        max: 0
-      floatSlider:
-        value: 0
-        min: 0
-        max: 0
-      tuple:
-        first: 1
-        second: 8
-      floatTuple:
-        first: 0
-        second: 0
-      text:
-        text: 
-      color:
-        color:
-          serializedVersion: 2
-          rgba: 0
-  - name: Terrain
+  - name: Advanced
     keys:
     - name: DetailDistance
       description: Grass will be displayed up to this distance
@@ -660,8 +555,8 @@ MonoBehaviour:
         selected: 0
         choices: []
       slider:
-        value: 80
-        min: 0
+        value: 120
+        min: 10
         max: 300
       floatSlider:
         value: 0
@@ -693,7 +588,7 @@ MonoBehaviour:
         max: 0
       floatSlider:
         value: 1
-        min: 0
+        min: 0.1
         max: 1
       tuple:
         first: 0

@@ -377,8 +377,7 @@ namespace RealGrass
         /// </summary>
         private void LoadSettings(out PrototypesProperties properties, out Density density)
         {
-            const string waterPlantsSection = "WaterPlants", stonesSection = "TerrainStones",
-                flowersSection = "Flowers", grassSection = "Grass", texturesSection = "Textures";
+            const string waterPlantsSection = "WaterPlants", grassSection = "Grass", texturesSection = "Textures";
 
             // Load settings
             settings = new ModSettings(mod);
@@ -387,13 +386,6 @@ namespace RealGrass
             int waterPlantsMode = settings.GetInt(waterPlantsSection, "Mode", 0, 2);
             waterPlants = waterPlantsMode != 0;
             winterPlants = waterPlantsMode == 2;
-            terrainStones = settings.GetBool(stonesSection, "Enable");
-            flowers = settings.GetBool(flowersSection, "Enable");
-
-            // Terrain
-            const string terrainSection = "Terrain";
-            detailObjectDistance = settings.GetFloat(terrainSection, "DetailDistance", 10f);
-            detailObjectDensity = settings.GetFloat(terrainSection, "DetailDensity", 0.1f, 1f);
 
             // Detail prototypes settings
             properties = new PrototypesProperties()
@@ -414,7 +406,6 @@ namespace RealGrass
                 },
                 useGrassShader = settings.GetInt(grassSection, "Shader", 0, 1) == 1,
                 noiseSpreadPlants = settings.GetFloat(waterPlantsSection, "NoiseSpread"),
-                noiseSpreadStones = settings.GetFloat("TerrainStones", "NoiseSpread")
             };
 
             // Detail prototypes density
@@ -424,10 +415,50 @@ namespace RealGrass
                 grassThin = settings.GetTupleInt(grassSection, "ThinDensity"),
                 waterPlants = settings.GetTupleInt(waterPlantsSection, "Density"),
                 desertPlants = settings.GetTupleInt(waterPlantsSection, "DesertDensity"),
-                stones = settings.GetTupleInt(stonesSection, "Density"),
-                flowers = settings.GetInt(flowersSection, "Density", 0, 100),
-                flowersBush = settings.GetTupleInt(flowersSection, "BushDensity")
             };
+
+            switch(settings.GetInt("Others", "Flowers"))
+            {
+                case 0:
+                    flowers = false;
+                    break;
+                case 1:
+                    flowers = true;
+                    density.flowers = 5;
+                    density.bushes = 2;
+                    break;
+                case 2:
+                    flowers = true;
+                    density.flowers = 25;
+                    density.bushes = 7;
+                    break;
+                case 3:
+                    flowers = true;
+                    density.flowers = 50;
+                    density.bushes = 15;
+                    break;
+            }
+
+            switch (settings.GetInt("Others", "Stones"))
+            {
+                case 0:
+                    terrainStones = false;
+                    break;
+
+                case 1:
+                    terrainStones = true;
+                    density.stones = new Range<int>(2, 6);
+                    density.rocks = 2;
+                    break;
+                case 2:
+                    terrainStones = true;
+                    density.stones = new Range<int>(4, 12);
+                    density.rocks = 4;
+                    break;
+            }
+
+            detailObjectDistance = settings.GetFloat("Advanced", "DetailDistance", 10f);
+            detailObjectDensity = settings.GetFloat("Advanced", "DetailDensity", 0.1f, 1f);
         }
 
         private static ClimateBases GetClimate(int climateIndex)
