@@ -1,5 +1,5 @@
-=================================================================================================
-█▄▄▄▄ ▄███▄   ██   █           ▄▀  █▄▄▄▄ ██      ▄▄▄▄▄    ▄▄▄▄▄   
+﻿=================================================================================================
+▄▄▄▄ ▄███▄   ██   █           ▄▀  █▄▄▄▄ ██      ▄▄▄▄▄    ▄▄▄▄▄   
 █  ▄▀ █▀   ▀  █ █  █         ▄▀    █  ▄▀ █ █    █     ▀▄ █     ▀▄ 
 █▀▀▌  ██▄▄    █▄▄█ █         █ ▀▄  █▀▀▌  █▄▄█ ▄  ▀▀▀▀▄ ▄  ▀▀▀▀▄   
 █  █  █▄   ▄▀ █  █ ███▄      █   █ █  █  █  █  ▀▄▄▄▄▀   ▀▄▄▄▄▀    
@@ -27,10 +27,11 @@ and customize the size and shape of grass.
 - Size
 The size of grass is determined by a minimum and a maximum value for height and width.
 This is the size at the highest point: grass grows from snow during the first days
-of spring, and fade back to snow at the end of fall.
+of spring, 
+and fade back to snow at the end of fall.
 
 - Density
-Thick and thin values affect the number of objects per terrain tile.
+Thick and thin values affect the number of objects per terrain tile. 
 Higher or lower numbers determine the density, while the delta between the min and max
 affects the homogeneity or variety among all tiles.
 Excessive values can cause performance drops.
@@ -52,11 +53,12 @@ You can choose to show the winter version during this season, or not to show the
 
 Additionally it places waterlilies above the surface of temperate lakes and some tufts 
 of grass inside the mountain water zones.
-Plants bend in the wind and waterlilies move slightly on the water surface moved by the same wind. 
+Plants bend in the wind and waterlilies move slightly on the water surface moved by the same wind.
 
 **Others**
 
 - Flowers
+
 Flowers and bushes for different climates. Density varies randomically and, for little flowers,
 also with seasons (they grow up in spring and die in fall). Select a lower level of density
 to increase performance.
@@ -136,20 +138,20 @@ Known compatible mods:
 * Third parties
 Some meshes and/or textures have been picked from the following free licensed packs:
 
-    - 60 CC0 Vegetation textures by rubberduck (License: CC0) at
+	- 60 CC0 Vegetation textures by rubberduck (License: CC0) at
 		https://opengameart.org/content/60-cc0-vegetation-textures
-    - Bushes by yughues (License: CC0) at
-        https://opengameart.org/content/bushes
-    - Fern Pack by yughues (License: CC0) at
-        https://opengameart.org/content/fern-pack
-    - Free Handpainted Plants by yughues (License: CC0) at
-        https://opengameart.org/content/free-handpainted-plants
-    - Rocks by yughues (License: CC0) at
+	- Bushes by yughues (License: CC0) at
+		https://opengameart.org/content/bushes
+	- Fern Pack by yughues (License: CC0) at
+		https://opengameart.org/content/fern-pack
+	- Free Handpainted Plants by yughues (License: CC0) at
+		https://opengameart.org/content/free-handpainted-plants
+	- Rocks by yughues (License: CC0) at
 		https://opengameart.org/content/rocks-0
 	- Tropical plant 02 by yughues (License: CC0) at
 		https://opengameart.org/content/tropical-plant-02-0
-    - Tropical shrubs by yughues (License: CC0) at
-        https://opengameart.org/content/tropical-shrubs
+	- Tropical shrubs by yughues (License: CC0) at
+		https://opengameart.org/content/tropical-shrubs
 
 * Contacts
 Daggerfall Unity forums: http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
@@ -158,6 +160,7 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 **CHANGELOG**
 -------------------------------------------------------------------------------------------------
 2.1
+
 * Seasonal changes (grass color and size).
 * Graphical improvements for plants and flowers.
 * Additional groundcover (bushes and stones).
