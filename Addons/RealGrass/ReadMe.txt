@@ -1,16 +1,17 @@
 =================================================================================================
-REAL GRASS
-
-2.1 for DaggerFall Unity 0.4.36
+█▄▄▄▄ ▄███▄   ██   █           ▄▀  █▄▄▄▄ ██      ▄▄▄▄▄    ▄▄▄▄▄   
+█  ▄▀ █▀   ▀  █ █  █         ▄▀    █  ▄▀ █ █    █     ▀▄ █     ▀▄ 
+█▀▀▌  ██▄▄    █▄▄█ █         █ ▀▄  █▀▀▌  █▄▄█ ▄  ▀▀▀▀▄ ▄  ▀▀▀▀▄   
+█  █  █▄   ▄▀ █  █ ███▄      █   █ █  █  █  █  ▀▄▄▄▄▀   ▀▄▄▄▄▀    
+  █   ▀███▀      █     ▀      ███    █      █                     
+ ▀              █                   ▀      █                      
+               ▀                          ▀                      
+v2.1 for DaggerFall Unity 0.4.75
 =================================================================================================
 
 **DESCRIPTION**
 -------------------------------------------------------------------------------------------------
 Adds grass and, optionally, water plants, stones and flowers to the terrain of Daggerfall Unity.
-
-**REQUIREMENTS**
--------------------------------------------------------------------------------------------------
-Daggerfall Unity 0.4.36
 
 **INSTALLATION**
 -------------------------------------------------------------------------------------------------
@@ -18,13 +19,32 @@ Put the *.dfmod file inside 'DaggerfallUnity_Data/StreamingAssets/Mods'.
 Use the load order settings window to choose if you want water plants and stones or only grass, 
 and customize the size and shape of grass.
 
-**CUSTOMIZATION**
+**SETTINGS**
 -------------------------------------------------------------------------------------------------
-It is possible to customize this mod from the mod settings in-game. 
-Presets with default values are available, but it's possible to customize them individually.
-If you create an interesting combination, do not forget to share your own preset!
 
-- WaterPlants
+**Grass**
+
+- Size
+The size of grass is determined by a minimum and a maximum value for height and width.
+This is the size at the highest point: grass grows from snow during the first days
+of spring, and fade back to snow at the end of fall.
+
+- Density
+Thick and thin values affect the number of objects per terrain tile.
+Higher or lower numbers determine the density, while the delta between the min and max
+affects the homogeneity or variety among all tiles.
+Excessive values can cause performance drops.
+
+- NoiseSpread
+The spread of the variety of grass, an higher number causes a more varied placement.
+It doesn't affect the number of objects.
+
+- Shader
+'Billboard' makes the grass images rotate so that they always face the camera; this is the cheapest option.
+When 'Mesh' is enabled, grass is shown in a more ralistic manner, much like modern games.
+
+**WaterPlants**
+
 Places vegetation near water areas, like lakes and river.
 There is a total of four different plants, for the same number of climate regions: mountain, temperate, 
 desert and swamp. They all have two variations, summer and winter. 
@@ -34,37 +54,24 @@ Additionally it places waterlilies above the surface of temperate lakes and some
 of grass inside the mountain water zones.
 Plants bend in the wind and waterlilies move slightly on the water surface moved by the same wind. 
 
-- TerrainStones 
-Places little stones on the cultivated grounds near farms.
+**Others**
 
-**Grass, plants and stones**
+- Flowers
+Flowers and bushes for different climates. Density varies randomically and, for little flowers,
+also with seasons (they grow up in spring and die in fall). Select a lower level of density
+to increase performance.
 
-- Size
-The size of grass is determined by a minimum and a maximum value for height and width. 
+- Stones 
+Places rocks on terrain as well as little stones on the cultivated grounds near farms.
+Select reduced density to improve performance.
 
-- Density
-Thick and thin values (separated for grass, water plants, desert plants and stones) affect
-the number of objects per terrain tile. Higher or lower numbers determine the density, while
-the delta between the min and max affect the homogeneity or variety among all tiles.
-
-- NoiseSpread
-The spread of the variety of grass, an higher number causes a more varied placement.
-It doesn't affect the number of objects.
-
-- UseGrassShader
-By default Real Grass uses the GrassBillboard render mode. This makes the grass images rotate
-so that they always face the camera and it's the cheapest option.
-When 'UseGrassShader' is enabled, the Grass render mode is used instead. 
-This can help creating a more realistic grass, but it's up to personal preferences.
-
-**Terrain**
+**Advanced**
 
 - DetailDistance
-The distance from camera beyond which the grass will be culled.
-Lower values can increase performance.
+The distance from camera beyond which the grass will be culled; this is the most expensive option.
+Lower values can increase performance while higher values reduce "popup".
 
 - DetailDensity
-1.0 is the original density, as decided by Thick and Thin. 
 Lower values result in less detail objects being rendered, increasing performance.
 
 **PRESETS**
@@ -100,13 +107,7 @@ In settings, enable Textures Import and write the name of folder (ex: Pack = MyT
 You can find textures names on github:
 https://github.com/TheLacus/realgrass-du-mod/tree/master/Addons/RealGrass/Assets/Resources
 
-**FAQ**
--------------------------------------------------------------------------------------------------
-- How can I improve performance?
-* Reducing 'DetailDistance' is the single most impactful option on game performance.
-* Disable 'UseGrassShader'
-* Reduce density of grass through *Lower and *Higher and/or with the general setting 'DetailDensity'.
-* If you imported custom textures, reduce their resolution.
+Use an appropriate resolution for desired performance requirements.
 
 **UNINSTALL**
 -------------------------------------------------------------------------------------------------
@@ -125,24 +126,30 @@ Known compatible mods:
 
 **CREDITS**
 -------------------------------------------------------------------------------------------------
-* Developers and contributors
-Uncanny_Valley - creator, original developer
-TheLacus - developer, maintainer
-Midopa - additional changes
+* Developers
+- Uncanny_Valley (creator)
+- TheLacus
 
-* Additional art:
+* Contributors
+- Midopa
+
+* Third parties
 Some meshes and/or textures have been picked from the following free licensed packs:
 
+    - 60 CC0 Vegetation textures by rubberduck (License: CC0) at
+		https://opengameart.org/content/60-cc0-vegetation-textures
+    - Bushes by yughues (License: CC0) at
+        https://opengameart.org/content/bushes
+    - Fern Pack by yughues (License: CC0) at
+        https://opengameart.org/content/fern-pack
     - Free Handpainted Plants by yughues (License: CC0) at
         https://opengameart.org/content/free-handpainted-plants
+    - Rocks by yughues (License: CC0) at
+		https://opengameart.org/content/rocks-0
 	- Tropical plant 02 by yughues (License: CC0) at
 		https://opengameart.org/content/tropical-plant-02-0
     - Tropical shrubs by yughues (License: CC0) at
         https://opengameart.org/content/tropical-shrubs
-    - Bushes by yughues (License: CC0) at
-        https://opengameart.org/content/bushes
-	- Rocks by yughues (License: CC0) at
-		https://opengameart.org/content/rocks-0
 
 * Contacts
 Daggerfall Unity forums: http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
@@ -153,7 +160,7 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 2.1
 * Seasonal changes (grass color and size).
 * Graphical improvements for plants and flowers.
-* Additional vegetation (bushes and stones).
+* Additional groundcover (bushes and stones).
 
 2.0
 * Support for flowers
@@ -181,48 +188,30 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 * Customize size and shape of grass from the settings window.
 * Minor improvements.
 
-=================================================================================================
-Original Real Grass Readme
-=================================================================================================
-
-Name: Real Grass 
-Made by: Uncanny_Valley
-Additional changes: midopa
-Mod version: TheLacus
-For:  DaggerFall Tools For Unity (1.3.31)
-Version: 1.07
-
-This mod adds animated billboard grass in DaggerFall
-
 1.07
-*Converted to mod system.
+* Converted to mod system.
 Place realgrass.dfmod inside 'StreamingAssets/Mods'.
-*Fixed bug which caused the wrong kind of grass to appear 
+* Fixed bug which caused the wrong kind of grass to appear 
 when loading a save made in a different climate.
 
 1.06
-*Properly clear grass when moving into an season/climate without grass.
+* Properly clear grass when moving into an season/climate without grass.
 
 1.05
-*Adds more variety to grass patches
-*Tweaks density of grass so patches near non-grass terrain look more natural (no "grass walls")
-*Refactoring, cleanup, and comments
+* Adds more variety to grass patches
+* Tweaks density of grass so patches near non-grass terrain look more natural (no "grass walls")
+* Refactoring, cleanup, and comments
 
 1.04
-*Fixes error messages when traveling during winter in grassy climates
+* Fixes error messages when traveling during winter in grassy climates
 
 1.03
-*Fixes a few misplaced grass placements
-*Added a new type of grass!
-*Improved the green grass texture (I'm no artist but I try)
-*Cleaned up the code and refined it a bit further 
-
+* Fixes a few misplaced grass placements
+* Added a new type of grass!
+* Improved the green grass texture (I'm no artist but I try)
+* Cleaned up the code and refined it a bit further 
 
 1.02
-*Updated to work with version 1.3 of DaggerFall Tools For Unity
-*You no longer need to edit existing DFTFU files to use Real Grass
-*Code improvements, the loading time for the grass should be significant faster than before
-
-How to use:
-1. Add the prefab (pref_RealGrass) to the StreamingWorld Scene
-2. Play and enjoy 
+* Updated to work with version 1.3 of DaggerFall Tools For Unity
+* You no longer need to edit existing DFTFU files to use Real Grass
+* Code improvements, the loading time for the grass should be significant faster than before
