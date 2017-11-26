@@ -27,6 +27,7 @@ namespace RealGrass
         bool flowers;
 
         Density density;
+        int flowersDensity, bushesDensity, rocksDensity;
 
         // Details layers
         int[,] details0, details1, details2, details3, details4, details5, details6, details7;
@@ -72,6 +73,11 @@ namespace RealGrass
             details5 = EmptyMap();
             details6 = EmptyMap();
             details7 = EmptyMap();
+
+            // Set density of details for this terrain 
+            flowersDensity = GetTerrainDensityAnnual(density.flowers);
+            bushesDensity = GetTerrainDensityPerennial(density.bushes);
+            rocksDensity = GetTerrainDensityPerennial(density.rocks);
         }
                 
         /// <summary>
@@ -391,9 +397,8 @@ namespace RealGrass
                                 // Temperate: waterlilies
                                 else if (currentClimate == ClimateBases.Temperate)
                                 {
-                                    details2[(y * 2) + 1, (x * 2) + 1] = 1;
-                                    details2[(y * 2) + 1, x * 2] = 1;
-                                    details2[y * 2, (x * 2) + 1] = 1;
+                                    if (Random.value < 0.2f)
+                                        details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(5, 10);
                                 }
                             }
                             break;
@@ -567,7 +572,7 @@ namespace RealGrass
 
         private int RandomRocks()
         {
-            return Random.Range(0, 100) < density.rocks ? 1 : 0;
+            return Random.Range(0, 100) < rocksDensity ? 1 : 0;
         }
 
         /// <summary>
@@ -575,15 +580,12 @@ namespace RealGrass
         /// </summary>
         private int RandomFlowers()
         {
-            if (Random.Range(0, 100) < density.flowers)
-                return Random.Range(1, 8);
-
-            return 0;
+            return Random.Range(0, 100) < flowersDensity ? Random.Range(1, 8) : 0;
         }
 
         private int RandomBushes()
         {
-            return Random.Range(0, 100) < 15 ? Random.Range(0, 4) : 0;
+            return Random.Range(0, 100) < bushesDensity ? Random.Range(0, 4) : 0;
         }
 
         /// <summary>
@@ -616,6 +618,30 @@ namespace RealGrass
         {
             const int size = 256;
             return new int[size, size];
+        }
+
+        private static int GetTerrainDensityPerennial(int maxDensity)
+        {
+            return Mathf.RoundToInt(Mathf.Lerp(0, maxDensity, Random.value));
+        }
+
+        private static int GetTerrainDensityAnnual(int maxDensity)
+        {
+            const int
+                spring = 2 * 30 + 1,
+                summer = 5 * 30 + 1,
+                fall = 8 * 30 + 1,
+                winter = 11 * 30 + 1;
+
+            float density = Mathf.Lerp(0, maxDensity, Random.value);
+
+            int day = DaggerfallUnity.Instance.WorldTime.Now.DayOfYear;
+            if (day < summer) // Spring
+                density *= Mathf.InverseLerp(spring, summer, day);
+            else if (day >= fall) // Fall
+                density *= (1 - Mathf.InverseLerp(fall, winter, day));
+
+            return Mathf.RoundToInt(density);
         }
 
         #endregion
