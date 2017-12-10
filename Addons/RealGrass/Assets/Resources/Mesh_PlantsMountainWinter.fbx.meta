@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 6e46f5a3aaa3ab0448a28aa1915f8c1b
-timeCreated: 1511382984
+guid: 6399e618151275f4a81896a1a69f2129
+timeCreated: 1483266224
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,9 +9,11 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: LP_Plant11
+    4300000: Plane.003
+    4300002: Plane.002
+    4300004: Plane.001
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
@@ -70,7 +72,7 @@ ModelImporter:
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
-    skeletonHasParents: 1
+    skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 0
   humanoidOversampling: 1

@@ -49,9 +49,11 @@ namespace RealGrass
         const string PlantsTemperate = "PlantsTemperate"; // water plants for temperate
         const string Waterlily = "Waterlily"; // waterlilies for temperate
         const string PlantsSwamp = "PlantsSwamp"; // water plants for swamp
+        const string PlantsSwampAlt = "PlantsSwampAlt";
         const string PlantsMountain = "PlantsMountain"; // grass for mountain near water
         const string WaterMountainGrass = "WaterMountainGrass"; // grass for mountain inside water
         const string PlantsDesert = "PlantsDesert"; // grass near water for desert
+        const string PlantsDesertAlt = "PlantsDesertAlt";
 
         // Winter models for water plants
         const string PlantsTemperateWinter = "PlantsTemperateWinter"; // water plants for temperate
@@ -61,6 +63,7 @@ namespace RealGrass
         const string BushSwamp = "BushSwamp";
         const string BushTemperate = "BushTemperate";
         const string BushMountain = "BushMountain";
+        const string BushDesert = "BushDesert";
 
         // Stones
         const string Stone = "Stone";
@@ -278,7 +281,10 @@ namespace RealGrass
                         detailPrototype[indices.Grass].prototype = LoadGameObject(brownGrassMesh);
 
                     if (RealGrass.Instance.WaterPlants)
+                    {
                         detailPrototype[indices.WaterPlants].prototype = LoadGameObject(PlantsSwamp);
+                        detailPrototype[indices.Waterlilies].prototype = LoadGameObject(PlantsSwampAlt);
+                    }
 
                     if (RealGrass.Instance.Flowers)
                     {
@@ -360,7 +366,9 @@ namespace RealGrass
             if (!NeedsUpdate(UpdateType.Desert, ClimateBases.Desert))
                 return;
 
-            detailPrototype[1].prototype = LoadGameObject(PlantsDesert);
+            detailPrototype[indices.WaterPlants].prototype = LoadGameObject(PlantsDesert);
+            detailPrototype[indices.Waterlilies].prototype = LoadGameObject(PlantsDesertAlt);
+            detailPrototype[indices.Bushes].prototype = LoadGameObject(BushDesert);
         }
 
         #endregion

@@ -1,15 +1,30 @@
 fileFormatVersion: 2
-guid: 6e46f5a3aaa3ab0448a28aa1915f8c1b
-timeCreated: 1511382984
+guid: 1f7b90942da7cf74899ecdc8e715740f
+timeCreated: 1511966087
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: LP_Plant11
+    100000: Cover_cross
+    100002: Cross
+    100004: //RootNode
+    100006: Palm
+    400000: Cover_cross
+    400002: Cross
+    400004: //RootNode
+    400006: Palm
+    2300000: Cover_cross
+    2300002: Cross
+    2300004: Palm
+    2300006: //RootNode
+    3300000: Cover_cross
+    3300002: Cross
+    3300004: Palm
+    3300006: //RootNode
+    4300000: Cross
+    4300002: Palm
+    4300004: Cover_cross
+    9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
@@ -72,7 +87,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

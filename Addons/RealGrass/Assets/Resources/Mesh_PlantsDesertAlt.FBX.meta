@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 6e46f5a3aaa3ab0448a28aa1915f8c1b
-timeCreated: 1511382984
+guid: 126325844f013c8408acd32ad5c41a18
+timeCreated: 1511964019
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,9 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: LP_Plant11
+    4300000: trop_shrub_05
+    4300002: Palm
+    9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
@@ -72,7 +74,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

@@ -146,6 +146,12 @@ Some meshes and/or textures have been picked from the following free licensed pa
 		https://opengameart.org/content/fern-pack
 	- Free Handpainted Plants by yughues (License: CC0) at
 		https://opengameart.org/content/free-handpainted-plants
+    - Free houseplants by yughues (License: CC0) at
+        https://opengameart.org/content/free-houseplants
+    - Palm plant by yughues (License: CC0) at
+        https://opengameart.org/content/palm-plant
+    - Plants textures Pack 01 by yughues (License: CC0) at
+        https://opengameart.org/content/plants-textures-pack-01
 	- Rocks by yughues (License: CC0) at
 		https://opengameart.org/content/rocks-0
 	- Tropical plant 02 by yughues (License: CC0) at

@@ -206,7 +206,6 @@ namespace RealGrass
         /// </summary>
         private void AddGrass(DaggerfallTerrain daggerTerrain, TerrainData terrainData)
         {
-
 #if TEST_PERFORMANCE
 
             var stopwatch = new System.Diagnostics.Stopwatch();
@@ -214,15 +213,21 @@ namespace RealGrass
 
 #endif
 
+            Random.InitState(TerrainHelper.MakeTerrainKey(daggerTerrain.MapPixelX, daggerTerrain.MapPixelY));
+
             // Terrain settings 
-            InitTerrain(daggerTerrain, terrainData);
-            Color32[] tilemap = daggerTerrain.TileMap;
+            terrainData.SetDetailResolution(256, 8);
+            terrainData.wavingGrassTint = Color.gray;
+            Terrain terrain = daggerTerrain.gameObject.GetComponent<Terrain>();
+            terrain.detailObjectDistance = detailObjectDistance;
+            terrain.detailObjectDensity = detailObjectDensity;
 
             // Get the current season and climate
             var currentSeason = DaggerfallUnity.Instance.WorldTime.Now.SeasonValue;
             ClimateBases climate = GetClimate(daggerTerrain.MapData.worldClimate);
 
             // Update detail layers
+            Color32[] tilemap = daggerTerrain.TileMap;
             detailPrototypesDensity.InitDetailsLayers();
             switch (climate)
             {
@@ -281,26 +286,6 @@ namespace RealGrass
             Debug.LogFormat("RealGrass - Time elapsed: {0} ms.", stopwatch.Elapsed.Milliseconds);
 
 #endif
-        }
-
-        /// <summary>
-        /// Set settings for terrain.
-        /// </summary>
-        private void InitTerrain(DaggerfallTerrain daggerTerrain, TerrainData terrainData)
-        {
-            // Resolution of the detail map
-            terrainData.SetDetailResolution(256, 8);
-
-            // Grass max distance and density
-            Terrain terrain = daggerTerrain.gameObject.GetComponent<Terrain>();
-            terrain.detailObjectDistance = detailObjectDistance;
-            terrain.detailObjectDensity = detailObjectDensity;
-
-            // Waving grass tint
-            terrainData.wavingGrassTint = Color.gray;
-
-            // Set seed for terrain
-            Random.InitState(TerrainHelper.MakeTerrainKey(daggerTerrain.MapPixelX, daggerTerrain.MapPixelY));
         }
 
         #endregion

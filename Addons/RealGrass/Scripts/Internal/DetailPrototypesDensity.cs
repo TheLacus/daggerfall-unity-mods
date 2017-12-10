@@ -203,6 +203,11 @@ namespace RealGrass
                                 details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
                                 details1[y * 2, x * 2] = RandomWaterPlants();
                             }
+                            if (terrainStones && Random.value < 0.3f)
+                            {
+                                details7[(y * 2) + 1, x * 2] = Random.Range(0, 4);
+                                details7[y * 2, x * 2] = Random.Range(0, 4);
+                            }
                             break;
 
                         // Lower side
@@ -222,6 +227,11 @@ namespace RealGrass
                             {
                                 details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
                                 details1[y * 2, (x * 2)] = RandomWaterPlants();
+                            }
+                            if (terrainStones && Random.value < 0.3f)
+                            {
+                                details7[y * 2, (x * 2) + 1] = Random.Range(0, 4);
+                                details7[y * 2, (x * 2)] = Random.Range(0, 4);
                             }
                             break;
 
@@ -243,6 +253,11 @@ namespace RealGrass
                                 details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
                                 details1[y * 2, (x * 2) + 1] = RandomWaterPlants();
                             }
+                            if (terrainStones && Random.value < 0.3f)
+                            {
+                                details7[(y * 2) + 1, (x * 2) + 1] = Random.Range(0, 4);
+                                details7[y * 2, (x * 2) + 1] = Random.Range(0, 4);
+                            }
                             break;
 
                         // Upper side
@@ -262,6 +277,11 @@ namespace RealGrass
                             {
                                 details1[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
                                 details1[(y * 2) + 1, x * 2] = RandomWaterPlants();
+                            }
+                            if (terrainStones && Random.value < 0.3f)
+                            {
+                                details7[(y * 2) + 1, (x * 2) + 1] = Random.Range(0, 4);
+                                details7[(y * 2) + 1, x * 2] = Random.Range(0, 4);
                             }
                             break;
 
@@ -385,21 +405,44 @@ namespace RealGrass
                         case 3:
                             if (waterPlants)
                             {
-                                // Mountain: grass
-                                if (currentClimate == ClimateBases.Mountain)
+                                switch (currentClimate)
                                 {
-                                    if (Random.Range(0, 100) < 5)
-                                    {
-                                        details2[y * 2, x * 2] = Random.Range(1, 2);
-                                        details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(1, 2);
-                                    }
+                                    case ClimateBases.Mountain:
+                                        if (Random.value < 0.1f)
+                                        {
+                                            details2[y * 2, x * 2] = Random.Range(1, 4);
+                                            details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(1, 4);
+                                        }
+                                        break;
+
+                                    case ClimateBases.Swamp:
+                                        if (Random.value < 0.3f)
+                                        {
+                                            details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(0, 3);
+                                            details2[(y * 2), (x * 2) + 1] = Random.Range(0, 3);
+                                            details2[(y * 2) + 1, (x * 2)] = Random.Range(0, 3);
+                                            details2[(y * 2), (x * 2) ] = Random.Range(0, 3);
+                                        }
+                                        break;
+
+                                    case ClimateBases.Temperate:
+                                        if (Random.value < 0.2f)
+                                            details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(5, 10);
+                                        break;
                                 }
-                                // Temperate: waterlilies
-                                else if (currentClimate == ClimateBases.Temperate)
-                                {
-                                    if (Random.value < 0.2f)
-                                        details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(5, 10);
-                                }
+                            }
+                            break;
+
+                        case 116:
+                        case 117:
+                        case 118:
+                        case 119:
+                            if (waterPlants && currentClimate == ClimateBases.Swamp)
+                            {
+                                details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(0, 10);
+                                details2[(y * 2), (x * 2) + 1] = Random.Range(0, 10);
+                                details2[(y * 2) + 1, (x * 2)] = Random.Range(0, 10);
+                                details2[(y * 2), (x * 2)] = Random.Range(0, 10);
                             }
                             break;
 
@@ -488,38 +531,78 @@ namespace RealGrass
                         case 84:
                             details1[(y * 2) + 1, x * 2] = RandomDesert();
                             details1[y * 2, x * 2] = RandomDesert();
+                            details2[(y * 2) + 1, x * 2] = RandomWaterPlants();
+                            if (flowers)
+                                details6[(y * 2) + 1, x * 2] = RandomBushesDesert();
+                            if (terrainStones)
+                                details7[y * 2, x * 2] = RandomRocksDesert();
                             break;
                         // Lower side
                         case 85:
                             details1[y * 2, (x * 2) + 1] = RandomDesert();
                             details1[y * 2, (x * 2)] = RandomDesert();
+                            details2[y * 2, (x * 2)] = RandomWaterPlants();
+                            if (flowers)
+                                details6[y * 2, (x * 2) + 1] = RandomBushesDesert();
+                            if (terrainStones)
+                                details7[y * 2, x * 2] = RandomRocksDesert();
                             break;
                         // Right side
                         case 86:
                             details1[(y * 2) + 1, (x * 2) + 1] = RandomDesert();
                             details1[y * 2, (x * 2) + 1] = RandomDesert();
+                            details2[y * 2, (x * 2) + 1] = RandomWaterPlants();
+                            if (flowers)
+                                details6[(y * 2) + 1, (x * 2) + 1] = RandomBushesDesert();
+                            if (terrainStones)
+                                details7[(y * 2) + 1, (x * 2) + 1] = RandomRocksDesert();
                             break;
                         // Upper side
                         case 87:
                             details1[(y * 2) + 1, (x * 2) + 1] = RandomDesert();
                             details1[(y * 2) + 1, x * 2] = RandomDesert();
+                            details2[(y * 2) + 1, x * 2] = RandomWaterPlants();
+                            if (flowers)
+                                details6[(y * 2) + 1, (x * 2) + 1] = RandomBushesDesert();
+                            if (terrainStones)
+                                details7[(y * 2) + 1, (x * 2) + 1] = RandomRocksDesert();
                             break;
                         // Corners
                         case 88:
                             details1[y * 2, x * 2] = RandomDesert();
                             details1[(y * 2) + 1, (x * 2) + 1] = RandomDesert();
+                            details2[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
+                            if (flowers)
+                                details6[y * 2, x * 2] = RandomBushesDesert();
+                            if (terrainStones)
+                                details7[y * 2, x * 2] = RandomRocksDesert();
                             break;
                         case 89:
                             details1[y * 2, (x * 2) + 1] = RandomDesert();
                             details1[(y * 2) + 1, x * 2] = RandomDesert();
+                            details2[(y * 2) + 1, x * 2] = RandomWaterPlants();
+                            if (flowers)
+                                details6[y * 2, (x * 2) + 1] = RandomBushesDesert();
+                            if (terrainStones)
+                                details7[y * 2, (x * 2) + 1] = RandomRocksDesert();
                             break;
                         case 90:
                             details1[y * 2, x * 2] = RandomDesert();
                             details1[(y * 2) + 1, (x * 2) + 1] = RandomDesert();
+                            details2[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
+                            if (flowers)
+                                details6[y * 2, x * 2] = RandomBushesDesert();
+                            if (terrainStones)
+                                details7[y * 2, x * 2] = RandomRocksDesert();
                             break;
                         case 91:
                             details1[y * 2, (x * 2) + 1] = RandomDesert();
                             details1[(y * 2) + 1, x * 2] = RandomDesert();
+                            details2[(y * 2) + 1, x * 2] = RandomWaterPlants();
+                            if (flowers)
+                                details6[y * 2, (x * 2) + 1] = RandomBushesDesert();
+                            if (terrainStones)
+                                details7[y * 2, (x * 2) + 1] = RandomRocksDesert();
                             break;
                     }
                 }
@@ -575,6 +658,11 @@ namespace RealGrass
             return Random.Range(0, 100) < rocksDensity ? 1 : 0;
         }
 
+        private int RandomRocksDesert()
+        {
+            return Random.value < 0.30f ? 1 : 0;
+        }
+
         /// <summary>
         /// Generate random values for the placement of flowers. 
         /// </summary>
@@ -586,6 +674,11 @@ namespace RealGrass
         private int RandomBushes()
         {
             return Random.Range(0, 100) < bushesDensity ? Random.Range(0, 4) : 0;
+        }
+
+        private int RandomBushesDesert()
+        {
+            return Random.value < 0.25f ? Random.Range(1, 3) : 0;
         }
 
         /// <summary>
@@ -612,7 +705,7 @@ namespace RealGrass
 
         #endregion
 
-        #region Private Methods
+        #region Static Methods
 
         private static int[,] EmptyMap()
         {
