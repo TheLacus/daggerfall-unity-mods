@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 431f1b68c514fa14c81e643ac9ce796f
-timeCreated: 1511728241
+guid: 0ae43befd3d6fea4ab6eced534589ceb
+timeCreated: 1514309601
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: fern
+    4300000: bush_02
     9500000: //RootNode
   materials:
     importMaterials: 1

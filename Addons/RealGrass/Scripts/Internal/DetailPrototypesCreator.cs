@@ -47,11 +47,11 @@ namespace RealGrass
 
         // Models for water plants
         const string PlantsTemperate = "PlantsTemperate"; // water plants for temperate
-        const string Waterlily = "Waterlily"; // waterlilies for temperate
+        const string PlantsTemperateAlt = "PlantsTemperateAlt";
         const string PlantsSwamp = "PlantsSwamp"; // water plants for swamp
         const string PlantsSwampAlt = "PlantsSwampAlt";
         const string PlantsMountain = "PlantsMountain"; // grass for mountain near water
-        const string WaterMountainGrass = "WaterMountainGrass"; // grass for mountain inside water
+        const string PlantsMountainAlt = "PlantsMountainAlt";
         const string PlantsDesert = "PlantsDesert"; // grass near water for desert
         const string PlantsDesertAlt = "PlantsDesertAlt";
 
@@ -261,7 +261,7 @@ namespace RealGrass
                     if (RealGrass.Instance.WaterPlants)
                     {
                         detailPrototype[indices.WaterPlants].prototype = LoadGameObject(PlantsMountain);
-                        detailPrototype[indices.Waterlilies].prototype = LoadGameObject(WaterMountainGrass);
+                        detailPrototype[indices.Waterlilies].prototype = LoadGameObject(PlantsMountainAlt);
                     }
 
                     if (RealGrass.Instance.Flowers)
@@ -305,7 +305,7 @@ namespace RealGrass
                     if (RealGrass.Instance.WaterPlants)
                     {
                         detailPrototype[indices.WaterPlants].prototype = LoadGameObject(PlantsTemperate);
-                        detailPrototype[indices.Waterlilies].prototype = LoadGameObject(Waterlily);
+                        detailPrototype[indices.Waterlilies].prototype = LoadGameObject(PlantsTemperateAlt);
                     }
 
                     if (RealGrass.Instance.Flowers)

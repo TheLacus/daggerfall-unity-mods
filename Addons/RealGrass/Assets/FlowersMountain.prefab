@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4207476384096712}
   - component: {fileID: 33929283383861646}
   - component: {fileID: 23984121625878538}
-  - component: {fileID: 95490184936353088}
+  - component: {fileID: 95747875737156326}
   m_Layer: 0
   m_Name: FlowersMountain
   m_TagString: Untagged
@@ -55,7 +55,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 9013f1740efb8a043b36bf439c9cb09b, type: 2}
+  - {fileID: 2100000, guid: 19932273c965aab479891022017c02ed, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -79,8 +79,8 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1939048319208338}
-  m_Mesh: {fileID: 4300000, guid: 431f1b68c514fa14c81e643ac9ce796f, type: 3}
---- !u!95 &95490184936353088
+  m_Mesh: {fileID: 4300000, guid: 0ae43befd3d6fea4ab6eced534589ceb, type: 3}
+--- !u!95 &95747875737156326
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
@@ -88,7 +88,7 @@ Animator:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1939048319208338}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 431f1b68c514fa14c81e643ac9ce796f, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 0ae43befd3d6fea4ab6eced534589ceb, type: 3}
   m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0

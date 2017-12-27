@@ -408,11 +408,8 @@ namespace RealGrass
                                 switch (currentClimate)
                                 {
                                     case ClimateBases.Mountain:
-                                        if (Random.value < 0.1f)
-                                        {
-                                            details2[y * 2, x * 2] = Random.Range(1, 4);
-                                            details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(1, 4);
-                                        }
+                                        if (Random.value < 0.2f)
+                                            details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(5, 10);
                                         break;
 
                                     case ClimateBases.Swamp:
@@ -426,8 +423,13 @@ namespace RealGrass
                                         break;
 
                                     case ClimateBases.Temperate:
-                                        if (Random.value < 0.2f)
-                                            details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(5, 10);
+                                        if (Random.value < 0.1f)
+                                        {
+                                            details2[y * 2, x * 2] = Random.Range(2, 5);
+                                            details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(2, 5);
+                                            details2[(y * 2) + 1, x * 2] = Random.Range(2, 5);
+                                            details2[y * 2, (x * 2) + 1] = Random.Range(2, 5);
+                                        }
                                         break;
                                 }
                             }
@@ -439,10 +441,10 @@ namespace RealGrass
                         case 119:
                             if (waterPlants && currentClimate == ClimateBases.Swamp)
                             {
-                                details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(0, 10);
-                                details2[(y * 2), (x * 2) + 1] = Random.Range(0, 10);
-                                details2[(y * 2) + 1, (x * 2)] = Random.Range(0, 10);
-                                details2[(y * 2), (x * 2)] = Random.Range(0, 10);
+                                details2[(y * 2) + 1, (x * 2) + 1] = Random.Range(0, 2);
+                                details2[(y * 2), (x * 2) + 1] = Random.Range(0, 2);
+                                details2[(y * 2) + 1, (x * 2)] = Random.Range(0, 2);
+                                details2[(y * 2), (x * 2)] = Random.Range(0, 2);
                             }
                             break;
 

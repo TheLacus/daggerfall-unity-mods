@@ -468,8 +468,8 @@ MonoBehaviour:
         min: 0
         max: 0
       tuple:
-        first: 0
-        second: 3
+        first: 10
+        second: 16
       floatTuple:
         first: 0
         second: 0

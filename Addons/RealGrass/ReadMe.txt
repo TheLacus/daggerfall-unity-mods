@@ -138,26 +138,34 @@ Known compatible mods:
 * Third parties
 Some meshes and/or textures have been picked from the following free licensed packs:
 
+	- 3TD Tropical Environment Pack v2.0 by Ron Kapaun (License: CC0) at
+		https://opengameart.org/content/3td-tropical-environment-pack-v20
 	- 60 CC0 Vegetation textures by rubberduck (License: CC0) at
 		https://opengameart.org/content/60-cc0-vegetation-textures
 	- Bushes by yughues (License: CC0) at
 		https://opengameart.org/content/bushes
-	- Fern Pack by yughues (License: CC0) at
-		https://opengameart.org/content/fern-pack
+	- Free 3D plants models by yughues (License: CC0) at
+		https://opengameart.org/content/free-3d-plants-models
 	- Free Handpainted Plants by yughues (License: CC0) at
 		https://opengameart.org/content/free-handpainted-plants
-    - Free houseplants by yughues (License: CC0) at
-        https://opengameart.org/content/free-houseplants
-    - Palm plant by yughues (License: CC0) at
-        https://opengameart.org/content/palm-plant
-    - Plants textures Pack 01 by yughues (License: CC0) at
-        https://opengameart.org/content/plants-textures-pack-01
+	- [Free] HandPainted Plants 2 by yughues (License: CC0) at
+		https://opengameart.org/content/free-handpainted-plants-2
+	- Free houseplants by yughues (License: CC0) at
+		https://opengameart.org/content/free-houseplants
+	- Low poly rocks by para (License: CC0) at
+		https://opengameart.org/content/low-poly-rocks
+	- Plants textures Pack 01 by yughues (License: CC0) at
+		https://opengameart.org/content/plants-textures-pack-01
 	- Rocks by yughues (License: CC0) at
 		https://opengameart.org/content/rocks-0
+	- Stylized LawnGrassWeeds by yughues (License: CC0) at
+		https://opengameart.org/content/free-stylized-lawngrassweeds
 	- Tropical plant 02 by yughues (License: CC0) at
 		https://opengameart.org/content/tropical-plant-02-0
 	- Tropical shrubs by yughues (License: CC0) at
 		https://opengameart.org/content/tropical-shrubs
+	- Weathered rock pack by para (License: CC0) at
+		https://opengameart.org/content/weathered-rock-pack
 
 * Contacts
 Daggerfall Unity forums: http://forums.dfworkshop.net/viewtopic.php?f=14&t=17

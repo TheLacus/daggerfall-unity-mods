@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4000010793949046}
   - component: {fileID: 33000010015330458}
   - component: {fileID: 23000011646424618}
-  - component: {fileID: 95179148668810146}
   m_Layer: 0
   m_Name: PlantsSwampWinter
   m_TagString: Untagged
@@ -36,7 +35,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012320037390}
   m_LocalRotation: {x: 6.6097587e-12, y: 1, z: -0.0000018099951, w: 0.0000036517765}
-  m_LocalPosition: {x: 0, y: -0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -55,7 +54,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 774f358b60dd2a044aa504e04afe9db5, type: 2}
+  - {fileID: 2100000, guid: 9b8ebce346e25fa4d8227d7c31219a74, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -79,21 +78,4 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012320037390}
-  m_Mesh: {fileID: 4300000, guid: 59894fcea90593743ae71cd22376f014, type: 3}
---- !u!95 &95179148668810146
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012320037390}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 59894fcea90593743ae71cd22376f014, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
+  m_Mesh: {fileID: 4300000, guid: 1afd1746eaef5334a88a60e8520e7e63, type: 3}
