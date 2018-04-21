@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4000014186041898}
   - component: {fileID: 33000010777692060}
   - component: {fileID: 23000012678080704}
-  - component: {fileID: 95466102661758830}
   m_Layer: 0
   m_Name: PlantsMountainWinter
   m_TagString: Untagged
@@ -35,7 +34,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012224833010}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.00000008146034, y: 0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -55,7 +54,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 1cb19229d0271ea43a7c1362b58affa7, type: 2}
+  - {fileID: 2100000, guid: dc95837608db9e649bc6d28fabca6362, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -79,21 +78,4 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012224833010}
-  m_Mesh: {fileID: 4300000, guid: 005720129c414ab45b65ff3211acac79, type: 3}
---- !u!95 &95466102661758830
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012224833010}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 005720129c414ab45b65ff3211acac79, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
+  m_Mesh: {fileID: 4300000, guid: a4ffc3ad9d1741249af587b71ad9e3ae, type: 3}
