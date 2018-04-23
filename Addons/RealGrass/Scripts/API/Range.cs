@@ -1,4 +1,4 @@
-﻿// Project:         RealGrass for Daggerfall Unity
+// Project:         RealGrass for Daggerfall Unity
 // Web Site:        http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Source Code:     https://github.com/TheLacus/realgrass-du-mod
@@ -15,13 +15,13 @@ namespace RealGrass
     /// <typeparam name="T">Numeric type of Min and Max.</typeparam>
     public class Range<T> where T : struct
     {
-        public T Min;
-        public T Max;
+        public T Min { get; set; }
+        public T Max { get; set; }
 
-        public Range(T Min, T Max)
+        public Range(T min, T max)
         {
-            this.Min = Min;
-            this.Max = Max;
+            this.Min = min;
+            this.Max = max;
         }
 
         public static implicit operator Range<T>(Tuple<T,T> t)
@@ -35,7 +35,7 @@ namespace RealGrass
         }
     }
 
-    public static class ExtensionMethods
+    public static class RangeSpecialization
     {
         /// <summary>
         /// Get a random number in this range.

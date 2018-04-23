@@ -3,130 +3,93 @@
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Source Code:     https://github.com/TheLacus/realgrass-du-mod
 // Original Author: Uncanny_Valley (original Real Grass)
-// Contributors:    TheLacus (Water plants, mod version and improvements) 
+// Contributors:    TheLacus (mod version, additional terrain details) 
 //                  Midopa
 
 // #define TEST_PERFORMANCE
 
 using System.Collections;
-using System.IO;
 using System.Linq;
 using UnityEngine;
 using DaggerfallWorkshop;
 using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
-using DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings;
 using DaggerfallWorkshop.Utility;
 using Climates = DaggerfallConnect.Arena2.MapsFile.Climates;
 
 namespace RealGrass
 {
+    public static class DaysOfYear
+    {
+        public const int
+
+            GrowDay =  1 * 30 + 15,
+            Spring  =  2 * 30 +  1,
+            Summer  =  5 * 30 +  1,
+            MidYear =  6 * 30 + 15,
+            Fall    =  8 * 30 +  1,
+            Winter  = 11 * 30 +  1,
+            DieDay  = 12 * 30 - 15;
+    }
+
     /// <summary>
-    /// Real Grass creates detail prototypes layers on terrain to place various components:
-    ///
-    /// GRASS
-    /// Adds a layer of tufts of grass, to give the impression of a grassy meadow. 
-    /// There are two variants of grass, varying for different regions.
-    ///
-    /// WATER PLANTS 
-    /// Places vegetation near water areas, like lakes and river.
-    /// There is a total of four different plants, for the same number of climate regions: mountain, temperate, 
-    /// desert and swamp. They all have two variations, summer and winter. 
-    /// Additionally it places waterlilies above the surface of temperate lakes and some tufts 
-    /// of grass inside the mountain water zones.
-    /// Plants bend in the wind and waterlilies move slightly on the water surface moved by the same wind. 
-    ///
-    /// STONES
-    /// Places little stones on the cultivated grounds near farms. 
-    /// 
-    /// FLOWERS
-    /// Places flowers on grass terrain.
-    ///
-    /// Real Grass thread on DU forums:
-    /// http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
+    /// Places grass and other details on Daggerall Unity terrain.
     /// </summary>
     public class RealGrass : MonoBehaviour
     {
         #region Fields
 
         static RealGrass instance;
-        static Mod mod;
-        static ModSettings settings;
 
+        DetailPrototypesManager detailPrototypesManager;
+        DensityManager densityManager;
         bool isEnabled;
 
-        DetailPrototypesCreator detailPrototypesCreator;
-        DetailPrototypesDensity detailPrototypesDensity;
-
-        // Optional details
-        bool waterPlants, winterPlants, terrainStones, flowers;
-
-        // Terrain settings
-        float detailObjectDistance;
-        float detailObjectDensity;
+        internal const string TexturesFolder = "Grass";
 
         #endregion
 
         #region Properties
 
-        // Singleton
         public static RealGrass Instance
         {
-            get
-            {
-                if (instance == null)
-                    instance = FindObjectOfType<RealGrass>();
-                return instance;
-            }
+            get { return instance ?? (instance = FindObjectOfType<RealGrass>()); }
         }
 
-        public static Mod Mod
-        {
-            get { return mod; }
-        }
+        public static Mod Mod { get; private set; }
 
-        /// <summary>
-        /// Resources folder on disk.
-        /// </summary>
-        public static string ResourcesFolder
-        {
-            get { return Path.Combine(mod.DirPath, "Resources"); }
-        }
-
-        // Details status
-        public bool WaterPlants { get { return waterPlants; } }
-        public bool WinterPlants { get { return winterPlants; } }
-        public bool TerrainStones { get { return terrainStones; } }
-        public bool Flowers { get { return flowers; } }
+        // Optional features
+        public bool WaterPlants { get; private set; }
+        public bool WinterPlants { get; private set; }
+        public bool TerrainStones { get; private set; }
+        public bool Flowers { get; private set; }
 
         /// <summary>
         /// Details will be rendered up to this distance from the player.
         /// </summary>
-        public float DetailObjectDistance
-        {
-            get { return detailObjectDistance; }
-            set { detailObjectDistance = value; }
-        }
+        public float DetailObjectDistance { get; set; }
+
+        /// <summary>
+        /// General density of details.
+        /// </summary>
+        public float DetailObjectDensity { get; set; }
 
         #endregion
 
         #region Unity
 
-        /// <summary>
-        /// Mod loader.
-        /// </summary>
         [Invoke(StateManager.StateTypes.Start, 0)]
         public static void Init(InitParams initParams)
         {
             // Get mod
-            mod = initParams.Mod;
+            Mod = initParams.Mod;
 
             // Add script to the scene.
             GameObject go = new GameObject("RealGrass");
             instance = go.AddComponent<RealGrass>();
 
             // After finishing, set the mod's IsReady flag to true.
-            mod.IsReady = true;
+            Mod.IsReady = true;
         }
 
         void Awake()
@@ -151,10 +114,10 @@ namespace RealGrass
 
         public override string ToString()
         {
-            if (mod == null)
+            if (Mod == null)
                 return base.ToString();
 
-            return string.Format("{0} v.{1}", mod.Title, mod.ModInfo.ModVersion);
+            return string.Format("{0} v.{1}", Mod.Title, Mod.ModInfo.ModVersion);
         }
 
         /// <summary>
@@ -199,12 +162,12 @@ namespace RealGrass
 
         #endregion
 
-        #region Mod Logic
+        #region Private Methods
 
         /// <summary>
         /// Add Grass and other details on terrain.
         /// </summary>
-        private void AddGrass(DaggerfallTerrain daggerTerrain, TerrainData terrainData)
+        private void AddTerrainDetails(DaggerfallTerrain daggerTerrain, TerrainData terrainData)
         {
 #if TEST_PERFORMANCE
 
@@ -215,12 +178,12 @@ namespace RealGrass
 
             Random.InitState(TerrainHelper.MakeTerrainKey(daggerTerrain.MapPixelX, daggerTerrain.MapPixelY));
 
-            // Terrain settings 
+            // Terrain settings
             terrainData.SetDetailResolution(256, 8);
             terrainData.wavingGrassTint = Color.gray;
             Terrain terrain = daggerTerrain.gameObject.GetComponent<Terrain>();
-            terrain.detailObjectDistance = detailObjectDistance;
-            terrain.detailObjectDensity = detailObjectDensity;
+            terrain.detailObjectDistance = DetailObjectDistance;
+            terrain.detailObjectDensity = DetailObjectDensity;
 
             // Get the current season and climate
             var currentSeason = DaggerfallUnity.Instance.WorldTime.Now.SeasonValue;
@@ -228,7 +191,7 @@ namespace RealGrass
 
             // Update detail layers
             Color32[] tilemap = daggerTerrain.TileMap;
-            detailPrototypesDensity.InitDetailsLayers();
+            densityManager.InitDetailsLayers();
             switch (climate)
             {
                 case ClimateBases.Temperate:
@@ -237,47 +200,43 @@ namespace RealGrass
                     if (currentSeason != DaggerfallDateTime.Seasons.Winter)
                     {
                         // Summer
-                        detailPrototypesCreator.UpdateClimateSummer(climate);
-                        detailPrototypesDensity.SetDensitySummer(tilemap, climate);
+                        detailPrototypesManager.UpdateClimateSummer(climate);
+                        densityManager.SetDensitySummer(tilemap, climate);
                     }
-                    else if (waterPlants && winterPlants)
+                    else
                     {
                         // Winter
-                        detailPrototypesCreator.UpdateClimateWinter(climate);
-                        detailPrototypesDensity.SetDensityWinter(tilemap);
+                        detailPrototypesManager.UpdateClimateWinter(climate);
+                        densityManager.SetDensityWinter(tilemap);
                     }
                     break;
 
                 case ClimateBases.Desert:
-                    if (waterPlants)
-                    {
-                        detailPrototypesCreator.UpdateClimateDesert();
-                        detailPrototypesDensity.SetDensityDesert(tilemap);
-                    }
+                    detailPrototypesManager.UpdateClimateDesert();
+                    densityManager.SetDensityDesert(tilemap);
                     break;
             }
 
             // Assign detail prototypes to the terrain
-            terrainData.detailPrototypes = detailPrototypesCreator.DetailPrototypes;
+            terrainData.detailPrototypes = detailPrototypesManager.DetailPrototypes;
 
             // Assign detail layers to the terrain
-            Indices indices = detailPrototypesCreator.Indices;
-            terrainData.SetDetailLayer(0, 0, indices.Grass, detailPrototypesDensity.Grass); // Grass
-            if (waterPlants)
+            terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Grass, densityManager.Grass);
+            if (WaterPlants)
             {
-                terrainData.SetDetailLayer(0, 0, indices.WaterPlants, detailPrototypesDensity.WaterPlants); // Water plants near water
-                terrainData.SetDetailLayer(0, 0, indices.Waterlilies, detailPrototypesDensity.Waterlilies); // Waterlilies and grass inside water
+                terrainData.SetDetailLayer(0, 0, detailPrototypesManager.WaterPlants, densityManager.WaterPlants);
+                terrainData.SetDetailLayer(0, 0, detailPrototypesManager.WaterPlantsAlt, densityManager.WaterPlantsAlt);
             }
-            if (terrainStones)
+            if (TerrainStones)
             {
-                terrainData.SetDetailLayer(0, 0, indices.Stones, detailPrototypesDensity.Stones); // Stones
-                terrainData.SetDetailLayer(0, 0, indices.Rocks, detailPrototypesDensity.Rocks);
+                terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Stones, densityManager.Stones);
+                terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Rocks, densityManager.Rocks);
             }
-            if (flowers)
+            if (Flowers)
             {
-                terrainData.SetDetailLayer(0, 0, indices.Bushes, detailPrototypesDensity.Bushes);
-                terrainData.SetDetailLayer(0, 0, indices.Flowers, detailPrototypesDensity.Flowers); // Flowers
-                terrainData.SetDetailLayer(0, 0, indices.CommonFlowers, detailPrototypesDensity.CommonFlowers);
+                terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Bushes, densityManager.Bushes);
+                terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Flowers, densityManager.Flowers);
+                terrainData.SetDetailLayer(0, 0, detailPrototypesManager.CommonFlowers, densityManager.CommonFlowers);
             }
 
 #if TEST_PERFORMANCE
@@ -288,10 +247,6 @@ namespace RealGrass
 #endif
         }
 
-        #endregion
-
-        #region Private Methods
-
         /// <summary>
         /// Start mod and optionally add grass to existing terrains.
         /// </summary>
@@ -299,29 +254,14 @@ namespace RealGrass
         /// <param name="initTerrains">Add Grass to existing terrains (unnecessary at startup).</param>
         private void StartMod(bool loadSettings, bool initTerrains)
         {
-            if(loadSettings)
-            {
-                try
-                {
-                    // Load settings and setup components
-                    PrototypesProperties properties;
-                    Density density;
-                    LoadSettings(out properties, out density);
-                    detailPrototypesCreator = new DetailPrototypesCreator(properties);
-                    detailPrototypesDensity = new DetailPrototypesDensity(density);
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogErrorFormat("RealGrass: Failed to setup mod as per user settings!\n{0}", e.ToString());
-                    return;
-                }
-            }
+            if (loadSettings)
+                LoadSettings();
 
             // Subscribe to onPromoteTerrainData
-            DaggerfallTerrain.OnPromoteTerrainData += AddGrass;
+            DaggerfallTerrain.OnPromoteTerrainData += DaggerfallTerrain_OnPromoteTerrainData;
 
             // Place details on existing terrains
-            if(initTerrains)
+            if (initTerrains)
                 StartCoroutine(InitTerrains());
 
             Debug.Log("Real Grass is now enabled; subscribed to terrain promotion.");
@@ -332,7 +272,7 @@ namespace RealGrass
             var terrains = GameManager.Instance.StreamingWorld.StreamingTarget.GetComponentsInChildren<DaggerfallTerrain>();
             foreach (DaggerfallTerrain daggerTerrain in terrains)
             {
-                AddGrass(daggerTerrain, daggerTerrain.gameObject.GetComponent<Terrain>().terrainData);
+                AddTerrainDetails(daggerTerrain, daggerTerrain.gameObject.GetComponent<Terrain>().terrainData);
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -343,107 +283,109 @@ namespace RealGrass
         private void StopMod()
         {
             // Unsubscribe from onPromoteTerrainData
-            DaggerfallTerrain.OnPromoteTerrainData -= AddGrass;
+            DaggerfallTerrain.OnPromoteTerrainData -= DaggerfallTerrain_OnPromoteTerrainData;
 
             // Remove details from terrains
             Terrain[] terrains = GameManager.Instance.StreamingWorld.StreamingTarget.GetComponentsInChildren<Terrain>();
             foreach (TerrainData terrainData in terrains.Select(x => x.terrainData))
             {
-                for (int i = 0; i < 5; i++)
-                    terrainData.SetDetailLayer(0, 0, i, detailPrototypesDensity.Empty);
+                foreach (var layer in terrainData.GetSupportedLayers(0, 0, terrainData.detailWidth, terrainData.detailHeight))
+                    terrainData.SetDetailLayer(0, 0, layer, DensityManager.Empty);
                 terrainData.detailPrototypes = null;
             }
 
             Debug.Log("Real Grass is now disabled; unsubscribed from terrain promotion.");
         }
 
-        /// <summary>
-        /// Load settings.
-        /// </summary>
-        private void LoadSettings(out PrototypesProperties properties, out Density density)
+        private void LoadSettings()
         {
-            const string waterPlantsSection = "WaterPlants", grassSection = "Grass", texturesSection = "Textures";
+            const string
+                waterPlantsSection  = "WaterPlants",
+                grassSection        = "Grass",
+                advancedSection     = "Advanced";
 
             // Load settings
-            settings = new ModSettings(mod);
+            var settings = Mod.GetSettings();
 
             // Optional details
-            int waterPlantsMode = settings.GetInt(waterPlantsSection, "Mode", 0, 2);
-            waterPlants = waterPlantsMode != 0;
-            winterPlants = waterPlantsMode == 2;
+            int waterPlantsMode = settings.GetInt(waterPlantsSection, "Mode");
+            WaterPlants = waterPlantsMode != 0;
+            WinterPlants = waterPlantsMode == 2;
 
             // Detail prototypes settings
-            properties = new PrototypesProperties()
+            var properties = new PrototypesProperties()
             {
-                import = settings.GetBool(texturesSection, "Import"),
-                packName = settings.GetString(texturesSection, "Pack"),
-                grassHeight = settings.GetTupleFloat(grassSection, "Height"),
-                grassWidth = settings.GetTupleFloat(grassSection, "Width"),
-                noiseSpread = settings.GetFloat(grassSection, "NoiseSpread"),
-                grassColors = new GrassColors()
+                GrassHeight = settings.GetTupleFloat(grassSection, "Height"),
+                GrassWidth = settings.GetTupleFloat(grassSection, "Width"),
+                NoiseSpread = settings.GetFloat(grassSection, "NoiseSpread"),
+                GrassColors = new GrassColors()
                 {
-                    springHealthy = settings.GetColor(grassSection, "SpringHealthy"),
-                    springDry = settings.GetColor(grassSection, "SpringDry"),
-                    summerHealty = settings.GetColor(grassSection, "SummerHealty"),
-                    summerDry = settings.GetColor(grassSection, "SummerDry"),
-                    fallHealty = settings.GetColor(grassSection, "FallHealty"),
-                    fallDry = settings.GetColor(grassSection, "FallDry"),
+                    SpringHealthy = settings.GetColor(grassSection, "SpringHealthy"),
+                    SpringDry = settings.GetColor(grassSection, "SpringDry"),
+                    SummerHealty = settings.GetColor(grassSection, "SummerHealty"),
+                    SummerDry = settings.GetColor(grassSection, "SummerDry"),
+                    FallHealty = settings.GetColor(grassSection, "FallHealty"),
+                    FallDry = settings.GetColor(grassSection, "FallDry"),
                 },
-                useGrassShader = settings.GetInt(grassSection, "Shader", 0, 1) == 1,
-                noiseSpreadPlants = settings.GetFloat(waterPlantsSection, "NoiseSpread"),
+                UseGrassShader = settings.GetInt(grassSection, "Shader") == 1,
+                NoiseSpreadPlants = settings.GetFloat(waterPlantsSection, "NoiseSpread"),
+                TextureOverride = settings.GetBool(advancedSection, "TextureOverride")
             };
 
             // Detail prototypes density
-            density = new Density()
+            var density = new Density()
             {
-                grassThick = settings.GetTupleInt(grassSection, "ThickDensity"),
-                grassThin = settings.GetTupleInt(grassSection, "ThinDensity"),
-                waterPlants = settings.GetTupleInt(waterPlantsSection, "Density"),
-                desertPlants = settings.GetTupleInt(waterPlantsSection, "DesertDensity"),
+                GrassThick = settings.GetTupleInt(grassSection, "ThickDensity"),
+                GrassThin = settings.GetTupleInt(grassSection, "ThinDensity"),
+                WaterPlants = settings.GetTupleInt(waterPlantsSection, "Density"),
+                DesertPlants = settings.GetTupleInt(waterPlantsSection, "DesertDensity"),
             };
 
             switch(settings.GetInt("Others", "Flowers"))
             {
                 case 0:
-                    flowers = false;
+                    Flowers = false;
                     break;
                 case 1:
-                    flowers = true;
-                    density.flowers = 5;
-                    density.bushes = 2;
+                    Flowers = true;
+                    density.Flowers = 5;
+                    density.Bushes = 2;
                     break;
                 case 2:
-                    flowers = true;
-                    density.flowers = 25;
-                    density.bushes = 7;
+                    Flowers = true;
+                    density.Flowers = 25;
+                    density.Bushes = 7;
                     break;
                 case 3:
-                    flowers = true;
-                    density.flowers = 50;
-                    density.bushes = 15;
+                    Flowers = true;
+                    density.Flowers = 50;
+                    density.Bushes = 15;
                     break;
             }
 
             switch (settings.GetInt("Others", "Stones"))
             {
                 case 0:
-                    terrainStones = false;
+                    TerrainStones = false;
                     break;
 
                 case 1:
-                    terrainStones = true;
-                    density.stones = new Range<int>(2, 6);
-                    density.rocks = 2;
+                    TerrainStones = true;
+                    density.Stones = new Range<int>(2, 6);
+                    density.Rocks = 2;
                     break;
                 case 2:
-                    terrainStones = true;
-                    density.stones = new Range<int>(4, 12);
-                    density.rocks = 4;
+                    TerrainStones = true;
+                    density.Stones = new Range<int>(4, 12);
+                    density.Rocks = 4;
                     break;
             }
 
-            detailObjectDistance = settings.GetFloat("Advanced", "DetailDistance", 10f);
-            detailObjectDensity = settings.GetFloat("Advanced", "DetailDensity", 0.1f, 1f);
+            DetailObjectDistance = settings.GetFloat(advancedSection, "DetailDistance");
+            DetailObjectDensity = settings.GetFloat(advancedSection, "DetailDensity");
+
+            detailPrototypesManager = new DetailPrototypesManager(properties);
+            densityManager = new DensityManager(density);
         }
 
         private static ClimateBases GetClimate(int climateIndex)
@@ -471,6 +413,15 @@ namespace RealGrass
                 default:
                     return (ClimateBases)(-1);
             }
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        private void DaggerfallTerrain_OnPromoteTerrainData(DaggerfallTerrain sender, TerrainData terrainData)
+        {
+            AddTerrainDetails(sender, terrainData);
         }
 
         #endregion

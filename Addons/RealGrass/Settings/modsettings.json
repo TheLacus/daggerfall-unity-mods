@@ -245,28 +245,13 @@
                     "Description": "Terrain global detail prototype density.",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
-                }
-            ],
-            "$version": "v1"
-        },
-        {
-            "Name": "Textures",
-            "Description": "Override default textures with png files from disk.",
-            "IsAdvanced": false,
-            "Keys": [
-                {
-                    "Value": false,
-                    "Name": "Import",
-                    "Description": "",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 },
                 {
-                    "Value": "",
-                    "Name": "Pack",
-                    "Description": "",
+                    "Value": false,
+                    "Name": "TextureOverride",
+                    "Description": "Import textures from loose files (Textures/Grass).",
                     "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 }
             ],
             "$version": "v1"

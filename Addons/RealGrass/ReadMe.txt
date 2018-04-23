@@ -1,4 +1,4 @@
-﻿=================================================================================================
+=================================================================================================
 ▄▄▄▄ ▄███▄   ██   █           ▄▀  █▄▄▄▄ ██      ▄▄▄▄▄    ▄▄▄▄▄   
 █  ▄▀ █▀   ▀  █ █  █         ▄▀    █  ▄▀ █ █    █     ▀▄ █     ▀▄ 
 █▀▀▌  ██▄▄    █▄▄█ █         █ ▀▄  █▀▀▌  █▄▄█ ▄  ▀▀▀▀▄ ▄  ▀▀▀▀▄   
@@ -6,7 +6,7 @@
   █   ▀███▀      █     ▀      ███    █      █                     
  ▀              █                   ▀      █                      
                ▀                          ▀                      
-v2.1 for DaggerFall Unity 0.4.75
+v2.2 for DaggerFall Unity 0.4.75
 =================================================================================================
 
 **DESCRIPTION**
@@ -76,26 +76,6 @@ Lower values can increase performance while higher values reduce "popup".
 - DetailDensity
 Lower values result in less detail objects being rendered, increasing performance.
 
-**PRESETS**
--------------------------------------------------------------------------------------------------
-Settings presets are ini files which contain a group of the settings descripted above.
-Such ini file should have this section as an header:
-
-[Internal]
-PresetName = MyPreset
-PresetAuthor = MyName
-Description = Short Description.
-SettingsVersion = 1.3
-
-Settings version is not the version of the preset but the version of this mod settings
-the preset is made for.
-
-Then you can have your settings as they are in realgrass.ini. 
-You don't need to include all sections or keys.
-
-When you created your preset, call it 'realgrasspreset*.ini' (use any number or name instead of *)
-and place it in the same folder with realgrass.ini.
-
 **IMPORT TEXTURES**
 -------------------------------------------------------------------------------------------------
 It's possible to create a subfolder called 'Resources' to further customize the grass
@@ -138,12 +118,12 @@ Known compatible mods:
 * Third parties
 Some meshes and/or textures have been picked from the following free licensed packs:
 
-	- 3TD Tropical Environment Pack v2.0 by Ron Kapaun (License: CC0) at
-		https://opengameart.org/content/3td-tropical-environment-pack-v20
 	- 60 CC0 Vegetation textures by rubberduck (License: CC0) at
 		https://opengameart.org/content/60-cc0-vegetation-textures
 	- Bushes by yughues (License: CC0) at
 		https://opengameart.org/content/bushes
+	- Fern v2.1 (double-sided) Pack by yughues (License: CC0) at
+		https://opengameart.org/content/fern-v21-double-sided-pack
 	- Free 3D plants models by yughues (License: CC0) at
 		https://opengameart.org/content/free-3d-plants-models
 	- Free Handpainted Plants by yughues (License: CC0) at
@@ -158,8 +138,6 @@ Some meshes and/or textures have been picked from the following free licensed pa
 		https://opengameart.org/content/plants-textures-pack-01
 	- Rocks by yughues (License: CC0) at
 		https://opengameart.org/content/rocks-0
-	- Stylized LawnGrassWeeds by yughues (License: CC0) at
-		https://opengameart.org/content/free-stylized-lawngrassweeds
 	- Tropical plant 02 by yughues (License: CC0) at
 		https://opengameart.org/content/tropical-plant-02-0
 	- Tropical shrubs by yughues (License: CC0) at
@@ -173,6 +151,11 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 
 **CHANGELOG**
 -------------------------------------------------------------------------------------------------
+2.2
+* Graphical improvements.
+* Smooth transition from/to winter.
+* Compatibility upgrade.
+
 2.1
 
 * Seasonal changes (grass color and size).
