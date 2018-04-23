@@ -1,0 +1,275 @@
+{
+    "Version": "1.5",
+    "Sections": [
+        {
+            "Name": "Grass",
+            "Description": "Tufts of grass placed on terrain with density, size and colors according to season.",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Value": {
+                        "First": 0.65,
+                        "Second": 0.65
+                    },
+                    "Name": "Height",
+                    "Description": "Grass height",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TupleFloatKey"
+                },
+                {
+                    "Value": {
+                        "First": 1.0,
+                        "Second": 1.0
+                    },
+                    "Name": "Width",
+                    "Description": "Grass height",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TupleFloatKey"
+                },
+                {
+                    "Min": 0.0,
+                    "Max": 1.0,
+                    "Value": 0.4,
+                    "Name": "NoiseSpread",
+                    "Description": "The higher this is, the more varied the grass will look.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
+                },
+                {
+                    "Value": {
+                        "First": 8,
+                        "Second": 24
+                    },
+                    "Name": "ThickDensity",
+                    "Description": "Number of grass patches per terrain tile (dense)",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TupleIntKey"
+                },
+                {
+                    "Value": {
+                        "First": 4,
+                        "Second": 12
+                    },
+                    "Name": "ThinDensity",
+                    "Description": "Number of grass patches per terrain tile (sparse)",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TupleIntKey"
+                },
+                {
+                    "Value": {
+                        "r": 130,
+                        "g": 206,
+                        "b": 112,
+                        "a": 255
+                    },
+                    "Name": "SpringHealthy",
+                    "Description": null,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ColorKey"
+                },
+                {
+                    "Value": {
+                        "r": 137,
+                        "g": 180,
+                        "b": 75,
+                        "a": 255
+                    },
+                    "Name": "SpringDry",
+                    "Description": null,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ColorKey"
+                },
+                {
+                    "Value": {
+                        "r": 163,
+                        "g": 204,
+                        "b": 162,
+                        "a": 255
+                    },
+                    "Name": "SummerHealty",
+                    "Description": null,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ColorKey"
+                },
+                {
+                    "Value": {
+                        "r": 128,
+                        "g": 125,
+                        "b": 104,
+                        "a": 255
+                    },
+                    "Name": "SummerDry",
+                    "Description": null,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ColorKey"
+                },
+                {
+                    "Value": {
+                        "r": 166,
+                        "g": 116,
+                        "b": 43,
+                        "a": 255
+                    },
+                    "Name": "FallHealty",
+                    "Description": null,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ColorKey"
+                },
+                {
+                    "Value": {
+                        "r": 105,
+                        "g": 51,
+                        "b": 29,
+                        "a": 255
+                    },
+                    "Name": "FallDry",
+                    "Description": null,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ColorKey"
+                },
+                {
+                    "Options": [
+                        "Billboard",
+                        "Mesh"
+                    ],
+                    "Value": 0,
+                    "Name": "Shader",
+                    "Description": "Shader used to render grass on terrain",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.MultipleChoiceKey"
+                }
+            ],
+            "$version": "v1"
+        },
+        {
+            "Name": "WaterPlants",
+            "Description": "Swamp vegetation and little plants near water ponds.",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Options": [
+                        "Disabled",
+                        "Summer Only",
+                        "Always Enabled"
+                    ],
+                    "Value": 2,
+                    "Name": "Mode",
+                    "Description": null,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.MultipleChoiceKey"
+                },
+                {
+                    "Min": 0.0,
+                    "Max": 1.0,
+                    "Value": 0.4,
+                    "Name": "NoiseSpread",
+                    "Description": "The higher this is, the more varied the vegetation will look.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
+                },
+                {
+                    "Value": {
+                        "First": 0,
+                        "Second": 3
+                    },
+                    "Name": "Density",
+                    "Description": "",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TupleIntKey"
+                },
+                {
+                    "Value": {
+                        "First": 10,
+                        "Second": 16
+                    },
+                    "Name": "DesertDensity",
+                    "Description": null,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TupleIntKey"
+                }
+            ],
+            "$version": "v1"
+        },
+        {
+            "Name": "Others",
+            "Description": "Additional groundcover models which increases terrain detatil variations.",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Options": [
+                        "Disabled",
+                        "Low",
+                        "Medium",
+                        "High"
+                    ],
+                    "Value": 3,
+                    "Name": "Flowers",
+                    "Description": "Density of flowers and little bushes.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.MultipleChoiceKey"
+                },
+                {
+                    "Options": [
+                        "Disabled",
+                        "Reduced",
+                        "Full"
+                    ],
+                    "Value": 2,
+                    "Name": "Stones",
+                    "Description": "Density of stones and rocks.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.MultipleChoiceKey"
+                }
+            ],
+            "$version": "v1"
+        },
+        {
+            "Name": "Advanced",
+            "Description": "Visual quaity options. Lower to improve performance.",
+            "IsAdvanced": true,
+            "Keys": [
+                {
+                    "Min": 0,
+                    "Max": 300,
+                    "Value": 120,
+                    "Name": "DetailDistance",
+                    "Description": "Details are drawn up to this distance from the player.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
+                },
+                {
+                    "Min": 0.0,
+                    "Max": 1.0,
+                    "Value": 1.0,
+                    "Name": "DetailDensity",
+                    "Description": "Terrain global detail prototype density.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
+                }
+            ],
+            "$version": "v1"
+        },
+        {
+            "Name": "Textures",
+            "Description": "Override default textures with png files from disk.",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Value": false,
+                    "Name": "Import",
+                    "Description": "",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+                {
+                    "Value": "",
+                    "Name": "Pack",
+                    "Description": "",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TextKey"
+                }
+            ],
+            "$version": "v1"
+        }
+    ]
+}
