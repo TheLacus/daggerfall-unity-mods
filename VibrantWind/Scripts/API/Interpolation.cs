@@ -8,10 +8,12 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using DaggerfallWorkshop.Utility;
+using System.Collections.Generic;
 
 namespace VibrantWind
 {
-    public struct InterpolationType
+    public static class InterpolationType
     {
         public const int
 
@@ -26,59 +28,121 @@ namespace VibrantWind
     /// </summary>
     public class Interpolation
     {
-        readonly float min, max;
-        readonly int count, maxStep;
-        readonly int interpolation;
+        #region Properties
+
+        /// <summary>
+        /// Limits of the interpolation.
+        /// </summary>
+        public Tuple<float, float> Range { get; set; }
+
+        /// <summary>
+        /// Number of values to generate.
+        /// </summary>
+        public int Precision { get; set; }
+
+        /// <summary>
+        /// Interpolation method defined in <see cref="InterpolationType"/>.
+        /// </summary>
+        public int Type { get; set; }
+
+        /// <summary>
+        /// Gets interpolated value at the given step.
+        /// </summary>
+        public float this[int step]
+        {
+            get { return GetValue(step); }
+        }
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Get values between min and max using interpolation.
         /// </summary>
-        /// <param name="min">Minimum value.</param>
-        /// <param name="max">maximum value.</param>
-        /// <param name="count">Number of values to generate.</param>
-        /// <param name="interpolation">Type of interpolation to use.</param>
-        public Interpolation(float min, float max, int count, int interpolation)
+        public Interpolation()
         {
-            this.min = min;
-            this.max = max;
-            this.count = count;
-            this.maxStep = count - 1;
-            this.interpolation = interpolation;
         }
 
         /// <summary>
-        /// Get interpolated values.
+        /// Get values between min and max using interpolation.
         /// </summary>
-        public float[] GetValues()
+        /// <param name="range">Limits of the interpolation.</param>
+        /// <param name="precision">Number of values to generate.</param>
+        /// <param name="type">Interpolation method defined in <see cref="InterpolationType"/>.</param>
+        public Interpolation(Tuple<float, float> range, int precision, int type = 0)
         {
-            return Enumerable.Range(0, count).Select(x => GetValue(x)).ToArray();
+            this.Range = range;
+            this.Precision = precision;
+            this.Type = type;
         }
 
-        private float GetValue(int step)
+        #endregion
+
+        #region Public Methods
+
+        public override string ToString()
         {
-            float t = (step != 0) ? (step / (float)maxStep) : 0;
+            return string.Join(",", GetValues().Select(x => x.ToString()).ToArray());
+        }
+
+        /// <summary>
+        /// Gets interpolated value at the given step.
+        /// </summary>
+        public float GetValue(int step)
+        {
+            if (step < 0 || step >= Precision)
+                throw new ArgumentException("Step is not in range!", "step");
+
+            float t = (step != 0) ? ((float)step / (Precision - 1)) : 0;
             return (float)Math.Round(Interpolate(t), 2);
         }
 
+        /// <summary>
+        /// Gets all interpolated values.
+        /// </summary>
+        public IEnumerable<float> GetValues()
+        {
+            return Enumerable.Range(0, Precision).Select(x => GetValue(x));
+        }
+
+        /// <summary>
+        /// Gets all interpolated values.
+        /// </summary>
+        public float[] ToArray()
+        {
+            return GetValues().ToArray();
+        }
+
+        #endregion
+
+        #region Private Methods
+
         private float Interpolate(float t)
         {
-            switch (interpolation)
+            if (Range == null)
+                throw new Exception("Interpolation range is not set!");
+
+            switch (Type)
             {
                 case InterpolationType.Lerp:
-                default:
-                    return Mathf.Lerp(min, max, t);
+                    return Mathf.Lerp(Range.First, Range.Second, t);
 
                 case InterpolationType.Sinerp:
                     t = Mathf.Sin(t * Mathf.PI * 0.5f);
-                    return Mathf.Lerp(min, max, t);
+                    return Mathf.Lerp(Range.First, Range.Second, t);
 
                 case InterpolationType.Coserp:
                     t = 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
-                    return Mathf.Lerp(min, max, t);
+                    return Mathf.Lerp(Range.First, Range.Second, t);
 
                 case InterpolationType.SmoothStep:
-                    return Mathf.SmoothStep(min, max, t);
+                    return Mathf.SmoothStep(Range.First, Range.Second, t);
             }
+
+            throw new Exception(string.Format("Unknown interpolation type: {0}", Type));
         }
+
+        #endregion
     }
 }

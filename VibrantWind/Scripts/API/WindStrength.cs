@@ -21,14 +21,19 @@ namespace VibrantWind
         /// <summary>
         /// Values for the terrain wind.
         /// </summary>
-        public WindStrength() {}
+        public WindStrength()
+        {
+        }
         
         /// <summary>
         /// Values for the terrain wind.
         /// Uses <paramref name="strength"/> for Speed, Bending and Size.
         /// </summary>
         /// <param name="strength"></param>
-        public WindStrength(float strength) : this(strength, strength, strength) { }
+        public WindStrength(float strength)
+            : this(strength, strength, strength)
+        {
+        }
 
         /// <summary>
         /// Values for the terrain wind.

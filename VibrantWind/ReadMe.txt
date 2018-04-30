@@ -5,7 +5,7 @@
    \ V / | | |_) | | | (_| | | | | |_    \ V  V / | | | | | (_| |
     \_/  |_|_.__/|_|  \__,_|_| |_|\__|    \_/\_/  |_|_| |_|\__,_|
                                                                  
-v0.4 for DaggerFall Unity 0.4.75
+v0.5 for DaggerFall Unity 0.5.33
 =================================================================================================
 
 Description 
@@ -83,6 +83,9 @@ settings or WindZone settings.
 
 Changelog
 ---------
+* 0.5
+- Compatibility upgrade.
+
 * 0.4
 - Support for WindZone (trees, particles).
 - Reorganization of console commands.

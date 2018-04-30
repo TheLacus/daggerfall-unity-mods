@@ -6,10 +6,11 @@
 // Contributors:    
 
 // #define TEST_PERFORMANCE
-// #define TEST_VALUES
 
 using System;
+using System.Collections;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 using DaggerfallWorkshop;
 using DaggerfallWorkshop.Game;
@@ -30,7 +31,6 @@ namespace VibrantWind
         static readonly int precision = Enum.GetValues(typeof(WeatherType)).Cast<WeatherType>().Distinct().Count();
 
         // This mod
-        static Mod mod;
         static VibrantWind instance;
         bool isEnabled = false;
 
@@ -50,7 +50,7 @@ namespace VibrantWind
         float[] ambientWind;
 
         // Index for current weather.
-        int _weather = -1;
+        int weather = -1;
 
         #endregion
 
@@ -61,31 +61,22 @@ namespace VibrantWind
         /// </summary>
         public static VibrantWind Instance
         {
-            get
-            {
-                if (instance == null)
-                    instance = FindObjectOfType<VibrantWind>();
-                return instance;
-            }
-            private set { instance = value; }
+            get { return instance ?? (instance = FindObjectOfType<VibrantWind>()); }
         }
 
         /// <summary>
         /// Vibrant Wind mod.
         /// </summary>
-        public static Mod Mod
-        {
-            get { return mod; }
-        }
+        public static Mod Mod { get; private set; }
 
         public WindStrength TerrainWindStrength
         {
-            get { return terrainWind[_weather]; }
+            get { return terrainWind[weather]; }
         }
 
         public float AmbientWindStrength
         {
-            get { return ambientWind[_weather]; }
+            get { return ambientWind[weather]; }
         }
 
         /// <summary>
@@ -93,8 +84,8 @@ namespace VibrantWind
         /// </summary>
         public WeatherType Weather
         {
-            get { return (WeatherType)_weather; }
-            internal set { _weather = (int)value; }
+            get { return (WeatherType)weather; }
+            private set { weather = (int)value; }
         }
 
         #endregion
@@ -105,14 +96,14 @@ namespace VibrantWind
         public static void Init(InitParams initParams)
         {
             // Get mod
-            mod = initParams.Mod;
+            Mod = initParams.Mod;
 
             // Add script to scene
             GameObject go = new GameObject("VibrantWind");
             instance = go.AddComponent<VibrantWind>();
 
             // Set mod as Ready
-            mod.IsReady = true;
+            Mod.IsReady = true;
         }
 
         void Awake()
@@ -133,7 +124,7 @@ namespace VibrantWind
 
             // Setup mod
             Setup();
-            mod.MessageReceiver = VibrantWindModMessages.MessageReceiver;
+            Mod.MessageReceiver = VibrantWindModMessages.MessageReceiver;
 
             // Start mod
             ToggleMod(true, false);
@@ -145,10 +136,10 @@ namespace VibrantWind
 
         public override string ToString()
         {
-            if (mod == null)
+            if (Mod == null)
                 return base.ToString();
 
-            return string.Format("{0} v.{1} (running: {2}).", mod.Title, mod.ModInfo.ModVersion, isEnabled);
+            return string.Format("{0} v.{1} (running: {2}).", Mod.Title, Mod.ModInfo.ModVersion, isEnabled);
         }
 
         /// <summary>
@@ -196,6 +187,14 @@ namespace VibrantWind
             WeatherManager_OnWeatherChange(weather);
         }
 
+        /// <summary>
+        /// Test all weathers and print results to log.
+        /// </summary>
+        internal void StartTestWeathers()
+        {
+            StartCoroutine(TestWeathers());
+        }
+
         #endregion
 
         #region Private Methods
@@ -205,19 +204,30 @@ namespace VibrantWind
         /// </summary>
         private void Setup()
         {
-            // Get settings
-            ModSettings settings = new ModSettings(mod);
+#if TEST_PERFORMANCE
+            var stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
+#endif
 
-            // Get terrain wind values
-            float[] speed = GetValuesFromSettings(settings, "Speed");
-            float[] bending = GetValuesFromSettings(settings, "Bending");
-            float[] size = GetValuesFromSettings(settings, "Size");
+            // Get settings
+            ModSettings settings = Mod.GetSettings();
+            var speed = GetInterpolation(settings, "Speed");
+            var bending = GetInterpolation(settings, "Bending");
+            var size = GetInterpolation(settings, "Size");
+            var force = GetInterpolation(settings, "Force");
+
+            // Get terrain values
             terrainWind = new WindStrength[precision];
             for (int i = 0; i < precision; i++)
                 terrainWind[i] = new WindStrength(speed[i], bending[i], size[i]);
 
-            // Get ambient wind values
-            ambientWind = GetValuesFromSettings(settings, "Force");
+            // Get ambient values
+            ambientWind = force.ToArray();
+
+#if TEST_PERFORMANCE
+            stopwatch.Stop();
+            Debug.LogFormat("VibrantWind: setup, elapsed {0} ms", stopwatch.Elapsed.Milliseconds);
+#endif
         }
 
         /// <summary>
@@ -226,7 +236,7 @@ namespace VibrantWind
         private void SetTerrainWindStrength()
         {
             foreach (Terrain terrain in streamingWorld.StreamingTarget.GetComponentsInChildren<Terrain>())
-                terrainWind[_weather].Assign(terrain.terrainData);
+                terrainWind[weather].Assign(terrain.terrainData);
         }
 
         /// <summary>
@@ -234,7 +244,7 @@ namespace VibrantWind
         /// </summary>
         private void SetTerrainWindStrength(TerrainData terrainData)
         {
-            terrainWind[_weather].Assign(terrainData);
+            terrainWind[weather].Assign(terrainData);
         }
 
         /// <summary>
@@ -245,29 +255,47 @@ namespace VibrantWind
             if (!windZone)
                 return;
 
-            windZone.windMain = ambientWind[_weather];
+            windZone.windMain = ambientWind[weather];
+        }
+
+        private IEnumerator TestWeathers()
+        {
+            const int waitSeconds = 6;
+            const string spacer = "################################################";
+
+            var weatherManager = GameManager.Instance.WeatherManager;
+            WeatherType currentWeather = Weather;
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(spacer);
+
+            foreach (var weather in Enum.GetValues(typeof(WeatherType)).Cast<WeatherType>().Distinct())
+            {
+                weatherManager.SetWeather(weather);
+                DaggerfallUI.Instance.PopupMessage(weather.ToString());
+
+                stringBuilder.AppendLine(weather.ToString().ToUpperInvariant());
+                stringBuilder.AppendLine(string.Format("Terrain: {0}", TerrainWindStrength));
+                stringBuilder.AppendLine(string.Format("Ambient: {0}", AmbientWindStrength));
+
+                yield return new WaitForSeconds(waitSeconds);
+            }
+
+            weatherManager.SetWeather(currentWeather);
+            stringBuilder.Append(spacer);
+            Debug.Log(stringBuilder);
+            DaggerfallUI.Instance.PopupMessage("Test ended");
         }
 
         #endregion
 
         #region Static Methods
 
-        private static float[] GetValuesFromSettings(ModSettings settings, string section)
+        private static Interpolation GetInterpolation(ModSettings settings, string section)
         {
-            var range = settings.GetTupleFloat(section, "Range");
-            int interpolationType = settings.GetInt(section, "Interpolation", 0, 4);
-
-            var interpolation = new Interpolation(range.First, range.Second, precision, interpolationType);
-            float[] values = interpolation.GetValues();
-
-#if TEST_VALUES
-
-            Func<float[], string> allValues = x => string.Join(",", x.Select(y => y.ToString()).ToArray());
-            Debug.LogFormat("VibrantWind - {0}: {1}", settings.Field, allValues(values));
-
-#endif
-
-            return values;
+            var interpolation = new Interpolation();
+            settings.Deserialize(section, ref interpolation, true);
+            interpolation.Precision = precision;
+            return interpolation;
         }
 
         #endregion
@@ -317,7 +345,7 @@ namespace VibrantWind
 
 #if TEST_PERFORMANCE
             stopwatch.Stop();
-            Debug.Log(string.Format("VibrantWind - time elsapsed {0}", stopwatch.Elapsed.Milliseconds));
+            Debug.LogFormat("VibrantWind: weather changed, elapsed {0} ms", stopwatch.Elapsed.Milliseconds);
 #endif
         }
 

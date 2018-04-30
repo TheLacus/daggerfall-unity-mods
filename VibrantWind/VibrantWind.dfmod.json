@@ -1,0 +1,17 @@
+{
+    "ModTitle": "Vibrant Wind",
+    "ModVersion": "0.5",
+    "ModAuthor": "TheLacus",
+    "ContactInfo": "",
+    "DFUnity_Version": "0.5.33",
+    "ModDescription": "Changes strength of wind according to current weather.",
+    "GUID": "d2fcfc26-4c33-4d47-b566-920c8d3f5757",
+    "Files": [
+        "Assets/Game/Addons/VibrantWind/modsettings.json",
+        "Assets/Game/Addons/VibrantWind/Scripts/VibrantWind.cs",
+        "Assets/Game/Addons/VibrantWind/Scripts/API/WindStrength.cs",
+        "Assets/Game/Addons/VibrantWind/Scripts/API/Interpolation.cs",
+        "Assets/Game/Addons/VibrantWind/Scripts/External/VibrantWindModMessages.cs",
+        "Assets/Game/Addons/VibrantWind/Scripts/External/VibrantWindConsoleCommands.cs"
+    ]
+}

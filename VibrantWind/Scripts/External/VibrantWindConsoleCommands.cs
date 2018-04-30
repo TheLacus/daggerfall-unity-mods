@@ -6,11 +6,8 @@
 // Contributors:    
 
 using System;
-using System.Linq;
-using System.Collections;
 using UnityEngine;
 using Wenzil.Console;
-using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Weather;
 
 namespace VibrantWind
@@ -82,8 +79,7 @@ namespace VibrantWind
                         catch { return usage; }
 
                     case 2:
-                        WeathersTest weathersTest = new WeathersTest();
-                        vibrantWind.StartCoroutine(weathersTest.StartTest());
+                        vibrantWind.StartTestWeathers();
                         return "Close console to start test; values will be logged on disk.";
                 }
 
@@ -97,34 +93,6 @@ namespace VibrantWind
                 usage += "\n1: Set weather for wind strength.";
                 usage += "\n2: Test all weathers in succession.";
                 return usage;
-            }
-
-            private class WeathersTest
-            {
-                public IEnumerator StartTest()
-                {
-                    const string spacer = "#####################################";
-
-                    var vibrantWind = VibrantWind.Instance;
-                    var weatherManager = GameManager.Instance.WeatherManager;
-                    WeatherType currentWeather = vibrantWind.Weather;
-                    string log = spacer;
-
-                    foreach (var weather in Enum.GetValues(typeof(WeatherType)).Cast<WeatherType>().Distinct())
-                    {
-                        weatherManager.SetWeather(weather);
-
-                        DaggerfallUI.Instance.PopupMessage(weather.ToString());
-                        log += string.Format("\n* {0}\nTerrain: {1}\nAmbient: {2}",
-                            weather.ToString(), vibrantWind.TerrainWindStrength, vibrantWind.AmbientWindStrength);
-
-                        yield return new WaitForSeconds(6);
-                    }
-
-                    weatherManager.SetWeather(currentWeather);
-                    DaggerfallUI.Instance.PopupMessage("Test ended");
-                    Debug.Log(log + "\n" + spacer);
-                }
             }
         }
     }
