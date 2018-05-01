@@ -9,7 +9,7 @@ Changes strength of wind according to current weather.
 * Set Speed, Bending and Size separately for further customization.
 
 ## Info
-+ Version: 0.3
-+ Daggerfall Unity Version: 0.4.36
++ Version: 0.5
++ Daggerfall Unity Version: 0.5.33
 + [VibrantWind on Daggerfall Unity forums](http://forums.dfworkshop.net/viewtopic.php?f=14&t=532)
 + [Download](http://forums.dfworkshop.net/viewtopic.php?f=22&t=456)
