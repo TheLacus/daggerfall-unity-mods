@@ -19,6 +19,8 @@ using Climates = DaggerfallConnect.Arena2.MapsFile.Climates;
 
 namespace RealGrass
 {
+    #region Static Classes
+
     public static class DaysOfYear
     {
         public const int
@@ -32,6 +34,8 @@ namespace RealGrass
             DieDay  = 12 * 30 - 15;
     }
 
+    #endregion
+
     /// <summary>
     /// Places grass and other details on Daggerall Unity terrain.
     /// </summary>
@@ -39,7 +43,9 @@ namespace RealGrass
     {
         #region Fields
 
-        static RealGrass instance;
+        static RealGrass instance;  
+        static GameObject fireflies;
+        static GameObject butterflies;
 
         DetailPrototypesManager detailPrototypesManager;
         DensityManager densityManager;
@@ -63,6 +69,11 @@ namespace RealGrass
         public bool WinterPlants { get; private set; }
         public bool TerrainStones { get; private set; }
         public bool Flowers { get; private set; }
+
+        /// <summary>
+        /// Make flying insects with particle systems.
+        /// </summary>
+        public bool FlyingInsects { get; private set; }
 
         /// <summary>
         /// Details will be rendered up to this distance from the player.
@@ -162,6 +173,23 @@ namespace RealGrass
 
         #endregion
 
+        #region Internal Methods    
+
+        /// <summary>
+        /// Instantiate particle system insects at the given position.
+        /// </summary>
+        internal void DoInsects(bool isNight, Vector3 position)
+        {
+            GameObject particles = isNight ?
+                (fireflies ?? (fireflies = Mod.GetAsset<GameObject>("Fireflies"))) :
+                (butterflies ?? (butterflies = Mod.GetAsset<GameObject>("Butterflies")));
+
+            GameObject go = Instantiate(particles, position, Quaternion.identity);
+            GameManager.Instance.StreamingWorld.TrackLooseObject(go, false, -1, -1, true);
+        }
+
+        #endregion
+
         #region Private Methods
 
         /// <summary>
@@ -201,13 +229,13 @@ namespace RealGrass
                     {
                         // Summer
                         detailPrototypesManager.UpdateClimateSummer(climate);
-                        densityManager.SetDensitySummer(tilemap, climate);
+                        densityManager.SetDensitySummer(terrain, tilemap, climate);
                     }
                     else
                     {
                         // Winter
                         detailPrototypesManager.UpdateClimateWinter(climate);
-                        densityManager.SetDensityWinter(tilemap);
+                        densityManager.SetDensityWinter(terrain, tilemap);
                     }
                     break;
 
@@ -257,7 +285,7 @@ namespace RealGrass
             if (loadSettings)
                 LoadSettings();
 
-            // Subscribe to onPromoteTerrainData
+            // Subscribe to events
             DaggerfallTerrain.OnPromoteTerrainData += DaggerfallTerrain_OnPromoteTerrainData;
 
             // Place details on existing terrains
@@ -282,8 +310,8 @@ namespace RealGrass
         /// </summary>
         private void StopMod()
         {
-            // Unsubscribe from onPromoteTerrainData
-            DaggerfallTerrain.OnPromoteTerrainData -= DaggerfallTerrain_OnPromoteTerrainData;
+            // Unsubscribe from events
+            DaggerfallTerrain.OnPromoteTerrainData -= DaggerfallTerrain_OnPromoteTerrainData;          
 
             // Remove details from terrains
             Terrain[] terrains = GameManager.Instance.StreamingWorld.StreamingTarget.GetComponentsInChildren<Terrain>();
@@ -302,6 +330,7 @@ namespace RealGrass
             const string
                 waterPlantsSection  = "WaterPlants",
                 grassSection        = "Grass",
+                othersSection       = "Others",
                 advancedSection     = "Advanced";
 
             // Load settings
@@ -341,7 +370,7 @@ namespace RealGrass
                 DesertPlants = settings.GetTupleInt(waterPlantsSection, "DesertDensity"),
             };
 
-            switch(settings.GetInt("Others", "Flowers"))
+            switch(settings.GetInt(othersSection, "Flowers"))
             {
                 case 0:
                     Flowers = false;
@@ -363,7 +392,7 @@ namespace RealGrass
                     break;
             }
 
-            switch (settings.GetInt("Others", "Stones"))
+            switch (settings.GetInt(othersSection, "Stones"))
             {
                 case 0:
                     TerrainStones = false;
@@ -380,6 +409,8 @@ namespace RealGrass
                     density.Rocks = 4;
                     break;
             }
+
+            FlyingInsects = settings.GetValue<bool>(othersSection, "FlyingInsects");
 
             DetailObjectDistance = settings.GetFloat(advancedSection, "DetailDistance");
             DetailObjectDensity = settings.GetFloat(advancedSection, "DetailDensity");

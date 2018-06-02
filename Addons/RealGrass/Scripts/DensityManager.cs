@@ -97,8 +97,10 @@ namespace RealGrass
         /// <summary>
         /// Set density for Summer.
         /// </summary>
-        public void SetDensitySummer(Color32[] tilemap, ClimateBases currentClimate)
+        public void SetDensitySummer(Terrain terrain, Color32[] tilemap, ClimateBases currentClimate)
         {
+            bool isNight = DaggerfallUnity.Instance.WorldTime.Now.IsNight;
+
             for (int y = 0; y < tilemapSize; y++)
             {
                 for (int x = 0; x < tilemapSize; x++)
@@ -440,6 +442,10 @@ namespace RealGrass
                                         break;
                                 }
                             }
+
+                            // Insects
+                            if (RealGrass.Instance.FlyingInsects && Random.value < 0.2f)
+                                RealGrass.Instance.DoInsects(isNight, GetTileWorldPosition(terrain, x, y));
                             break;
 
                         case 116:
@@ -467,6 +473,9 @@ namespace RealGrass
                             }
                             break;
                     }
+
+                    if (RealGrass.Instance.FlyingInsects && Random.value < 0.001f)
+                        RealGrass.Instance.DoInsects(isNight, GetTileWorldPosition(terrain, x, y));
                 }
             }
         }
@@ -474,7 +483,7 @@ namespace RealGrass
         /// <summary>
         /// Set density for Winter.
         /// </summary>
-        public void SetDensityWinter(Color32[] tilemap)
+        public void SetDensityWinter(Terrain terrain, Color32[] tilemap)
         {
             float grassChance = GetWinterGrassChance();
 
@@ -786,6 +795,15 @@ namespace RealGrass
             if (day >= DaysOfYear.Winter && day < DaysOfYear.DieDay)
                 return Mathf.Clamp(1 - Mathf.InverseLerp(DaysOfYear.Winter, DaysOfYear.DieDay, day), 0, maxChance);
             return 0;
+        }
+
+        private static Vector3 GetTileWorldPosition(Terrain terrain, int x, int y)
+        {
+            Vector3 pos = terrain.GetPosition();
+            pos.x += terrain.terrainData.size.x / tilemapSize * x;
+            pos.z += terrain.terrainData.size.z / tilemapSize * y;
+            pos.y = terrain.terrainData.GetHeight(x, y);
+            return pos;
         }
 
         #endregion

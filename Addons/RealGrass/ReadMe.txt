@@ -120,6 +120,8 @@ Some meshes and/or textures have been picked from the following free licensed pa
 
 	- 60 CC0 Vegetation textures by rubberduck (License: CC0) at
 		https://opengameart.org/content/60-cc0-vegetation-textures
+    - Butterfly (animated) by CDmir (License: CC0) at
+        https://opengameart.org/content/butterfly-animated
 	- Bushes by yughues (License: CC0) at
 		https://opengameart.org/content/bushes
 	- Fern v2.1 (double-sided) Pack by yughues (License: CC0) at
@@ -151,6 +153,9 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 
 **CHANGELOG**
 -------------------------------------------------------------------------------------------------
+Unreleased
+* Make flying insects with particle systems at random spots on terrain.
+
 2.2
 * Graphical improvements.
 * Smooth transition from/to winter.
