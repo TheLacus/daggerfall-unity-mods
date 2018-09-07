@@ -48,11 +48,17 @@ namespace RealGrass
 
         // Textures for grass billboards
         const string brownGrass = "BrownGrass";
+        const string brownGrassRealistic = "Grass_01";
         const string greenGrass = "GreenGrass";
+        const string greenGrassRealistic = "Grass_02";
 
         // Meshes for grass shader
         const string brownGrassMesh = "BrownGrass";
         const string greenGrassMesh = "GreenGrass";
+
+        static readonly string[] grassDetailsTextures = {
+            "GrassDetails_01", "GrassDetails_02", "GrassDetails_03", "GrassDetails_04", "GrassDetails_05"
+        };
 
         // Models for water plants
         const string plantsTemperate = "PlantsTemperate"; 
@@ -80,18 +86,17 @@ namespace RealGrass
         const string rockDark = "RockDark";
 
         // Flowers
-        const string flowersMountain = "FlowersMountain";
-        const string flowersSwamp = "FlowersSwamp";
-        const string flowersTemperate = "FlowersTemperate";
-        static readonly string[] commonFlowers = {
-            "FlowersCommonRed", "FlowersCommonPink" ,
-            "FlowersCommonBlue" , "FlowersCommonYellow" };
+        static readonly string[] flowers = {
+            "FlowersRed", "FlowersPink" , "FlowersBlue" , "FlowersYellow" };
 
         struct UpdateType { public const short Summer = 0, Winter = 1, Desert = 2; }
 
         #endregion
 
         #region Fields
+
+        static GameObject grassDetailPrefab;
+        static GameObject grassAccentPrefab;
 
         readonly DetailPrototype[] detailPrototypes;
 
@@ -117,12 +122,13 @@ namespace RealGrass
 
         // Layers index
         public int Grass { get; private set; }
+        public int GrassDetails { get; private set; }
+        public int GrassAccents { get; private set; }
         public int WaterPlants { get; private set; }
         public int WaterPlantsAlt { get; private set; }
         public int Stones { get; private set; }
         public int Rocks { get; private set; }
         public int Flowers { get; private set; }
-        public int CommonFlowers { get; private set; }
         public int Bushes { get; private set; }
 
         #endregion
@@ -159,6 +165,33 @@ namespace RealGrass
             };
             detailPrototypes.Add(grassPrototypes);
             Grass = index;
+
+            if (RealGrass.Instance.RealisticGrass)
+            {
+                detailPrototypes.Add(new DetailPrototype()
+                {
+                    minWidth = properties.GrassWidth.Min,
+                    maxWidth = properties.GrassWidth.Max,
+                    noiseSpread = properties.NoiseSpread,
+                    healthyColor = healthyColor,
+                    dryColor = dryColor,
+                    renderMode = useGrassShader ? DetailRenderMode.Grass : DetailRenderMode.GrassBillboard,
+                    usePrototypeMesh = useGrassShader
+                });
+                GrassDetails = ++index;
+
+                detailPrototypes.Add(new DetailPrototype()
+                {
+                    minWidth = properties.GrassWidth.Min,
+                    maxWidth = properties.GrassWidth.Max,
+                    noiseSpread = properties.NoiseSpread,
+                    healthyColor = healthyColor,
+                    dryColor = dryColor,
+                    renderMode = useGrassShader ? DetailRenderMode.Grass : DetailRenderMode.GrassBillboard,
+                    usePrototypeMesh = useGrassShader
+                });
+                GrassAccents = ++index;
+            }
 
             if (RealGrass.Instance.WaterPlants)
             {
@@ -232,7 +265,7 @@ namespace RealGrass
                 detailPrototypes.Add(bushesPrototypes);
                 Bushes = ++index;
 
-                // Specific to climate
+                // Little flowers
                 var flowerPrototypes = new DetailPrototype()
                 {
                     usePrototypeMesh = true,
@@ -243,18 +276,6 @@ namespace RealGrass
                 };
                 detailPrototypes.Add(flowerPrototypes);
                 Flowers = ++index;
-
-                // For all climates
-                var commonFlowerPrototypes = new DetailPrototype()
-                {
-                    usePrototypeMesh = true,
-                    noiseSpread = 0.4f,
-                    healthyColor = healthyColor,
-                    dryColor = healthyColor,
-                    renderMode = DetailRenderMode.Grass,
-                };
-                detailPrototypes.Add(commonFlowerPrototypes);
-                CommonFlowers = ++index;
             }
 
             this.detailPrototypes = detailPrototypes.ToArray();
@@ -275,15 +296,18 @@ namespace RealGrass
             if (!NeedsUpdate(UpdateType.Summer, currentClimate))
                 return;
 
+            if (RealGrass.Instance.RealisticGrass)
+            {
+                SetGrassDetail(GrassDetails, ref grassDetailPrefab);
+                SetGrassDetail(GrassAccents, ref grassAccentPrefab);
+            }
+
             switch (currentClimate)
             {
                 case ClimateBases.Mountain:
 
                     // Mountain
-                    if (!useGrassShader)
-                        detailPrototypes[Grass].prototypeTexture = LoadTexture(brownGrass);
-                    else
-                        detailPrototypes[Grass].prototype = LoadGameObject(brownGrassMesh);
+                    SetGrass(brownGrassMesh, brownGrass, brownGrassRealistic);
 
                     if (RealGrass.Instance.WaterPlants)
                     {
@@ -294,8 +318,7 @@ namespace RealGrass
                     if (RealGrass.Instance.Flowers)
                     {
                         detailPrototypes[Bushes].prototype = LoadGameObject(bushMountain);
-                        detailPrototypes[Flowers].prototype = LoadGameObject(flowersMountain);
-                        detailPrototypes[CommonFlowers].prototype = LoadGameObject(CommonFlower());
+                        detailPrototypes[Flowers].prototype = LoadGameObject(GetRandomFlowers());
                     }
 
                     if (RealGrass.Instance.TerrainStones)
@@ -305,10 +328,7 @@ namespace RealGrass
                 case ClimateBases.Swamp:
 
                     // Swamp
-                    if (!useGrassShader)
-                        detailPrototypes[Grass].prototypeTexture = LoadTexture(brownGrass);
-                    else
-                        detailPrototypes[Grass].prototype = LoadGameObject(brownGrassMesh);
+                    SetGrass(brownGrassMesh, brownGrass, brownGrassRealistic);
 
                     if (RealGrass.Instance.WaterPlants)
                     {
@@ -319,8 +339,7 @@ namespace RealGrass
                     if (RealGrass.Instance.Flowers)
                     {
                         detailPrototypes[Bushes].prototype = LoadGameObject(bushSwamp);
-                        detailPrototypes[Flowers].prototype = LoadGameObject(flowersSwamp);
-                        detailPrototypes[CommonFlowers].prototype = LoadGameObject(CommonFlower());
+                        detailPrototypes[Flowers].prototype = LoadGameObject(GetRandomFlowers());
                     }
 
                     if (RealGrass.Instance.TerrainStones)
@@ -330,10 +349,7 @@ namespace RealGrass
                 case ClimateBases.Temperate:
 
                     // Temperate
-                    if (!useGrassShader)
-                        detailPrototypes[Grass].prototypeTexture = LoadTexture(greenGrass);
-                    else
-                        detailPrototypes[Grass].prototype = LoadGameObject(greenGrassMesh);
+                    SetGrass(greenGrassMesh, greenGrass, greenGrassRealistic);
 
                     if (RealGrass.Instance.WaterPlants)
                     {
@@ -344,8 +360,7 @@ namespace RealGrass
                     if (RealGrass.Instance.Flowers)
                     {
                         detailPrototypes[Bushes].prototype = LoadGameObject(bushTemperate);
-                        detailPrototypes[Flowers].prototype = LoadGameObject(flowersTemperate);
-                        detailPrototypes[CommonFlowers].prototype = LoadGameObject(CommonFlower());
+                        detailPrototypes[Flowers].prototype = LoadGameObject(GetRandomFlowers());
                     }
 
                     if (RealGrass.Instance.TerrainStones)
@@ -378,12 +393,7 @@ namespace RealGrass
             {
                 case ClimateBases.Mountain:
                     if (drawGrass)
-                    {
-                        if (!useGrassShader)
-                            detailPrototypes[Grass].prototypeTexture = LoadTexture(brownGrass);
-                        else
-                            detailPrototypes[Grass].prototype = LoadGameObject(brownGrassMesh);
-                    }
+                        SetGrass(brownGrassMesh, brownGrass, brownGrassRealistic);
 
                     if (RealGrass.Instance.WaterPlants)
                         detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsMountainWinter);
@@ -391,12 +401,7 @@ namespace RealGrass
 
                 case ClimateBases.Swamp:
                     if (drawGrass)
-                    {
-                        if (!useGrassShader)
-                            detailPrototypes[Grass].prototypeTexture = LoadTexture(brownGrass);
-                        else
-                            detailPrototypes[Grass].prototype = LoadGameObject(brownGrassMesh);
-                    }
+                        SetGrass(brownGrassMesh, brownGrass, brownGrassRealistic);
 
                     if (RealGrass.Instance.WaterPlants)
                         detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsSwampWinter);
@@ -404,12 +409,7 @@ namespace RealGrass
 
                 case ClimateBases.Temperate:
                     if (drawGrass)
-                    {
-                        if (!useGrassShader)
-                            detailPrototypes[Grass].prototypeTexture = LoadTexture(greenGrass);
-                        else
-                            detailPrototypes[Grass].prototype = LoadGameObject(greenGrassMesh);
-                    }
+                        SetGrass(greenGrassMesh, greenGrass, greenGrassRealistic);
 
                     if (RealGrass.Instance.WaterPlants)
                         detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsTemperateWinter);
@@ -446,6 +446,36 @@ namespace RealGrass
         #endregion
 
         #region Private Methods
+
+        private void SetGrass(string mesh, string classic, string realistic)
+        {
+            if (!useGrassShader)
+            {
+                detailPrototypes[Grass].prototypeTexture = LoadTexture(RealGrass.Instance.RealisticGrass ? realistic : classic);
+            }
+            else
+            {
+                detailPrototypes[Grass].prototype = LoadGameObject(mesh);
+                if (RealGrass.Instance.RealisticGrass)
+                    detailPrototypes[Grass].prototype.GetComponent<Renderer>().material.mainTexture = LoadTexture(realistic);
+            }
+        }
+
+        private void SetGrassDetail(int layer, ref GameObject prefab)
+        {
+            Texture2D tex = LoadTexture(grassDetailsTextures[Random.Range(0, grassDetailsTextures.Length)]);
+
+            if (!useGrassShader)
+            { 
+                detailPrototypes[layer].prototypeTexture = tex;
+            }
+            else
+            {
+                GameObject go = prefab ?? (prefab = GameObject.Instantiate(LoadGameObject(greenGrassMesh)));
+                go.GetComponent<Renderer>().material.mainTexture = tex;
+                detailPrototypes[layer].prototype = go;
+            }
+        }
 
         /// <summary>
         /// Import texture from loose files or from mod.
@@ -573,6 +603,13 @@ namespace RealGrass
                 detailPrototypes[Grass].minHeight = grassHeight.Min * minScale;
                 detailPrototypes[Grass].maxHeight = grassHeight.Max * minScale;
             }
+
+            if (RealGrass.Instance.RealisticGrass)
+            {
+                // Secondary grass layers are slightly bigger than the base one
+                detailPrototypes[GrassDetails].minHeight = detailPrototypes[GrassAccents].minHeight = detailPrototypes[Grass].minHeight * 1.35f;
+                detailPrototypes[GrassDetails].maxHeight = detailPrototypes[GrassAccents].maxHeight = detailPrototypes[Grass].maxHeight * 1.35f;
+            }
         }
 
         private bool IsGrassTransitioning()
@@ -581,9 +618,9 @@ namespace RealGrass
             return day > DaysOfYear.GrowDay || day < DaysOfYear.DieDay;
         }
 
-        private static string CommonFlower()
+        private static string GetRandomFlowers()
         {
-            return commonFlowers[Random.Range(0, commonFlowers.Length)];
+            return flowers[Random.Range(0, flowers.Length)];
         }
 
         #endregion

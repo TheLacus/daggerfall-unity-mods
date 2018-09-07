@@ -64,6 +64,8 @@ namespace RealGrass
 
         public static Mod Mod { get; private set; }
 
+        public bool RealisticGrass { get; private set; }
+
         // Optional features
         public bool WaterPlants { get; private set; }
         public bool WinterPlants { get; private set; }
@@ -250,6 +252,11 @@ namespace RealGrass
 
             // Assign detail layers to the terrain
             terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Grass, densityManager.Grass);
+            if (RealisticGrass)
+            {
+                terrainData.SetDetailLayer(0, 0, detailPrototypesManager.GrassDetails, densityManager.GrassDetails);
+                terrainData.SetDetailLayer(0, 0, detailPrototypesManager.GrassAccents, densityManager.GrassAccents);
+            }
             if (WaterPlants)
             {
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.WaterPlants, densityManager.WaterPlants);
@@ -264,7 +271,6 @@ namespace RealGrass
             {
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Bushes, densityManager.Bushes);
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Flowers, densityManager.Flowers);
-                terrainData.SetDetailLayer(0, 0, detailPrototypesManager.CommonFlowers, densityManager.CommonFlowers);
             }
 
 #if TEST_PERFORMANCE
@@ -410,6 +416,7 @@ namespace RealGrass
                     break;
             }
 
+            RealisticGrass = settings.GetValue<bool>(grassSection, "Realistic");
             FlyingInsects = settings.GetValue<bool>(othersSection, "FlyingInsects");
 
             DetailObjectDistance = settings.GetFloat(advancedSection, "DetailDistance");

@@ -34,6 +34,7 @@ namespace RealGrass
         const int tilemapSize = 128;
 
         // Features
+        readonly bool realisticGrass;
         readonly bool waterPlants;
         readonly bool terrainStones;
         readonly bool flowers;
@@ -51,12 +52,13 @@ namespace RealGrass
 
         // Layers maps
         public int[,] Grass { get; private set; }
+        public int[,] GrassDetails { get; private set; }
+        public int[,] GrassAccents { get; private set; }
         public int[,] WaterPlants { get; private set; }
         public int[,] WaterPlantsAlt { get; private set; }
         public int[,] Stones { get; private set; }
         public int[,] Rocks { get; private set; }
         public int[,] Flowers { get; private set; }
-        public int[,] CommonFlowers { get; private set; }
         public int[,] Bushes { get; private set; }
 
         #endregion
@@ -66,6 +68,7 @@ namespace RealGrass
         public DensityManager(Density density)
         {
             RealGrass realGrass = RealGrass.Instance;
+            this.realisticGrass = realGrass.RealisticGrass;
             this.waterPlants = realGrass.WaterPlants;
             this.terrainStones = realGrass.TerrainStones;
             this.flowers = realGrass.Flowers;
@@ -80,13 +83,14 @@ namespace RealGrass
         public void InitDetailsLayers()
         {
             Grass           = EmptyMap();
-            WaterPlants     = EmptyMap();
-            WaterPlantsAlt  = EmptyMap();
-            Stones          = EmptyMap();
-            Flowers         = EmptyMap();
-            CommonFlowers   = EmptyMap();
-            Bushes          = EmptyMap();
-            Rocks           = EmptyMap();
+            GrassDetails    = EmptyMap(realisticGrass);
+            GrassAccents    = EmptyMap(realisticGrass);
+            WaterPlants     = EmptyMap(waterPlants);
+            WaterPlantsAlt  = EmptyMap(waterPlants);
+            Stones          = EmptyMap(terrainStones);
+            Rocks           = EmptyMap(terrainStones);
+            Flowers         = EmptyMap(flowers);
+            Bushes          = EmptyMap(flowers);
 
             // Set density of details for this terrain 
             flowersDensity = GetTerrainDensityAnnual(density.Flowers);
@@ -99,6 +103,7 @@ namespace RealGrass
         /// </summary>
         public void SetDensitySummer(Terrain terrain, Color32[] tilemap, ClimateBases currentClimate)
         {
+            float seasonalDetailsChance = GetGrassDetailsChance();
             bool isNight = DaggerfallUnity.Instance.WorldTime.Now.IsNight;
 
             for (int y = 0; y < tilemapSize; y++)
@@ -127,24 +132,18 @@ namespace RealGrass
                         case 9:
                         case 10:
                         case 11:
-                            Grass[y * 2, x * 2] = RandomThick();
-                            Grass[y * 2, (x * 2) + 1] = RandomThick();
-                            Grass[(y * 2) + 1, x * 2] = RandomThick();
-                            Grass[(y * 2) + 1, (x * 2) + 1] = RandomThick();
+                            SetGrassDensity(y * 2, x * 2, RandomThick(), seasonalDetailsChance);
+                            SetGrassDensity(y * 2, (x * 2) + 1, RandomThick(), seasonalDetailsChance);
+                            SetGrassDensity((y * 2) + 1, x * 2, RandomThick(), seasonalDetailsChance);
+                            SetGrassDensity((y * 2) + 1, (x * 2) + 1, RandomThick(), seasonalDetailsChance);
+
                             if (flowers)
                             {
-                                int flowers = RandomFlowers();
-                                if (flowers != 0)
-                                {
-                                    var index = RandomPosition(y, x);
-                                    Flowers[index.First, index.Second] = flowers;
-                                }
-
-                                int commonFlowers = RandomCommonFlowers();
+                                int commonFlowers = RandomFlowers();
                                 if (commonFlowers != 0)
                                 {
                                     var index = RandomPosition(y, x);
-                                    CommonFlowers[index.First, index.Second] = commonFlowers;
+                                    Flowers[index.First, index.Second] = commonFlowers;
                                 }
 
                                 int bushes = RandomBushes();
@@ -704,17 +703,9 @@ namespace RealGrass
         }
 
         /// <summary>
-        /// Generate random values for the placement of flowers for a specific climate.
-        /// </summary>
-        private int RandomFlowers()
-        {
-            return Random.Range(0, 100) < flowersDensity ? Random.Range(1, 4) : 0;
-        }
-
-        /// <summary>
         /// Generate random values for the placement of flowers for all climates.
         /// </summary>
-        private int RandomCommonFlowers()
+        private int RandomFlowers()
         {
             return Random.Range(0, 100) < flowersDensity ? Random.Range(1, 12) : 0;
         }
@@ -759,12 +750,33 @@ namespace RealGrass
 
         #endregion
 
+        /// <summary>
+        /// Sets density to grass layers.
+        /// </summary>
+        /// <param name="density"> The total density, partitioned among all layers.</param>
+        /// <param name="seasonalChance">Chance that details layers are populated.</param>
+        private void SetGrassDensity(int x, int y, int density, float seasonalChance)
+        {
+            // Set full density to a single layer
+            if (!realisticGrass)
+            {
+                Grass[x, y] = density;
+                return;
+            }
+
+            // Density is subdivided by main and details layers; details layers are more populated when seasonalChance is higher.
+            float seasonalMinDensity = Mathf.Lerp(0.8f, 1f, 1 - seasonalChance);
+            int detailDensity = density - (Grass[x, y] = Mathf.RoundToInt(Mathf.Lerp(0, density, Random.Range(seasonalMinDensity, 1f))));
+            if (detailDensity > 0)
+                GrassAccents[x, y] = detailDensity - (GrassDetails[x, y] = Mathf.RoundToInt(Mathf.Lerp(0, detailDensity, Random.Range(0.8f, 1f))));
+        }
+
         #region Static Methods
 
-        private static int[,] EmptyMap()
+        private static int[,] EmptyMap(bool isValid = true)
         {
             const int size = 256;
-            return new int[size, size];
+            return isValid ? new int[size, size] : null;
         }
 
         private static int GetTerrainDensityPerennial(int maxDensity)
@@ -794,6 +806,22 @@ namespace RealGrass
                 return Mathf.Clamp(Mathf.InverseLerp(DaysOfYear.GrowDay, DaysOfYear.Spring, day), 0, maxChance);
             if (day >= DaysOfYear.Winter && day < DaysOfYear.DieDay)
                 return Mathf.Clamp(1 - Mathf.InverseLerp(DaysOfYear.Winter, DaysOfYear.DieDay, day), 0, maxChance);
+            return 0;
+        }
+
+        /// <summary>
+        /// Additional grass with flowers grows in density during spring, dies during fall.
+        /// </summary>
+        /// <returns>A value between 0 and 1</returns>
+        private static float GetGrassDetailsChance()
+        {
+            int day = DaggerfallUnity.Instance.WorldTime.Now.DayOfYear;
+            if (day < DaysOfYear.Summer)
+                return Mathf.InverseLerp(DaysOfYear.Spring, DaysOfYear.Summer, day);
+            if (day < DaysOfYear.Fall)
+                return 1;
+            if (day < DaysOfYear.Winter)
+                return 1 - Mathf.InverseLerp(DaysOfYear.Fall, DaysOfYear.Winter, day);
             return 0;
         }
 

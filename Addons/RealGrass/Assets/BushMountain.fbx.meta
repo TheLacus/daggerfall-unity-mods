@@ -1,30 +1,15 @@
 fileFormatVersion: 2
-guid: 184c84f2b156b864fa804ac97a3f44df
-timeCreated: 1511630284
+guid: 0ae43befd3d6fea4ab6eced534589ceb
+timeCreated: 1514309601
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: branches
-    100002: //RootNode
-    100004: flower
-    100006: leaf
-    400000: branches
-    400002: //RootNode
-    400004: flower
-    400006: leaf
-    2300000: branches
-    2300002: flower
-    2300004: leaf
-    2300006: //RootNode
-    3300000: branches
-    3300002: flower
-    3300004: leaf
-    3300006: //RootNode
-    4300000: branches
-    4300002: leaf
-    4300004: flower
-    4300006: bush
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: bush_02
     9500000: //RootNode
   materials:
     importMaterials: 1

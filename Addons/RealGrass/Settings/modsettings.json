@@ -128,11 +128,18 @@
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ColorKey"
                 },
                 {
+                    "Value": true,
+                    "Name": "Realistic",
+                    "Description": "Use multiple grass layers with more detailed textures.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+                {
                     "Options": [
                         "Billboard",
                         "Mesh"
                     ],
-                    "Value": 0,
+                    "Value": 1,
                     "Name": "Shader",
                     "Description": "Shader used to render grass on terrain",
                     "$version": "v1",

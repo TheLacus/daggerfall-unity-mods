@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 7bdfa9446a53f9c40819a77309406024
-timeCreated: 1511627779
+guid: dfa5aa6bc628e5e4692324c217f6db08
+timeCreated: 1514629203
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,8 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: trop_shrub_04
-    9500000: //RootNode
+    4300000: fern_v2
   materials:
     importMaterials: 1
     materialName: 0
@@ -73,7 +72,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

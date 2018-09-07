@@ -108,12 +108,11 @@ Known compatible mods:
 
 **CREDITS**
 -------------------------------------------------------------------------------------------------
-* Developers
-- Uncanny_Valley (creator)
-- TheLacus
-
 * Contributors
-- Midopa
+- Uncanny_Valley, creator of original core mod
+- TheLacus, developer of standalone mod and additions
+- Midopa, contributions to original core mod
+- VMblast, artist for some grass textures   
 
 * Third parties
 Some meshes and/or textures have been picked from the following free licensed packs:
@@ -155,6 +154,8 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 -------------------------------------------------------------------------------------------------
 Unreleased
 * Make flying insects with particle systems at random spots on terrain.
+* New grass textures by VMblast.
+* Improvements to grass density and disposition.
 
 2.2
 * Graphical improvements.
