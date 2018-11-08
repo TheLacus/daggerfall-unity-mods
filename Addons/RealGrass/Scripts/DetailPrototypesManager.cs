@@ -293,14 +293,17 @@ namespace RealGrass
             SetGrassColor();
             SetGrassSize();
 
-            if (!NeedsUpdate(UpdateType.Summer, currentClimate))
-                return;
-
             if (RealGrass.Instance.RealisticGrass)
             {
                 SetGrassDetail(GrassDetails, ref grassDetailPrefab);
                 SetGrassDetail(GrassAccents, ref grassAccentPrefab);
             }
+
+            if (RealGrass.Instance.Flowers)
+                detailPrototypes[Flowers].prototype = LoadGameObject(GetRandomFlowers());
+
+            if (!NeedsUpdate(UpdateType.Summer, currentClimate))
+                return;
 
             switch (currentClimate)
             {
@@ -316,10 +319,7 @@ namespace RealGrass
                     }
 
                     if (RealGrass.Instance.Flowers)
-                    {
                         detailPrototypes[Bushes].prototype = LoadGameObject(bushMountain);
-                        detailPrototypes[Flowers].prototype = LoadGameObject(GetRandomFlowers());
-                    }
 
                     if (RealGrass.Instance.TerrainStones)
                         detailPrototypes[Rocks].prototype = LoadGameObject(rockLight);
@@ -337,10 +337,7 @@ namespace RealGrass
                     }
 
                     if (RealGrass.Instance.Flowers)
-                    {
                         detailPrototypes[Bushes].prototype = LoadGameObject(bushSwamp);
-                        detailPrototypes[Flowers].prototype = LoadGameObject(GetRandomFlowers());
-                    }
 
                     if (RealGrass.Instance.TerrainStones)
                         detailPrototypes[Rocks].prototype = LoadGameObject(rockDark);
@@ -358,10 +355,7 @@ namespace RealGrass
                     }
 
                     if (RealGrass.Instance.Flowers)
-                    {
                         detailPrototypes[Bushes].prototype = LoadGameObject(bushTemperate);
-                        detailPrototypes[Flowers].prototype = LoadGameObject(GetRandomFlowers());
-                    }
 
                     if (RealGrass.Instance.TerrainStones)
                         detailPrototypes[Rocks].prototype = LoadGameObject(rockLight);
