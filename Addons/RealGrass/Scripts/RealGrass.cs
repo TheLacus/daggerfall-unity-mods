@@ -419,8 +419,8 @@ namespace RealGrass
             RealisticGrass = settings.GetValue<bool>(grassSection, "Realistic");
             FlyingInsects = settings.GetValue<bool>(othersSection, "FlyingInsects");
 
-            DetailObjectDistance = settings.GetFloat(advancedSection, "DetailDistance");
-            DetailObjectDensity = settings.GetFloat(advancedSection, "DetailDensity");
+            DetailObjectDistance = settings.GetValue<int>(advancedSection, "DetailDistance");
+            DetailObjectDensity = settings.GetValue<float>(advancedSection, "DetailDensity");
 
             detailPrototypesManager = new DetailPrototypesManager(properties);
             densityManager = new DensityManager(density);
