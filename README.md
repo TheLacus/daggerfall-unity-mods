@@ -1,22 +1,14 @@
 # Real Grass
-Adds grass and, optionally, water plants, stones and flowers to the terrain of Daggerfall Unity.
+A mod for Daggerfall Unity that provides a groundcover with grass, plants, flowers and other terrain details.
 
-![Real Grass](https://i.imgur.com/rOJTkUm.png)
+![Real Grass](https://i.imgur.com/R0fz3wE.png)
 
 ## Features
-+ Grass, water plants, rocks and flowers for different climates and seasons.
-+ Higly and easily customizable (density, size, position)
-+ Support pre-made presets of settings
-+ It's possible to import alternatives textures directly from disk.
-+ Supports two shaders: _GrassBilboard_ for classic style and _Grass_ for a more realistic vegetation
-+ Advanced and performance-important settings like distant rendering can be changed by the user
-
-## Credits and history
-Real Grass was originally created by Uncanny_Valley in 2015, as an automatic [vanilla-friendly grass](http://forums.dfworkshop.net/download/file.php?id=6) placer for Daggerfall Unity. It supported two kinds of grass for different climates.
-
-In 2016, and more in 2017, TheLacus expanded it, adding [water plants](https://i.imgur.com/xoAoh61.png) and [rocks](https://i.imgur.com/pGyA0xQ.png) for different climates, and moving it as an indipendent mod allowing settings and customization from users.
-
-At the same time, while it was still hosted alongside the Daggerfall Unity project, it received [contributions](https://twitter.com/zottgrammes/status/810390248647696384) from Midopa.
++ Grass, water plants, rocks and flowers for different climates and seasons; size and color of grass gradually changes during the year.
++ Higly and easily customizable (density, size, position); presets are also available for one-click configuration.
++ Texture and shader variations are available for a classic style or a more realistic vegetation.
++ Alternative textures can be imported directly from disk for additional customization.
++ Advanced settings like rendering distance can be tweaked for a quality/performance balance.
 
 ## Info
 + Version: 2.2 
