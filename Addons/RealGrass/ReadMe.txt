@@ -1,4 +1,4 @@
-=================================================================================================
+﻿=================================================================================================
 ▄▄▄▄ ▄███▄   ██   █           ▄▀  █▄▄▄▄ ██      ▄▄▄▄▄    ▄▄▄▄▄   
 █  ▄▀ █▀   ▀  █ █  █         ▄▀    █  ▄▀ █ █    █     ▀▄ █     ▀▄ 
 █▀▀▌  ██▄▄    █▄▄█ █         █ ▀▄  █▀▀▌  █▄▄█ ▄  ▀▀▀▀▄ ▄  ▀▀▀▀▄   
@@ -6,97 +6,89 @@
   █   ▀███▀      █     ▀      ███    █      █                     
  ▀              █                   ▀      █                      
                ▀                          ▀                      
-v2.2 for DaggerFall Unity 0.4.75
+Unreleased for DaggerFall Unity 0.5.x
 =================================================================================================
 
-**DESCRIPTION**
+Description
 -------------------------------------------------------------------------------------------------
 Adds grass and, optionally, water plants, stones and flowers to the terrain of Daggerfall Unity.
 
-**INSTALLATION**
+Installation
 -------------------------------------------------------------------------------------------------
-Put the *.dfmod file inside 'DaggerfallUnity_Data/StreamingAssets/Mods'. 
-Use the load order settings window to choose if you want water plants and stones or only grass, 
-and customize the size and shape of grass.
+Put RealGrass.dfmod file inside 'DaggerfallUnity_Data/StreamingAssets/Mods'. 
 
-**SETTINGS**
+Settings
 -------------------------------------------------------------------------------------------------
+* Grass
 
-**Grass**
+    - Size
+    The size of grass is determined by a minimum and a maximum value for height and width.
+    This is the size at the highest point: grass grows from snow during the first days
+    of spring, and fade back to snow at the end of fall.
 
-- Size
-The size of grass is determined by a minimum and a maximum value for height and width.
-This is the size at the highest point: grass grows from snow during the first days
-of spring, 
-and fade back to snow at the end of fall.
+    - Density
+    Thick and thin values affect the number of objects per terrain tile. 
+    Higher or lower numbers determine the density, while the delta between the min and max
+    affects the homogeneity or variety among all tiles. Excessive values can cause performance drops.
 
-- Density
-Thick and thin values affect the number of objects per terrain tile. 
-Higher or lower numbers determine the density, while the delta between the min and max
-affects the homogeneity or variety among all tiles.
-Excessive values can cause performance drops.
+    - NoiseSpread
+    The spread of the variety of grass, an higher number causes a more varied placement.
+    It doesn't affect the number of objects.
 
-- NoiseSpread
-The spread of the variety of grass, an higher number causes a more varied placement.
-It doesn't affect the number of objects.
+    - Shader
+    'Billboard' makes the grass images rotate so that they always face the camera; this is the cheapest option.
+    When 'Mesh' is enabled, grass is shown in a more realistic manner, much like modern games.
+    
+    - Realistic
+    Toggle between a simple grass texture for a classick look (great with ambient occlusion!) and somewhat
+    more detailed textures as well as additional layers with flowers.
 
-- Shader
-'Billboard' makes the grass images rotate so that they always face the camera; this is the cheapest option.
-When 'Mesh' is enabled, grass is shown in a more ralistic manner, much like modern games.
+* WaterPlants
 
-**WaterPlants**
+    Places vegetation near water areas, like lakes and river.
+    There is a total of four different plants, for the same number of climate regions: mountain, temperate, 
+    desert and swamp. They all have two variations, summer and winter. 
+    You can choose to show the winter version during this season, or not to show them like the grass.
+    
+    Additionally it places waterlilies above the surface of temperate lakes and some tufts 
+    of grass inside the mountain water zones.
+    Plants bend in the wind and waterlilies move slightly on the water surface moved by the same wind.
 
-Places vegetation near water areas, like lakes and river.
-There is a total of four different plants, for the same number of climate regions: mountain, temperate, 
-desert and swamp. They all have two variations, summer and winter. 
-You can choose to show the winter version during this season, or not to show them like the grass.
+* Others
 
-Additionally it places waterlilies above the surface of temperate lakes and some tufts 
-of grass inside the mountain water zones.
-Plants bend in the wind and waterlilies move slightly on the water surface moved by the same wind.
+    - Flowers   
+    Flowers and bushes for different climates. Density varies randomically and, for little flowers,
+    also with seasons (they grow up in spring and die in fall). Select a lower level of density
+    to increase performance.
+    
+    - Stones 
+    Places rocks on terrain as well as little stones on the cultivated grounds near farms.
+    Select reduced density to improve performance.
 
-**Others**
+* Advanced
 
-- Flowers
+    - DetailDistance
+    The distance from camera beyond which the grass will be culled; this is the most expensive option.
+    Lower values can increase performance while higher values reduce "popup".
+    
+    - DetailDensity
+    Lower values result in less detail objects being rendered, increasing performance.
 
-Flowers and bushes for different climates. Density varies randomically and, for little flowers,
-also with seasons (they grow up in spring and die in fall). Select a lower level of density
-to increase performance.
-
-- Stones 
-Places rocks on terrain as well as little stones on the cultivated grounds near farms.
-Select reduced density to improve performance.
-
-**Advanced**
-
-- DetailDistance
-The distance from camera beyond which the grass will be culled; this is the most expensive option.
-Lower values can increase performance while higher values reduce "popup".
-
-- DetailDensity
-Lower values result in less detail objects being rendered, increasing performance.
-
-**IMPORT TEXTURES**
+Texture Override
 -------------------------------------------------------------------------------------------------
-It's possible to create a subfolder called 'Resources' to further customize the grass
-and import custom textures. Inside this folder you can have as many subfolder as you want.
-For example:
+It's possible to import custom textures from StreamingAssets/Textures/Grass.
 
-- Mods/RealGrass/realgrass.dfmod
-- Mods/RealGrass/Resources/MyTexturePack
-
-In settings, enable Textures Import and write the name of folder (ex: Pack = MyTexturePack).
 You can find textures names on github:
 https://github.com/TheLacus/realgrass-du-mod/tree/master/Addons/RealGrass/Assets/Resources
 
 Use an appropriate resolution for desired performance requirements.
 
-**UNINSTALL**
+Uninstall
 -------------------------------------------------------------------------------------------------
 If you wish to uninstall, you can safely remove the mod from the StreamingAssets folder. 
 It won't affect saves.
 
-**COMPATIBILITY**
+Compatibility
 -------------------------------------------------------------------------------------------------
 This mod is compatible with vegetation retextures as well as mods that replace existing vegetation
 with 3d models, while it may be incompatible with mods that add new vegetation.
@@ -106,45 +98,45 @@ Known compatible mods:
 * Distant Terrain, Nystul
 * Vibrant Wind, TheLacus
 
-**CREDITS**
+Credits
 -------------------------------------------------------------------------------------------------
 * Contributors
-- Uncanny_Valley, creator of original core mod
-- TheLacus, developer of standalone mod and additions
-- Midopa, contributions to original core mod
-- VMblast, artist for some grass textures   
+    - Uncanny_Valley, creator of original core mod
+    - TheLacus, developer of standalone mod and additions
+    - Midopa, contributions to original core mod
+    - VMblast, artist for some grass textures   
 
 * Third parties
 Some meshes and/or textures have been picked from the following free licensed packs:
 
-	- 60 CC0 Vegetation textures by rubberduck (License: CC0) at
-		https://opengameart.org/content/60-cc0-vegetation-textures
+    - 60 CC0 Vegetation textures by rubberduck (License: CC0) at
+        https://opengameart.org/content/60-cc0-vegetation-textures
     - Butterfly (animated) by CDmir (License: CC0) at
         https://opengameart.org/content/butterfly-animated
-	- Bushes by yughues (License: CC0) at
-		https://opengameart.org/content/bushes
-	- Fern v2.1 (double-sided) Pack by yughues (License: CC0) at
-		https://opengameart.org/content/fern-v21-double-sided-pack
-	- Free 3D plants models by yughues (License: CC0) at
-		https://opengameart.org/content/free-3d-plants-models
-	- Free Handpainted Plants by yughues (License: CC0) at
-		https://opengameart.org/content/free-handpainted-plants
-	- [Free] HandPainted Plants 2 by yughues (License: CC0) at
-		https://opengameart.org/content/free-handpainted-plants-2
-	- Free houseplants by yughues (License: CC0) at
-		https://opengameart.org/content/free-houseplants
-	- Low poly rocks by para (License: CC0) at
-		https://opengameart.org/content/low-poly-rocks
-	- Plants textures Pack 01 by yughues (License: CC0) at
-		https://opengameart.org/content/plants-textures-pack-01
-	- Rocks by yughues (License: CC0) at
-		https://opengameart.org/content/rocks-0
-	- Tropical plant 02 by yughues (License: CC0) at
-		https://opengameart.org/content/tropical-plant-02-0
-	- Tropical shrubs by yughues (License: CC0) at
-		https://opengameart.org/content/tropical-shrubs
-	- Weathered rock pack by para (License: CC0) at
-		https://opengameart.org/content/weathered-rock-pack
+    - Bushes by yughues (License: CC0) at
+        https://opengameart.org/content/bushes
+    - Fern v2.1 (double-sided) Pack by yughues (License: CC0) at
+        https://opengameart.org/content/fern-v21-double-sided-pack
+    - Free 3D plants models by yughues (License: CC0) at
+        https://opengameart.org/content/free-3d-plants-models
+    - Free Handpainted Plants by yughues (License: CC0) at
+        https://opengameart.org/content/free-handpainted-plants
+    - [Free] HandPainted Plants 2 by yughues (License: CC0) at
+        https://opengameart.org/content/free-handpainted-plants-2
+    - Free houseplants by yughues (License: CC0) at
+        https://opengameart.org/content/free-houseplants
+    - Low poly rocks by para (License: CC0) at
+        https://opengameart.org/content/low-poly-rocks
+    - Plants textures Pack 01 by yughues (License: CC0) at
+        https://opengameart.org/content/plants-textures-pack-01
+    - Rocks by yughues (License: CC0) at
+        https://opengameart.org/content/rocks-0
+    - Tropical plant 02 by yughues (License: CC0) at
+        https://opengameart.org/content/tropical-plant-02-0
+    - Tropical shrubs by yughues (License: CC0) at
+        https://opengameart.org/content/tropical-shrubs
+    - Weathered rock pack by para (License: CC0) at
+        https://opengameart.org/content/weathered-rock-pack
 
 * Contacts
 Daggerfall Unity forums: http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
