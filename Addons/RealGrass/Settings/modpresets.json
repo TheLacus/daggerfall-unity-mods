@@ -3,7 +3,7 @@
         "Title": "LowGrass",
         "Author": "Uncanny_Valley",
         "Description": "Low-profile grass.",
-        "SettingsVersion": "1.5",
+        "SettingsVersion": "1.6",
         "Values": {
             "Grass": {
                 "Height": "0.65,0.65",
@@ -11,7 +11,8 @@
                 "ThickDensity": "8,24",
                 "NoiseSpread": "0.4",
                 "Width": "1,1",
-                "Shader": "0"
+                "Shader": "0",
+                "Realistic": "False"
             }
         },
         "$version": "v1"
@@ -20,7 +21,7 @@
         "Title": "TallGrass",
         "Author": "Midopa",
         "Description": "More varieties of grass size.",
-        "SettingsVersion": "1.5",
+        "SettingsVersion": "1.6",
         "Values": {
             "Grass": {
                 "Height": "0.5,2.5",
@@ -28,7 +29,8 @@
                 "NoiseSpread": "0.4",
                 "ThickDensity": "3,20",
                 "ThinDensity": "0,7",
-                "Shader": "0"
+                "Shader": "0",
+                "Realistic": "False"
             }
         },
         "$version": "v1"
@@ -37,7 +39,7 @@
         "Title": "DenseGrass",
         "Author": "TheLacus",
         "Description": "Thick medium-sized grass.",
-        "SettingsVersion": "1.5",
+        "SettingsVersion": "1.6",
         "Values": {
             "Grass": {
                 "Height": "0.65,1.05",
@@ -45,7 +47,8 @@
                 "NoiseSpread": "0.4",
                 "ThinDensity": "1,6",
                 "ThickDensity": "5,16",
-                "Shader": "1"
+                "Shader": "1",
+                "Realistic": "True"
             }
         },
         "$version": "v1"
