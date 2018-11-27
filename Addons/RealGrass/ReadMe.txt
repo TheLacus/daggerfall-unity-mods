@@ -101,10 +101,10 @@ Known compatible mods:
 Credits
 -------------------------------------------------------------------------------------------------
 * Contributors
-    - Uncanny_Valley, creator of original core mod
-    - TheLacus, developer of standalone mod and additions
-    - Midopa, contributions to original core mod
-    - VMblast, artist for some grass textures   
+    - Uncanny_Valley, creator of original mod inclued with early versions of DaggerFall Unity.
+    - TheLacus, current developer and maintainer of the standalone mod release.
+    - Midopa, contributions to original core mod.
+    - VMblast, artist for textures 'Grass_n.psd' and 'GrassDetails_n.psd' (use authorized for this project only).
 
 * Third parties
 Some meshes and/or textures have been picked from the following free licensed packs:
@@ -142,7 +142,7 @@ Some meshes and/or textures have been picked from the following free licensed pa
 Daggerfall Unity forums: http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
 Github: https://github.com/TheLacus/realgrass-du-mod
 
-**CHANGELOG**
+ChangeLog
 -------------------------------------------------------------------------------------------------
 2.3
 * Make flying insects with particle systems at random spots on terrain.
