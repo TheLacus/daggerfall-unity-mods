@@ -144,6 +144,9 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 
 ChangeLog
 -------------------------------------------------------------------------------------------------
+Unreleased
+* Fixed exception thrown in editor mode.
+
 2.3
 * Make flying insects with particle systems at random spots on terrain.
 * New grass textures by VMblast.

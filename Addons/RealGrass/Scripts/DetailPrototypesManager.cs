@@ -46,15 +46,11 @@ namespace RealGrass
     {
         #region Constants
 
-        // Textures for grass billboards
+        // Textures/Prefabs for grass billboards
         const string brownGrass = "BrownGrass";
         const string brownGrassRealistic = "Grass_01";
         const string greenGrass = "GreenGrass";
         const string greenGrassRealistic = "Grass_02";
-
-        // Meshes for grass shader
-        const string brownGrassMesh = "BrownGrass";
-        const string greenGrassMesh = "GreenGrass";
 
         static readonly string[] grassDetailsTextures = {
             "GrassDetails_01", "GrassDetails_02", "GrassDetails_03", "GrassDetails_04", "GrassDetails_05"
@@ -310,7 +306,7 @@ namespace RealGrass
                 case ClimateBases.Mountain:
 
                     // Mountain
-                    SetGrass(brownGrassMesh, brownGrass, brownGrassRealistic);
+                    SetGrass(brownGrass, brownGrassRealistic);
 
                     if (RealGrass.Instance.WaterPlants)
                     {
@@ -328,7 +324,7 @@ namespace RealGrass
                 case ClimateBases.Swamp:
 
                     // Swamp
-                    SetGrass(brownGrassMesh, brownGrass, brownGrassRealistic);
+                    SetGrass(brownGrass, brownGrassRealistic);
 
                     if (RealGrass.Instance.WaterPlants)
                     {
@@ -346,7 +342,7 @@ namespace RealGrass
                 case ClimateBases.Temperate:
 
                     // Temperate
-                    SetGrass(greenGrassMesh, greenGrass, greenGrassRealistic);
+                    SetGrass(greenGrass, greenGrassRealistic);
 
                     if (RealGrass.Instance.WaterPlants)
                     {
@@ -387,7 +383,7 @@ namespace RealGrass
             {
                 case ClimateBases.Mountain:
                     if (drawGrass)
-                        SetGrass(brownGrassMesh, brownGrass, brownGrassRealistic);
+                        SetGrass(brownGrass, brownGrassRealistic);
 
                     if (RealGrass.Instance.WaterPlants)
                         detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsMountainWinter);
@@ -395,7 +391,7 @@ namespace RealGrass
 
                 case ClimateBases.Swamp:
                     if (drawGrass)
-                        SetGrass(brownGrassMesh, brownGrass, brownGrassRealistic);
+                        SetGrass(brownGrass, brownGrassRealistic);
 
                     if (RealGrass.Instance.WaterPlants)
                         detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsSwampWinter);
@@ -403,7 +399,7 @@ namespace RealGrass
 
                 case ClimateBases.Temperate:
                     if (drawGrass)
-                        SetGrass(greenGrassMesh, greenGrass, greenGrassRealistic);
+                        SetGrass(greenGrass, greenGrassRealistic);
 
                     if (RealGrass.Instance.WaterPlants)
                         detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsTemperateWinter);
@@ -441,18 +437,14 @@ namespace RealGrass
 
         #region Private Methods
 
-        private void SetGrass(string mesh, string classic, string realistic)
+        private void SetGrass(string classic, string realistic)
         {
+            string assetName = RealGrass.Instance.RealisticGrass ? realistic : classic;
+
             if (!useGrassShader)
-            {
-                detailPrototypes[Grass].prototypeTexture = LoadTexture(RealGrass.Instance.RealisticGrass ? realistic : classic);
-            }
+                detailPrototypes[Grass].prototypeTexture = LoadTexture(assetName);
             else
-            {
-                detailPrototypes[Grass].prototype = LoadGameObject(mesh);
-                if (RealGrass.Instance.RealisticGrass)
-                    detailPrototypes[Grass].prototype.GetComponent<Renderer>().material.mainTexture = LoadTexture(realistic);
-            }
+                detailPrototypes[Grass].prototype = LoadGameObject(assetName);
         }
 
         private void SetGrassDetail(int layer, ref GameObject prefab)
@@ -465,7 +457,7 @@ namespace RealGrass
             }
             else
             {
-                GameObject go = prefab ?? (prefab = GameObject.Instantiate(LoadGameObject(greenGrassMesh)));
+                GameObject go = prefab ?? (prefab = GameObject.Instantiate(LoadGameObject(greenGrass)));
                 go.GetComponent<Renderer>().material.mainTexture = tex;
                 detailPrototypes[layer].prototype = go;
             }
