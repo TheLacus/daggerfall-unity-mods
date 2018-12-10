@@ -514,40 +514,64 @@ namespace RealGrass
 
                         // Left side
                         case 84:
-                            WaterPlants[(y * 2) + 1, x * 2] = RandomWaterPlants();
-                            WaterPlants[y * 2, x * 2] = RandomWaterPlants();
+                            if (waterPlants)
+                            {
+                                WaterPlants[(y * 2) + 1, x * 2] = RandomWaterPlants();
+                                WaterPlants[y * 2, x * 2] = RandomWaterPlants();
+                            }
                             break;
                         // Lower side
                         case 85:
-                            WaterPlants[y * 2, (x * 2) + 1] = RandomWaterPlants();
-                            WaterPlants[y * 2, (x * 2)] = RandomWaterPlants();
+                            if (waterPlants)
+                            {
+                                WaterPlants[y * 2, (x * 2) + 1] = RandomWaterPlants();
+                                WaterPlants[y * 2, (x * 2)] = RandomWaterPlants();
+                            }
                             break;
                         // Right side
                         case 86:
-                            WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
-                            WaterPlants[y * 2, (x * 2) + 1] = RandomWaterPlants();
+                            if (waterPlants)
+                            {
+                                WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
+                                WaterPlants[y * 2, (x * 2) + 1] = RandomWaterPlants();
+                            }
                             break;
                         // Upper side
                         case 87:
-                            WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
-                            WaterPlants[(y * 2) + 1, x * 2] = RandomWaterPlants();
+                            if (waterPlants)
+                            {
+                                WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
+                                WaterPlants[(y * 2) + 1, x * 2] = RandomWaterPlants();
+                            }
                             break;
                         // Corners
                         case 88:
-                            WaterPlants[y * 2, x * 2] = RandomWaterPlants();
-                            WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
+                            if (waterPlants)
+                            {
+                                WaterPlants[y * 2, x * 2] = RandomWaterPlants();
+                                WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
+                            }
                             break;
                         case 89:
-                            WaterPlants[y * 2, (x * 2) + 1] = RandomWaterPlants();
-                            WaterPlants[(y * 2) + 1, x * 2] = RandomWaterPlants();
+                            if (waterPlants)
+                            {
+                                WaterPlants[y * 2, (x * 2) + 1] = RandomWaterPlants();
+                                WaterPlants[(y * 2) + 1, x * 2] = RandomWaterPlants();
+                            }
                             break;
                         case 90:
-                            WaterPlants[y * 2, x * 2] = RandomWaterPlants();
-                            WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
+                            if (waterPlants)
+                            {
+                                WaterPlants[y * 2, x * 2] = RandomWaterPlants();
+                                WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
+                            }
                             break;
                         case 91:
-                            WaterPlants[y * 2, (x * 2) + 1] = RandomWaterPlants();
-                            WaterPlants[(y * 2) + 1, x * 2] = RandomWaterPlants();
+                            if (waterPlants)
+                            {
+                                WaterPlants[y * 2, (x * 2) + 1] = RandomWaterPlants();
+                                WaterPlants[(y * 2) + 1, x * 2] = RandomWaterPlants();
+                            }
                             break;
                     }
                 }

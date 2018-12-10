@@ -146,6 +146,7 @@ ChangeLog
 -------------------------------------------------------------------------------------------------
 Unreleased
 * Fixed exception thrown in editor mode.
+* Fixed exception thrown during winter if water plants are disabled.
 
 2.3
 * Make flying insects with particle systems at random spots on terrain.
