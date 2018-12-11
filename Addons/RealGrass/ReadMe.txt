@@ -6,7 +6,7 @@
   █   ▀███▀      █     ▀      ███    █      █                     
  ▀              █                   ▀      █                      
                ▀                          ▀                      
-2.3 for DaggerFall Unity 0.5.x
+2.3.1 for DaggerFall Unity 0.5.x
 =================================================================================================
 
 Description
@@ -144,7 +144,7 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 
 ChangeLog
 -------------------------------------------------------------------------------------------------
-Unreleased
+2.3.1
 * Fixed exception thrown in editor mode.
 * Fixed exception thrown during winter if water plants are disabled.
 
