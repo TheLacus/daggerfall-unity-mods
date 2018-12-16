@@ -144,6 +144,9 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 
 ChangeLog
 -------------------------------------------------------------------------------------------------
+Unreleased
+* Improved proportions and scale for grass details when 'Realistic' option is enabled.
+
 2.3.1
 * Fixed exception thrown in editor mode.
 * Fixed exception thrown during winter if water plants are disabled.

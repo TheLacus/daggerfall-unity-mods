@@ -37,6 +37,13 @@ namespace RealGrass
         public bool TextureOverride;
     }
 
+    public struct GrassDetail
+    {
+        public string Name;
+        public float WidthModifier;
+        public float HeightModifier;
+    }
+
     #endregion
 
     /// <summary>
@@ -51,10 +58,6 @@ namespace RealGrass
         const string brownGrassRealistic = "Grass_01";
         const string greenGrass = "GreenGrass";
         const string greenGrassRealistic = "Grass_02";
-
-        static readonly string[] grassDetailsTextures = {
-            "GrassDetails_01", "GrassDetails_02", "GrassDetails_03", "GrassDetails_04", "GrassDetails_05"
-        };
 
         // Models for water plants
         const string plantsTemperate = "PlantsTemperate"; 
@@ -94,6 +97,40 @@ namespace RealGrass
         static GameObject grassDetailPrefab;
         static GameObject grassAccentPrefab;
 
+        static readonly GrassDetail[] grassDetails = new GrassDetail[]
+        {
+            new GrassDetail()
+            {
+                Name = "GrassDetails_01",
+                WidthModifier = 1.0f,
+                HeightModifier = 2.0f
+            },
+            new GrassDetail()
+            {
+                Name = "GrassDetails_02",
+                WidthModifier = 1.0f,
+                HeightModifier = 2.0f
+            },
+            new GrassDetail()
+            {
+                Name = "GrassDetails_03",
+                WidthModifier = 0.65f,
+                HeightModifier = 0.65f
+            },
+            new GrassDetail()
+            {
+                Name = "GrassDetails_04",
+                WidthModifier = 1.0f,
+                HeightModifier = 2.0f
+            },
+            new GrassDetail()
+            {
+                Name = "GrassDetails_05",
+                WidthModifier = 1.0f,
+                HeightModifier = 2.0f
+            }
+        };
+
         readonly DetailPrototype[] detailPrototypes;
 
         readonly bool useGrassShader;
@@ -102,6 +139,8 @@ namespace RealGrass
 
         readonly bool textureOverride;
 
+        int currentGrassDetail;
+        int currentGrassAccent;
         int currentkey = -1;
 
         #endregion
@@ -286,13 +325,14 @@ namespace RealGrass
         /// </summary>
         public void UpdateClimateSummer(ClimateBases currentClimate)
         {
+            RefreshGrassDetails();
             SetGrassColor();
             SetGrassSize();
 
             if (RealGrass.Instance.RealisticGrass)
             {
-                SetGrassDetail(GrassDetails, ref grassDetailPrefab);
-                SetGrassDetail(GrassAccents, ref grassAccentPrefab);
+                SetGrassDetail(GrassDetails, currentGrassDetail, ref grassDetailPrefab);
+                SetGrassDetail(GrassAccents, currentGrassAccent, ref grassAccentPrefab);
             }
 
             if (RealGrass.Instance.Flowers)
@@ -447,9 +487,9 @@ namespace RealGrass
                 detailPrototypes[Grass].prototype = LoadGameObject(assetName);
         }
 
-        private void SetGrassDetail(int layer, ref GameObject prefab)
+        private void SetGrassDetail(int layer, int index, ref GameObject prefab)
         {
-            Texture2D tex = LoadTexture(grassDetailsTextures[Random.Range(0, grassDetailsTextures.Length)]);
+            Texture2D tex = LoadTexture(grassDetails[index].Name);
 
             if (!useGrassShader)
             { 
@@ -592,9 +632,8 @@ namespace RealGrass
 
             if (RealGrass.Instance.RealisticGrass)
             {
-                // Secondary grass layers are slightly bigger than the base one
-                detailPrototypes[GrassDetails].minHeight = detailPrototypes[GrassAccents].minHeight = detailPrototypes[Grass].minHeight * 1.35f;
-                detailPrototypes[GrassDetails].maxHeight = detailPrototypes[GrassAccents].maxHeight = detailPrototypes[Grass].maxHeight * 1.35f;
+                ScaleGrassDetail(detailPrototypes[Grass], detailPrototypes[GrassDetails], grassDetails[currentGrassDetail]);
+                ScaleGrassDetail(detailPrototypes[Grass], detailPrototypes[GrassAccents], grassDetails[currentGrassAccent]);
             }
         }
 
@@ -604,9 +643,23 @@ namespace RealGrass
             return day > DaysOfYear.GrowDay || day < DaysOfYear.DieDay;
         }
 
+        private void RefreshGrassDetails()
+        {
+            currentGrassDetail = Random.Range(0, grassDetails.Length);
+            currentGrassAccent = Random.Range(0, grassDetails.Length);
+        }
+
         private static string GetRandomFlowers()
         {
             return flowers[Random.Range(0, flowers.Length)];
+        }
+
+        public void ScaleGrassDetail(DetailPrototype reference, DetailPrototype prototype, GrassDetail detail)
+        {
+            prototype.minHeight = reference.minHeight * detail.HeightModifier;
+            prototype.maxHeight = reference.maxHeight * detail.HeightModifier;
+            prototype.minWidth = reference.minWidth * detail.WidthModifier;
+            prototype.maxWidth = reference.maxWidth * detail.WidthModifier;
         }
 
         #endregion
