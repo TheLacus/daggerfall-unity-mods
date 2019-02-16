@@ -7,8 +7,8 @@
     "ModDescription": "Groundcover with grass, flowers and water plants.",
     "GUID": "2185b00e-bc5d-4758-81f5-7540817e2cbc",
     "Files": [
-        "Assets/Game/Addons/RealGrass/Settings/modsettings.json",
-        "Assets/Game/Addons/RealGrass/Settings/modpresets.json",
+        "Assets/Game/Addons/RealGrass/modsettings.json",
+        "Assets/Game/Addons/RealGrass/modpresets.json",
         "Assets/Game/Addons/RealGrass/Scripts/RealGrass.cs",
         "Assets/Game/Addons/RealGrass/Scripts/DetailPrototypesManager.cs",
         "Assets/Game/Addons/RealGrass/Scripts/DensityManager.cs",
