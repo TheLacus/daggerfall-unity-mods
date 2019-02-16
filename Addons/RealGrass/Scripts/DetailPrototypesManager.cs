@@ -539,7 +539,7 @@ namespace RealGrass
         private bool TryImportTextureFromLooseFiles(string name, out Texture2D tex)
         {
             if (textureOverride)
-                return TextureReplacement.TryImportTextureFromLooseFiles(Path.Combine(RealGrass.TexturesFolder, name), true, false, out tex);
+                return TextureReplacement.TryImportTextureFromLooseFiles(Path.Combine(RealGrass.TexturesFolder, name), true, false, false, out tex);
 
             tex = null;
             return false;
