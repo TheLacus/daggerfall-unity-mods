@@ -54,10 +54,9 @@ namespace RealGrass
         #region Constants
 
         // Textures/Prefabs for grass billboards
+        const string realisticGrass = "Grass";
         const string brownGrass = "BrownGrass";
-        const string brownGrassRealistic = "Grass_01";
         const string greenGrass = "GreenGrass";
-        const string greenGrassRealistic = "Grass_02";
 
         // Models for water plants
         const string plantsTemperate = "PlantsTemperate"; 
@@ -128,6 +127,12 @@ namespace RealGrass
                 Name = "GrassDetails_05",
                 WidthModifier = 1.0f,
                 HeightModifier = 2.0f
+            },
+            new GrassDetail()
+            {
+                Name = "GrassDetails_06",
+                WidthModifier = 0.65f,
+                HeightModifier = 0.65f
             }
         };
 
@@ -346,7 +351,7 @@ namespace RealGrass
                 case ClimateBases.Mountain:
 
                     // Mountain
-                    SetGrass(brownGrass, brownGrassRealistic);
+                    SetGrass(brownGrass, realisticGrass);
 
                     if (RealGrass.Instance.WaterPlants)
                     {
@@ -364,7 +369,7 @@ namespace RealGrass
                 case ClimateBases.Swamp:
 
                     // Swamp
-                    SetGrass(brownGrass, brownGrassRealistic);
+                    SetGrass(brownGrass, realisticGrass);
 
                     if (RealGrass.Instance.WaterPlants)
                     {
@@ -382,7 +387,7 @@ namespace RealGrass
                 case ClimateBases.Temperate:
 
                     // Temperate
-                    SetGrass(greenGrass, greenGrassRealistic);
+                    SetGrass(greenGrass, realisticGrass);
 
                     if (RealGrass.Instance.WaterPlants)
                     {
@@ -423,7 +428,7 @@ namespace RealGrass
             {
                 case ClimateBases.Mountain:
                     if (drawGrass)
-                        SetGrass(brownGrass, brownGrassRealistic);
+                        SetGrass(brownGrass, realisticGrass);
 
                     if (RealGrass.Instance.WaterPlants)
                         detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsMountainWinter);
@@ -431,7 +436,7 @@ namespace RealGrass
 
                 case ClimateBases.Swamp:
                     if (drawGrass)
-                        SetGrass(brownGrass, brownGrassRealistic);
+                        SetGrass(brownGrass, realisticGrass);
 
                     if (RealGrass.Instance.WaterPlants)
                         detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsSwampWinter);
@@ -439,7 +444,7 @@ namespace RealGrass
 
                 case ClimateBases.Temperate:
                     if (drawGrass)
-                        SetGrass(greenGrass, greenGrassRealistic);
+                        SetGrass(greenGrass, realisticGrass);
 
                     if (RealGrass.Instance.WaterPlants)
                         detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsTemperateWinter);

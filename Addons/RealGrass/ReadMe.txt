@@ -104,7 +104,7 @@ Credits
     - Uncanny_Valley, creator of original mod inclued with early versions of DaggerFall Unity.
     - TheLacus, current developer and maintainer of the standalone mod release.
     - Midopa, contributions to original core mod.
-    - VMblast, artist for textures 'Grass_n.psd' and 'GrassDetails_n.psd' (use authorized for this project only).
+    - VMblast, artist for textures 'Grass.psd' and 'GrassDetails_n.psd' (use authorized for this project only).
 
 * Third parties
 Some meshes and/or textures have been picked from the following free licensed packs:
@@ -146,6 +146,7 @@ ChangeLog
 -------------------------------------------------------------------------------------------------
 Unreleased
 * Improved proportions and scale for grass details when 'Realistic' option is enabled.
+* Changes to featured grass plants with 'Realistic' option.
 
 2.3.1
 * Fixed exception thrown in editor mode.

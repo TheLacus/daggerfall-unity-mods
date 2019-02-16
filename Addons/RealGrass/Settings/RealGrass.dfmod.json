@@ -25,8 +25,7 @@
         "Assets/Game/Addons/RealGrass/Assets/FlowersYellow.fbx",
         "Assets/Game/Addons/RealGrass/Assets/GreenGrass.png",
         "Assets/Game/Addons/RealGrass/Assets/GreenGrass.fbx",
-        "Assets/Game/Addons/RealGrass/Assets/Grass_01.prefab",
-        "Assets/Game/Addons/RealGrass/Assets/Grass_02.prefab",
+        "Assets/Game/Addons/RealGrass/Assets/Grass.prefab",
         "Assets/Game/Addons/RealGrass/Assets/PlantsDesert.fbx",
         "Assets/Game/Addons/RealGrass/Assets/PlantsDesertAlt.fbx",
         "Assets/Game/Addons/RealGrass/Assets/PlantsMountain.fbx",
@@ -44,12 +43,12 @@
         "Assets/Game/Addons/RealGrass/Assets/Stone.fbx",
         "Assets/Game/Addons/RealGrass/Assets/Particles/Butterflies.prefab",
         "Assets/Game/Addons/RealGrass/Assets/Particles/Fireflies.prefab",
-        "Assets/Game/Addons/RealGrass/Assets/Textures/Grass_01.psd",
-        "Assets/Game/Addons/RealGrass/Assets/Textures/Grass_02.psd",
+        "Assets/Game/Addons/RealGrass/Assets/Textures/Grass.psd",
         "Assets/Game/Addons/RealGrass/Assets/Textures/GrassDetails_01.psd",
         "Assets/Game/Addons/RealGrass/Assets/Textures/GrassDetails_02.psd",
         "Assets/Game/Addons/RealGrass/Assets/Textures/GrassDetails_03.psd",
         "Assets/Game/Addons/RealGrass/Assets/Textures/GrassDetails_04.psd",
-        "Assets/Game/Addons/RealGrass/Assets/Textures/GrassDetails_05.psd"
+        "Assets/Game/Addons/RealGrass/Assets/Textures/GrassDetails_05.psd",
+        "Assets/Game/Addons/RealGrass/Assets/Textures/GrassDetails_06.psd"
     ]
 }
