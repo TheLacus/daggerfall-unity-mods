@@ -112,12 +112,6 @@ namespace RealGrass
             },
             new GrassDetail()
             {
-                Name = "GrassDetails_03",
-                WidthModifier = 0.65f,
-                HeightModifier = 0.65f
-            },
-            new GrassDetail()
-            {
                 Name = "GrassDetails_04",
                 WidthModifier = 1.0f,
                 HeightModifier = 2.0f
@@ -127,6 +121,16 @@ namespace RealGrass
                 Name = "GrassDetails_05",
                 WidthModifier = 1.0f,
                 HeightModifier = 2.0f
+            }
+        };
+
+        static readonly GrassDetail[] grassAccents = new GrassDetail[]
+        {
+            new GrassDetail()
+            {
+                Name = "GrassDetails_03",
+                WidthModifier = 0.65f,
+                HeightModifier = 0.65f
             },
             new GrassDetail()
             {
@@ -336,8 +340,8 @@ namespace RealGrass
 
             if (RealGrass.Instance.RealisticGrass)
             {
-                SetGrassDetail(GrassDetails, currentGrassDetail, ref grassDetailPrefab);
-                SetGrassDetail(GrassAccents, currentGrassAccent, ref grassAccentPrefab);
+                SetGrassDetail(GrassDetails, grassDetails[currentGrassDetail], ref grassDetailPrefab);
+                SetGrassDetail(GrassAccents, grassAccents[currentGrassAccent], ref grassAccentPrefab);
             }
 
             if (RealGrass.Instance.Flowers)
@@ -492,9 +496,9 @@ namespace RealGrass
                 detailPrototypes[Grass].prototype = LoadGameObject(assetName);
         }
 
-        private void SetGrassDetail(int layer, int index, ref GameObject prefab)
+        private void SetGrassDetail(int layer, GrassDetail grassDetail, ref GameObject prefab)
         {
-            Texture2D tex = LoadTexture(grassDetails[index].Name);
+            Texture2D tex = LoadTexture(grassDetail.Name);
 
             if (!useGrassShader)
             { 
@@ -638,7 +642,7 @@ namespace RealGrass
             if (RealGrass.Instance.RealisticGrass)
             {
                 ScaleGrassDetail(detailPrototypes[Grass], detailPrototypes[GrassDetails], grassDetails[currentGrassDetail]);
-                ScaleGrassDetail(detailPrototypes[Grass], detailPrototypes[GrassAccents], grassDetails[currentGrassAccent]);
+                ScaleGrassDetail(detailPrototypes[Grass], detailPrototypes[GrassAccents], grassAccents[currentGrassAccent]);
             }
         }
 
@@ -651,7 +655,7 @@ namespace RealGrass
         private void RefreshGrassDetails()
         {
             currentGrassDetail = Random.Range(0, grassDetails.Length);
-            currentGrassAccent = Random.Range(0, grassDetails.Length);
+            currentGrassAccent = Random.Range(0, grassAccents.Length);
         }
 
         private static string GetRandomFlowers()

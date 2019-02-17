@@ -147,6 +147,7 @@ ChangeLog
 Unreleased
 * Improved proportions and scale for grass details when 'Realistic' option is enabled.
 * Changes to featured grass plants with 'Realistic' option.
+* Improvements to grass density and disposition.
 
 2.3.1
 * Fixed exception thrown in editor mode.

@@ -777,22 +777,23 @@ namespace RealGrass
         /// <summary>
         /// Sets density to grass layers.
         /// </summary>
-        /// <param name="density"> The total density, partitioned among all layers.</param>
-        /// <param name="seasonalChance">Chance that details layers are populated.</param>
+        /// <param name="density"> The total grass density.</param>
+        /// <param name="seasonalChance">Chance that details layers are populated in range 0-1.</param>
         private void SetGrassDensity(int x, int y, int density, float seasonalChance)
         {
-            // Set full density to a single layer
-            if (!realisticGrass)
+            if (realisticGrass)
             {
-                Grass[x, y] = density;
-                return;
+                // Accents are small tufts that add variety to grass
+                if (density > 1 && Random.value > 0.7f)
+                    density -= (GrassAccents[x, y] = Random.Range(0, density));
+
+                // Details are tall flowers whose density is affected by season
+                if (Random.value < Mathf.Lerp(0, 0.25f, seasonalChance))
+                    density -= (GrassDetails[x, y] = Random.Range(0, density));
             }
 
-            // Density is subdivided by main and details layers; details layers are more populated when seasonalChance is higher.
-            float seasonalMinDensity = Mathf.Lerp(0.8f, 1f, 1 - seasonalChance);
-            int detailDensity = density - (Grass[x, y] = Mathf.RoundToInt(Mathf.Lerp(0, density, Random.Range(seasonalMinDensity, 1f))));
-            if (detailDensity > 0)
-                GrassAccents[x, y] = detailDensity - (GrassDetails[x, y] = Mathf.RoundToInt(Mathf.Lerp(0, detailDensity, Random.Range(0.8f, 1f))));
+            // Main grass layer
+            Grass[x, y] = density;
         }
 
         #region Static Methods
