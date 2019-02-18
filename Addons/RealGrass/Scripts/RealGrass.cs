@@ -263,10 +263,7 @@ namespace RealGrass
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.WaterPlantsAlt, densityManager.WaterPlantsAlt);
             }
             if (TerrainStones)
-            {
-                terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Stones, densityManager.Stones);
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Rocks, densityManager.Rocks);
-            }
             if (Flowers)
             {
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Bushes, densityManager.Bushes);
@@ -406,12 +403,10 @@ namespace RealGrass
 
                 case 1:
                     TerrainStones = true;
-                    density.Stones = new Range<int>(2, 6);
                     density.Rocks = 2;
                     break;
                 case 2:
                     TerrainStones = true;
-                    density.Stones = new Range<int>(4, 12);
                     density.Rocks = 4;
                     break;
             }

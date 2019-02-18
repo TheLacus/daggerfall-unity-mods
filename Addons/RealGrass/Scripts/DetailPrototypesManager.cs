@@ -78,10 +78,8 @@ namespace RealGrass
         const string bushMountain = "BushMountain";
         const string bushDesert = "BushDesert";
 
-        // Stones
-        const string stone = "Stone";
-        const string rockLight = "RockLight";
-        const string rockDark = "RockDark";
+        // Rocks
+        const string rock = "Rock";
 
         // Flowers
         static readonly string[] flowers = {
@@ -170,7 +168,6 @@ namespace RealGrass
         public int GrassAccents { get; private set; }
         public int WaterPlants { get; private set; }
         public int WaterPlantsAlt { get; private set; }
-        public int Stones { get; private set; }
         public int Rocks { get; private set; }
         public int Flowers { get; private set; }
         public int Bushes { get; private set; }
@@ -269,29 +266,19 @@ namespace RealGrass
 
             if (RealGrass.Instance.TerrainStones)
             {
-                // Little stones
-                // For stones we use VertexLit as we are placing 3d static models.
-                var stonesPrototypes = new DetailPrototype()
+                detailPrototypes.Add(new DetailPrototype()
                 {
+                    minWidth = 0.4f,
+                    maxWidth = 1,
+                    minHeight = 0.4f,
+                    maxHeight = 1,
                     usePrototypeMesh = true,
                     noiseSpread = 0.4f,
                     healthyColor = healthyColor,
                     dryColor = dryColor,
                     renderMode = DetailRenderMode.VertexLit,
-                    prototype = LoadGameObject(stone)
-                };
-                detailPrototypes.Add(stonesPrototypes);
-                Stones = ++index;
-
-                var rocksPrototypes = new DetailPrototype()
-                {
-                    usePrototypeMesh = true,
-                    noiseSpread = 0.4f,
-                    healthyColor = healthyColor,
-                    dryColor = dryColor,
-                    renderMode = DetailRenderMode.VertexLit,
-                };
-                detailPrototypes.Add(rocksPrototypes);
+                    prototype = LoadGameObject(rock)
+                });
                 Rocks = ++index;
             }
 
@@ -365,9 +352,6 @@ namespace RealGrass
 
                     if (RealGrass.Instance.Flowers)
                         detailPrototypes[Bushes].prototype = LoadGameObject(bushMountain);
-
-                    if (RealGrass.Instance.TerrainStones)
-                        detailPrototypes[Rocks].prototype = LoadGameObject(rockLight);
                     break;
 
                 case ClimateBases.Swamp:
@@ -383,9 +367,6 @@ namespace RealGrass
 
                     if (RealGrass.Instance.Flowers)
                         detailPrototypes[Bushes].prototype = LoadGameObject(bushSwamp);
-
-                    if (RealGrass.Instance.TerrainStones)
-                        detailPrototypes[Rocks].prototype = LoadGameObject(rockDark);
                     break;
 
                 case ClimateBases.Temperate:
@@ -401,9 +382,6 @@ namespace RealGrass
 
                     if (RealGrass.Instance.Flowers)
                         detailPrototypes[Bushes].prototype = LoadGameObject(bushTemperate);
-
-                    if (RealGrass.Instance.TerrainStones)
-                        detailPrototypes[Rocks].prototype = LoadGameObject(rockLight);
                     break;
 
                 default:
@@ -477,9 +455,6 @@ namespace RealGrass
 
             if (RealGrass.Instance.Flowers)
                 detailPrototypes[Bushes].prototype = LoadGameObject(bushDesert);
-
-            if (RealGrass.Instance.TerrainStones)
-                detailPrototypes[Rocks].prototype = LoadGameObject(rockDark);
         }
 
         #endregion

@@ -129,14 +129,10 @@ Some meshes and/or textures have been picked from the following free licensed pa
         https://opengameart.org/content/low-poly-rocks
     - Plants textures Pack 01 by yughues (License: CC0) at
         https://opengameart.org/content/plants-textures-pack-01
-    - Rocks by yughues (License: CC0) at
-        https://opengameart.org/content/rocks-0
     - Tropical plant 02 by yughues (License: CC0) at
         https://opengameart.org/content/tropical-plant-02-0
     - Tropical shrubs by yughues (License: CC0) at
         https://opengameart.org/content/tropical-shrubs
-    - Weathered rock pack by para (License: CC0) at
-        https://opengameart.org/content/weathered-rock-pack
 
 * Contacts
 Daggerfall Unity forums: http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
@@ -148,6 +144,7 @@ Unreleased
 * Improved proportions and scale for grass details when 'Realistic' option is enabled.
 * Changes to featured grass plants with 'Realistic' option.
 * Improvements to grass density and disposition.
+* Merged rocks and stones layers, changed texture.
 
 2.3.1
 * Fixed exception thrown in editor mode.

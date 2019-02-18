@@ -17,7 +17,6 @@ namespace RealGrass
         public Range<int> GrassThin;
         public Range<int> WaterPlants;
         public Range<int> DesertPlants;
-        public Range<int> Stones;
         public int Rocks;
         public int Flowers;
         public int Bushes;
@@ -56,7 +55,6 @@ namespace RealGrass
         public int[,] GrassAccents { get; private set; }
         public int[,] WaterPlants { get; private set; }
         public int[,] WaterPlantsAlt { get; private set; }
-        public int[,] Stones { get; private set; }
         public int[,] Rocks { get; private set; }
         public int[,] Flowers { get; private set; }
         public int[,] Bushes { get; private set; }
@@ -87,7 +85,6 @@ namespace RealGrass
             GrassAccents    = EmptyMap(realisticGrass);
             WaterPlants     = EmptyMap(waterPlants);
             WaterPlantsAlt  = EmptyMap(waterPlants);
-            Stones          = EmptyMap(terrainStones);
             Rocks           = EmptyMap(terrainStones);
             Flowers         = EmptyMap(flowers);
             Bushes          = EmptyMap(flowers);
@@ -465,10 +462,10 @@ namespace RealGrass
                         case 217:
                         case 218:
                         case 219:
-                            if (terrainStones)
+                            if (terrainStones && Random.value > 0.8f)
                             {
-                                Stones[y * 2, x * 2] = RandomStones();
-                                Stones[(y * 2) + 1, (x * 2) + 1] = RandomStones();
+                                Rocks[y * 2, x * 2] = Random.Range(1, 3);
+                                Rocks[(y * 2) + 1, (x * 2) + 1] = Random.Range(1, 3);
                             }
                             break;
                     }
@@ -706,14 +703,6 @@ namespace RealGrass
         private int RandomDesert()
         {
             return density.DesertPlants.Random();
-        }
-
-        /// <summary>
-        /// Generate random values for the placement of stones. 
-        /// </summary>
-        private int RandomStones()
-        {
-            return density.Stones.Random();
         }
 
         private int RandomRocks()
