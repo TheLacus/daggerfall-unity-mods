@@ -145,6 +145,7 @@ Unreleased
 * Changes to featured grass plants with 'Realistic' option.
 * Improvements to grass density and disposition.
 * Merged rocks and stones layers, changed texture.
+* Fixed exception thrown when inside a desert region if water plants are disabled.
 
 2.3.1
 * Fixed exception thrown in editor mode.
