@@ -6,7 +6,7 @@
   █   ▀███▀      █     ▀      ███    █      █                     
  ▀              █                   ▀      █                      
                ▀                          ▀                      
-2.3.1 for DaggerFall Unity 0.5.x
+2.4 for DaggerFall Unity 0.7.x
 =================================================================================================
 
 Description
@@ -140,7 +140,7 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 
 ChangeLog
 -------------------------------------------------------------------------------------------------
-Unreleased
+2.4
 * Improved proportions and scale for grass details when 'Realistic' option is enabled.
 * Changes to featured grass plants with 'Realistic' option.
 * Improvements to grass density and disposition.

@@ -1,9 +1,9 @@
 {
     "ModTitle": "Real Grass",
-    "ModVersion": "2.3.1",
+    "ModVersion": "2.4",
     "ModAuthor": "Uncanny_Valley, TheLacus",
     "ContactInfo": "",
-    "DFUnity_Version": "0.4.75",
+    "DFUnity_Version": "0.7.x",
     "ModDescription": "Groundcover with grass, flowers and water plants.",
     "GUID": "2185b00e-bc5d-4758-81f5-7540817e2cbc",
     "Files": [
