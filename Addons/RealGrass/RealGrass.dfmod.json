@@ -26,6 +26,7 @@
         "Assets/Game/Addons/RealGrass/Assets/GreenGrass.png",
         "Assets/Game/Addons/RealGrass/Assets/GreenGrass.fbx",
         "Assets/Game/Addons/RealGrass/Assets/Grass.prefab",
+        "Assets/Game/Addons/RealGrass/Assets/DesertGrass.prefab",
         "Assets/Game/Addons/RealGrass/Assets/PlantsDesert.fbx",
         "Assets/Game/Addons/RealGrass/Assets/PlantsDesertAlt.fbx",
         "Assets/Game/Addons/RealGrass/Assets/PlantsMountain.fbx",
@@ -47,6 +48,8 @@
         "Assets/Game/Addons/RealGrass/Assets/Textures/GrassDetails_03.psd",
         "Assets/Game/Addons/RealGrass/Assets/Textures/GrassDetails_04.psd",
         "Assets/Game/Addons/RealGrass/Assets/Textures/GrassDetails_05.psd",
-        "Assets/Game/Addons/RealGrass/Assets/Textures/GrassDetails_06.psd"
-    ]
+        "Assets/Game/Addons/RealGrass/Assets/Textures/GrassDetails_06.psd",
+        "Assets/Game/Addons/RealGrass/Assets/Textures/DesertGrass.psd"
+    ],
+    "Contributes": null
 }

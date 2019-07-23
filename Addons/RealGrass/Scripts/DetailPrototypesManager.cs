@@ -57,6 +57,7 @@ namespace RealGrass
         const string realisticGrass = "Grass";
         const string brownGrass = "BrownGrass";
         const string greenGrass = "GreenGrass";
+        const string desertGrass = "DesertGrass";
 
         // Models for water plants
         const string plantsTemperate = "PlantsTemperate"; 
@@ -270,8 +271,8 @@ namespace RealGrass
                 {
                     minWidth = 0.4f,
                     maxWidth = 1,
-                    minHeight = 0.4f,
-                    maxHeight = 1,
+                    minHeight = 0.25f,
+                    maxHeight = 1.5f,
                     usePrototypeMesh = true,
                     noiseSpread = 0.4f,
                     healthyColor = healthyColor,
@@ -389,6 +390,12 @@ namespace RealGrass
                     RealGrass.Instance.ToggleMod(false);
                     break;
             }
+
+            if (RealGrass.Instance.TerrainStones)
+            {
+                detailPrototypes[Rocks].healthyColor = new Color(0.70f, 0.70f, 0.70f);
+                detailPrototypes[Rocks].dryColor = new Color(0.40f, 0.40f, 0.40f);
+            }
         }
 
         /// <summary>
@@ -447,6 +454,21 @@ namespace RealGrass
             if (!NeedsUpdate(UpdateType.Desert, ClimateBases.Desert))
                 return;
 
+            SetGrass(desertGrass, desertGrass);
+            detailPrototypes[Grass].healthyColor = Color.white;
+            detailPrototypes[Grass].dryColor = new Color(0.85f, 0.85f, 0.85f);
+            detailPrototypes[Grass].minHeight = grassHeight.Min;
+            detailPrototypes[Grass].maxHeight = grassHeight.Max;
+
+            if (RealGrass.Instance.RealisticGrass)
+            {
+                SetGrassDetail(GrassDetails, grassDetails[0], ref grassDetailPrefab);
+                SetGrassDetail(GrassAccents, grassAccents[1], ref grassAccentPrefab);
+
+                ScaleGrassDetail(detailPrototypes[Grass], detailPrototypes[GrassDetails], grassDetails[currentGrassDetail]);
+                ScaleGrassDetail(detailPrototypes[Grass], detailPrototypes[GrassAccents], grassAccents[currentGrassAccent]);
+            }
+
             if (RealGrass.Instance.WaterPlants)
             {
                 detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsDesert);
@@ -455,6 +477,12 @@ namespace RealGrass
 
             if (RealGrass.Instance.Flowers)
                 detailPrototypes[Bushes].prototype = LoadGameObject(bushDesert);
+
+            if (RealGrass.Instance.TerrainStones)
+            {
+                detailPrototypes[Rocks].healthyColor = Color.white;
+                detailPrototypes[Rocks].dryColor = new Color(0.85f, 0.85f, 0.85f);
+            }
         }
 
         #endregion

@@ -105,6 +105,7 @@ Credits
     - TheLacus, current developer and maintainer of the standalone mod release.
     - Midopa, contributions to original core mod.
     - VMblast, artist for textures 'Grass.psd' and 'GrassDetails_n.psd' (use authorized for this project only).
+      'DesertGrass.psd' is an edited version of 'Grass.psd'.
 
 * Third parties
 Some meshes and/or textures have been picked from the following free licensed packs:
@@ -140,6 +141,9 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 
 ChangeLog
 -------------------------------------------------------------------------------------------------
+Unreleased
+* Added sparse grass and stones to desert locations.
+
 2.4
 * Improved proportions and scale for grass details when 'Realistic' option is enabled.
 * Changes to featured grass plants with 'Realistic' option.

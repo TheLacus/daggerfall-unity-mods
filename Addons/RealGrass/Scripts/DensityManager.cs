@@ -581,12 +581,54 @@ namespace RealGrass
         /// </summary>
         public void SetDensityDesert(Color32[] tilemap)
         {
+            const float grassChance = 0.15f;
+            const float seasonalDetailsChance = 0.2f;
+
             for (int y = 0; y < tilemapSize; y++)
             {
                 for (int x = 0; x < tilemapSize; x++)
                 {
                     switch (tilemap[(y * tilemapSize) + x].r)
                     {
+                        case 4:
+                        case 5:
+                        case 6:
+                        case 7:
+                            if (terrainStones)
+                            {
+                                int rocks = RandomRocks();
+                                if (rocks != 0)
+                                {
+                                    var index = RandomPosition(y, x);
+                                    Rocks[index.First, index.Second] = rocks * 5;
+                                }
+                            }
+                            break;
+
+                        case 8:
+                        case 9:
+                        case 10:
+                        case 11:
+                            if (Random.value < grassChance)
+                            {
+                                SetGrassDensity(y * 2, x * 2, RandomThin(), seasonalDetailsChance);
+                                SetGrassDensity(y * 2, (x * 2) + 1, RandomThin(), seasonalDetailsChance);
+                            }
+                            if (Random.value < grassChance)
+                            {
+                                SetGrassDensity((y * 2) + 1, x * 2, RandomThin(), seasonalDetailsChance);
+                                SetGrassDensity((y * 2) + 1, (x * 2) + 1, RandomThin(), seasonalDetailsChance);
+                            }
+                            if (terrainStones)
+                            {
+                                int rocks = RandomRocks();
+                                if (rocks != 0)
+                                {
+                                    var index = RandomPosition(y, x);
+                                    Rocks[index.First, index.Second] = rocks * 5;
+                                }
+                            }
+                            break;
                         // Left side
                         case 84:
                             if (waterPlants)
@@ -688,6 +730,27 @@ namespace RealGrass
                             if (terrainStones)
                                 Rocks[y * 2, (x * 2) + 1] = RandomRocksDesert();
                             break;
+                        // Left to right
+                        case 204:
+                        case 206:
+                        case 214:
+                            if (Random.value < grassChance)
+                            {
+                                Grass[y * 2, x * 2] = RandomThin();
+                                Grass[(y * 2) + 1, (x * 2) + 1] = RandomThin();
+                            }
+                            break;
+
+                        // Right to left
+                        case 205:
+                        case 207:
+                        case 213:
+                            if (Random.value < grassChance)
+                            {
+                                Grass[(y * 2) + 1, x * 2] = RandomThin();
+                                Grass[y * 2, (x * 2) + 1] = RandomThin();
+                            }
+                            break;
                     }
                 }
             }
@@ -736,7 +799,7 @@ namespace RealGrass
 
         private int RandomRocksDesert()
         {
-            return Random.value < 0.30f ? 1 : 0;
+            return Random.value < 0.30f ? 5 : 0;
         }
 
         /// <summary>
