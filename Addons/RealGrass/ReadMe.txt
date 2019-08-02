@@ -143,6 +143,7 @@ ChangeLog
 -------------------------------------------------------------------------------------------------
 Unreleased
 * Added sparse grass and stones to desert locations.
+* Minor improvements to stones disposition.
 
 2.4
 * Improved proportions and scale for grass details when 'Realistic' option is enabled.

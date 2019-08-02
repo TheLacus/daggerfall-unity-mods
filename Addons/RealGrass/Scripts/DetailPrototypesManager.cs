@@ -274,7 +274,7 @@ namespace RealGrass
                     minHeight = 0.25f,
                     maxHeight = 1.5f,
                     usePrototypeMesh = true,
-                    noiseSpread = 0.4f,
+                    noiseSpread = 1,
                     healthyColor = healthyColor,
                     dryColor = dryColor,
                     renderMode = DetailRenderMode.VertexLit,

@@ -600,7 +600,7 @@ namespace RealGrass
                                 if (rocks != 0)
                                 {
                                     var index = RandomPosition(y, x);
-                                    Rocks[index.First, index.Second] = rocks * 5;
+                                    Rocks[index.First, index.Second] = rocks;
                                 }
                             }
                             break;
@@ -625,7 +625,7 @@ namespace RealGrass
                                 if (rocks != 0)
                                 {
                                     var index = RandomPosition(y, x);
-                                    Rocks[index.First, index.Second] = rocks * 5;
+                                    Rocks[index.First, index.Second] = rocks;
                                 }
                             }
                             break;
@@ -794,7 +794,7 @@ namespace RealGrass
 
         private int RandomRocks()
         {
-            return Random.Range(0, 100) < rocksDensity ? 1 : 0;
+            return Random.Range(0, 100) < rocksDensity ? 5 : 0;
         }
 
         private int RandomRocksDesert()
