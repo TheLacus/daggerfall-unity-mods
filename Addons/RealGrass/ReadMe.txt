@@ -126,8 +126,6 @@ Some meshes and/or textures have been picked from the following free licensed pa
         https://opengameart.org/content/free-handpainted-plants-2
     - Free houseplants by yughues (License: CC0) at
         https://opengameart.org/content/free-houseplants
-    - Low poly rocks by para (License: CC0) at
-        https://opengameart.org/content/low-poly-rocks
     - Plants textures Pack 01 by yughues (License: CC0) at
         https://opengameart.org/content/plants-textures-pack-01
     - Tropical plant 02 by yughues (License: CC0) at
