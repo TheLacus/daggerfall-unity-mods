@@ -81,6 +81,7 @@ namespace RealGrass
 
         // Rocks
         const string rock = "Rock";
+        const string rockWinter = "RockWinter";
 
         // Flowers
         static readonly string[] flowers = {
@@ -275,10 +276,7 @@ namespace RealGrass
                     maxHeight = 1.5f,
                     usePrototypeMesh = true,
                     noiseSpread = 1,
-                    healthyColor = healthyColor,
-                    dryColor = dryColor,
-                    renderMode = DetailRenderMode.VertexLit,
-                    prototype = LoadGameObject(rock)
+                    renderMode = DetailRenderMode.VertexLit
                 });
                 Rocks = ++index;
             }
@@ -393,6 +391,7 @@ namespace RealGrass
 
             if (RealGrass.Instance.TerrainStones)
             {
+                detailPrototypes[Rocks].prototype = LoadGameObject(rock);
                 detailPrototypes[Rocks].healthyColor = new Color(0.70f, 0.70f, 0.70f);
                 detailPrototypes[Rocks].dryColor = new Color(0.40f, 0.40f, 0.40f);
             }
@@ -444,6 +443,13 @@ namespace RealGrass
                     RealGrass.Instance.ToggleMod(false);
                     break;
             }
+
+            if (RealGrass.Instance.TerrainStones)
+            {
+                detailPrototypes[Rocks].prototype = LoadGameObject(rockWinter);
+                detailPrototypes[Rocks].healthyColor = new Color(0.70f, 0.70f, 0.70f);
+                detailPrototypes[Rocks].dryColor = new Color(0.40f, 0.40f, 0.40f);
+            }
         }
 
         /// <summary>
@@ -480,6 +486,7 @@ namespace RealGrass
 
             if (RealGrass.Instance.TerrainStones)
             {
+                detailPrototypes[Rocks].prototype = LoadGameObject(rock);
                 detailPrototypes[Rocks].healthyColor = Color.white;
                 detailPrototypes[Rocks].dryColor = new Color(0.85f, 0.85f, 0.85f);
             }

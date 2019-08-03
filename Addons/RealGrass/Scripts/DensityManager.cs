@@ -489,6 +489,21 @@ namespace RealGrass
                 {
                     switch (tilemap[(y * tilemapSize) + x].r)
                     {
+                        case 4:
+                        case 5:
+                        case 6:
+                        case 7:
+                            if (terrainStones)
+                            {
+                                int rocks = RandomRocks();
+                                if (rocks != 0)
+                                {
+                                    var index = RandomPosition(y, x);
+                                    Rocks[index.First, index.Second] = rocks;
+                                }
+                            }
+                            break;
+
                         // Grass growing/dying
                         case 8:
                         case 9:
@@ -507,6 +522,15 @@ namespace RealGrass
                                     Grass[(y * 2) + 1, (x * 2) + 1] = RandomThick();
                                 }
                             }
+                            if (terrainStones)
+                            {
+                                int rocks = RandomRocks();
+                                if (rocks != 0)
+                                {
+                                    var index = RandomPosition(y, x);
+                                    Rocks[index.First, index.Second] = rocks;
+                                }
+                            }
                             break;
 
                         // Left side
@@ -516,6 +540,8 @@ namespace RealGrass
                                 WaterPlants[(y * 2) + 1, x * 2] = RandomWaterPlants();
                                 WaterPlants[y * 2, x * 2] = RandomWaterPlants();
                             }
+                            if (terrainStones)
+                                Rocks[y * 2, x * 2] = RandomRocksDesert();
                             break;
                         // Lower side
                         case 85:
@@ -524,6 +550,8 @@ namespace RealGrass
                                 WaterPlants[y * 2, (x * 2) + 1] = RandomWaterPlants();
                                 WaterPlants[y * 2, (x * 2)] = RandomWaterPlants();
                             }
+                            if (terrainStones)
+                                Rocks[y * 2, x * 2] = RandomRocksDesert();
                             break;
                         // Right side
                         case 86:
@@ -532,6 +560,8 @@ namespace RealGrass
                                 WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
                                 WaterPlants[y * 2, (x * 2) + 1] = RandomWaterPlants();
                             }
+                            if (terrainStones)
+                                Rocks[(y * 2) + 1, (x * 2) + 1] = RandomRocksDesert();
                             break;
                         // Upper side
                         case 87:
@@ -540,6 +570,8 @@ namespace RealGrass
                                 WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
                                 WaterPlants[(y * 2) + 1, x * 2] = RandomWaterPlants();
                             }
+                            if (terrainStones)
+                                Rocks[(y * 2) + 1, (x * 2) + 1] = RandomRocksDesert();
                             break;
                         // Corners
                         case 88:
@@ -548,6 +580,8 @@ namespace RealGrass
                                 WaterPlants[y * 2, x * 2] = RandomWaterPlants();
                                 WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
                             }
+                            if (terrainStones)
+                                Rocks[y * 2, x * 2] = RandomRocksDesert();
                             break;
                         case 89:
                             if (waterPlants)
@@ -555,6 +589,8 @@ namespace RealGrass
                                 WaterPlants[y * 2, (x * 2) + 1] = RandomWaterPlants();
                                 WaterPlants[(y * 2) + 1, x * 2] = RandomWaterPlants();
                             }
+                            if (terrainStones)
+                                Rocks[y * 2, (x * 2) + 1] = RandomRocksDesert();
                             break;
                         case 90:
                             if (waterPlants)
@@ -562,6 +598,8 @@ namespace RealGrass
                                 WaterPlants[y * 2, x * 2] = RandomWaterPlants();
                                 WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
                             }
+                            if (terrainStones)
+                                Rocks[y * 2, x * 2] = RandomRocksDesert();
                             break;
                         case 91:
                             if (waterPlants)
@@ -569,6 +607,8 @@ namespace RealGrass
                                 WaterPlants[y * 2, (x * 2) + 1] = RandomWaterPlants();
                                 WaterPlants[(y * 2) + 1, x * 2] = RandomWaterPlants();
                             }
+                            if (terrainStones)
+                                Rocks[y * 2, (x * 2) + 1] = RandomRocksDesert();
                             break;
                     }
                 }
