@@ -83,6 +83,20 @@ https://github.com/TheLacus/realgrass-du-mod/tree/master/Addons/RealGrass/Assets
 
 Use an appropriate resolution for desired performance requirements.
 
+How to Optimize
+-------------------------------------------------------------------------------------------------
+LOADING TIMES
+* Disable additional details (flowers, stones etc.).
+
+PERFORMANCE
+* Reduce detail distance.
+* Reduce grass/details density.
+* Disable additional details (flowers, stones etc.).
+
+MEMORY
+* Disable additional details (flowers, stones etc.).
+* Reduce terrain distance (game settings).
+
 Uninstall
 -------------------------------------------------------------------------------------------------
 If you wish to uninstall, you can safely remove the mod from the StreamingAssets folder. 
@@ -141,7 +155,7 @@ ChangeLog
 -------------------------------------------------------------------------------------------------
 Unreleased
 * Added sparse grass and stones to desert locations.
-* Minor improvements to stones disposition.
+* Improvements to terrain stones: winter version, new mesh and better disposition.
 
 2.4
 * Improved proportions and scale for grass details when 'Realistic' option is enabled.
