@@ -16,9 +16,6 @@
         "Assets/Game/Addons/RealGrass/Scripts/External/RealGrassConsoleCommands.cs",
         "Assets/Game/Addons/RealGrass/Assets/BrownGrass.prefab",
         "Assets/Game/Addons/RealGrass/Assets/BushDesert.fbx",
-        "Assets/Game/Addons/RealGrass/Assets/BushMountain.fbx",
-        "Assets/Game/Addons/RealGrass/Assets/BushSwamp.fbx",
-        "Assets/Game/Addons/RealGrass/Assets/BushTemperate.fbx",
         "Assets/Game/Addons/RealGrass/Assets/FlowersBlue.fbx",
         "Assets/Game/Addons/RealGrass/Assets/FlowersPink.fbx",
         "Assets/Game/Addons/RealGrass/Assets/FlowersRed.fbx",
@@ -50,7 +47,8 @@
         "Assets/Game/Addons/RealGrass/Assets/Textures/GrassDetails_04.psd",
         "Assets/Game/Addons/RealGrass/Assets/Textures/GrassDetails_05.psd",
         "Assets/Game/Addons/RealGrass/Assets/Textures/GrassDetails_06.psd",
-        "Assets/Game/Addons/RealGrass/Assets/Textures/DesertGrass.psd"
+        "Assets/Game/Addons/RealGrass/Assets/Textures/DesertGrass.psd",
+        "Assets/Game/Addons/RealGrass/RealGrass.dfmod.json"
     ],
     "Contributes": null
 }

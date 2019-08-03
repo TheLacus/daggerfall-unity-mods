@@ -19,7 +19,6 @@ namespace RealGrass
         public Range<int> DesertPlants;
         public int Rocks;
         public int Flowers;
-        public int Bushes;
     }
 
     /// <summary>
@@ -57,7 +56,6 @@ namespace RealGrass
         public int[,] WaterPlantsAlt { get; private set; }
         public int[,] Rocks { get; private set; }
         public int[,] Flowers { get; private set; }
-        public int[,] Bushes { get; private set; }
 
         #endregion
 
@@ -87,11 +85,9 @@ namespace RealGrass
             WaterPlantsAlt  = EmptyMap(waterPlants);
             Rocks           = EmptyMap(terrainStones);
             Flowers         = EmptyMap(flowers);
-            Bushes          = EmptyMap(flowers);
 
             // Set density of details for this terrain 
             flowersDensity = GetTerrainDensityAnnual(density.Flowers);
-            bushesDensity = GetTerrainDensityPerennial(density.Bushes);
             rocksDensity = GetTerrainDensityPerennial(density.Rocks);
         }
                 
@@ -141,13 +137,6 @@ namespace RealGrass
                                 {
                                     var index = RandomPosition(y, x);
                                     Flowers[index.First, index.Second] = commonFlowers;
-                                }
-
-                                int bushes = RandomBushes();
-                                if (bushes != 0)
-                                {
-                                    var index = RandomPosition(y, x);
-                                    Bushes[index.First, index.Second] = bushes;
                                 }
                             }
                             if (terrainStones)
@@ -678,7 +667,7 @@ namespace RealGrass
                                 WaterPlantsAlt[(y * 2) + 1, x * 2] = RandomWaterPlants();
                             }
                             if (flowers)
-                                Bushes[(y * 2) + 1, x * 2] = RandomBushesDesert();
+                                Flowers[(y * 2) + 1, x * 2] = RandomBushesDesert();
                             if (terrainStones)
                                 Rocks[y * 2, x * 2] = RandomRocksDesert();
                             break;
@@ -691,7 +680,7 @@ namespace RealGrass
                                 WaterPlantsAlt[y * 2, (x * 2)] = RandomWaterPlants();
                             }
                             if (flowers)
-                                Bushes[y * 2, (x * 2) + 1] = RandomBushesDesert();
+                                Flowers[y * 2, (x * 2) + 1] = RandomBushesDesert();
                             if (terrainStones)
                                 Rocks[y * 2, x * 2] = RandomRocksDesert();
                             break;
@@ -704,7 +693,7 @@ namespace RealGrass
                                 WaterPlantsAlt[y * 2, (x * 2) + 1] = RandomWaterPlants();
                             }
                             if (flowers)
-                                Bushes[(y * 2) + 1, (x * 2) + 1] = RandomBushesDesert();
+                                Flowers[(y * 2) + 1, (x * 2) + 1] = RandomBushesDesert();
                             if (terrainStones)
                                 Rocks[(y * 2) + 1, (x * 2) + 1] = RandomRocksDesert();
                             break;
@@ -717,7 +706,7 @@ namespace RealGrass
                                 WaterPlantsAlt[(y * 2) + 1, x * 2] = RandomWaterPlants();
                             }
                             if (flowers)
-                                Bushes[(y * 2) + 1, (x * 2) + 1] = RandomBushesDesert();
+                                Flowers[(y * 2) + 1, (x * 2) + 1] = RandomBushesDesert();
                             if (terrainStones)
                                 Rocks[(y * 2) + 1, (x * 2) + 1] = RandomRocksDesert();
                             break;
@@ -730,7 +719,7 @@ namespace RealGrass
                                 WaterPlantsAlt[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
                             }
                             if (flowers)
-                                Bushes[y * 2, x * 2] = RandomBushesDesert();
+                                Flowers[y * 2, x * 2] = RandomBushesDesert();
                             if (terrainStones)
                                 Rocks[y * 2, x * 2] = RandomRocksDesert();
                             break;
@@ -742,7 +731,7 @@ namespace RealGrass
                                 WaterPlantsAlt[(y * 2) + 1, x * 2] = RandomWaterPlants();
                             }
                             if (flowers)
-                                Bushes[y * 2, (x * 2) + 1] = RandomBushesDesert();
+                                Flowers[y * 2, (x * 2) + 1] = RandomBushesDesert();
                             if (terrainStones)
                                 Rocks[y * 2, (x * 2) + 1] = RandomRocksDesert();
                             break;
@@ -754,7 +743,7 @@ namespace RealGrass
                                 WaterPlantsAlt[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
                             }
                             if (flowers)
-                                Bushes[y * 2, x * 2] = RandomBushesDesert();
+                                Flowers[y * 2, x * 2] = RandomBushesDesert();
                             if (terrainStones)
                                 Rocks[y * 2, x * 2] = RandomRocksDesert();
                             break;
@@ -766,7 +755,7 @@ namespace RealGrass
                                 WaterPlantsAlt[(y * 2) + 1, x * 2] = RandomWaterPlants();
                             }
                             if (flowers)
-                                Bushes[y * 2, (x * 2) + 1] = RandomBushesDesert();
+                                Flowers[y * 2, (x * 2) + 1] = RandomBushesDesert();
                             if (terrainStones)
                                 Rocks[y * 2, (x * 2) + 1] = RandomRocksDesert();
                             break;

@@ -265,10 +265,7 @@ namespace RealGrass
             if (TerrainStones)
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Rocks, densityManager.Rocks);
             if (Flowers)
-            {
-                terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Bushes, densityManager.Bushes);
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Flowers, densityManager.Flowers);
-            }
 
 #if TEST_PERFORMANCE
 
@@ -381,17 +378,17 @@ namespace RealGrass
                 case 1:
                     Flowers = true;
                     density.Flowers = 5;
-                    density.Bushes = 2;
+                    //density.Bushes = 2;
                     break;
                 case 2:
                     Flowers = true;
                     density.Flowers = 25;
-                    density.Bushes = 7;
+                    //density.Bushes = 7;
                     break;
                 case 3:
                     Flowers = true;
                     density.Flowers = 50;
-                    density.Bushes = 15;
+                    //density.Bushes = 15;
                     break;
             }
 

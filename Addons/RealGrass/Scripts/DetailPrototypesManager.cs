@@ -172,7 +172,6 @@ namespace RealGrass
         public int WaterPlantsAlt { get; private set; }
         public int Rocks { get; private set; }
         public int Flowers { get; private set; }
-        public int Bushes { get; private set; }
 
         #endregion
 
@@ -283,26 +282,13 @@ namespace RealGrass
 
             if (RealGrass.Instance.Flowers)
             {
-                // Medium-sized vegetation
-                var bushesPrototypes = new DetailPrototype()
-                {
-                    usePrototypeMesh = true,
-                    noiseSpread = 0.4f,
-                    healthyColor = healthyColor,
-                    dryColor = dryColor,
-                    renderMode = DetailRenderMode.Grass,
-                };
-                detailPrototypes.Add(bushesPrototypes);
-                Bushes = ++index;
-
-                // Little flowers
                 var flowerPrototypes = new DetailPrototype()
                 {
                     usePrototypeMesh = true,
                     noiseSpread = 0.4f,
                     healthyColor = healthyColor,
                     dryColor = healthyColor,
-                    renderMode = DetailRenderMode.Grass,
+                    renderMode = DetailRenderMode.Grass
                 };
                 detailPrototypes.Add(flowerPrototypes);
                 Flowers = ++index;
@@ -348,9 +334,6 @@ namespace RealGrass
                         detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsMountain);
                         detailPrototypes[WaterPlantsAlt].prototype = LoadGameObject(plantsMountainAlt);
                     }
-
-                    if (RealGrass.Instance.Flowers)
-                        detailPrototypes[Bushes].prototype = LoadGameObject(bushMountain);
                     break;
 
                 case ClimateBases.Swamp:
@@ -363,9 +346,6 @@ namespace RealGrass
                         detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsSwamp);
                         detailPrototypes[WaterPlantsAlt].prototype = LoadGameObject(plantsSwampAlt);
                     }
-
-                    if (RealGrass.Instance.Flowers)
-                        detailPrototypes[Bushes].prototype = LoadGameObject(bushSwamp);
                     break;
 
                 case ClimateBases.Temperate:
@@ -378,9 +358,6 @@ namespace RealGrass
                         detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsTemperate);
                         detailPrototypes[WaterPlantsAlt].prototype = LoadGameObject(plantsTemperateAlt);
                     }
-
-                    if (RealGrass.Instance.Flowers)
-                        detailPrototypes[Bushes].prototype = LoadGameObject(bushTemperate);
                     break;
 
                 default:
@@ -475,14 +452,14 @@ namespace RealGrass
                 ScaleGrassDetail(detailPrototypes[Grass], detailPrototypes[GrassAccents], grassAccents[currentGrassAccent]);
             }
 
+            if (RealGrass.Instance.Flowers)
+                detailPrototypes[Flowers].prototype = LoadGameObject(bushDesert);
+
             if (RealGrass.Instance.WaterPlants)
             {
                 detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsDesert);
                 detailPrototypes[WaterPlantsAlt].prototype = LoadGameObject(plantsDesertAlt);
             }
-
-            if (RealGrass.Instance.Flowers)
-                detailPrototypes[Bushes].prototype = LoadGameObject(bushDesert);
 
             if (RealGrass.Instance.TerrainStones)
             {

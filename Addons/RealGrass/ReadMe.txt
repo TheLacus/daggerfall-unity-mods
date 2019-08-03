@@ -128,16 +128,10 @@ Some meshes and/or textures have been picked from the following free licensed pa
         https://opengameart.org/content/60-cc0-vegetation-textures
     - Butterfly (animated) by CDmir (License: CC0) at
         https://opengameart.org/content/butterfly-animated
-    - Bushes by yughues (License: CC0) at
-        https://opengameart.org/content/bushes
-    - Fern v2.1 (double-sided) Pack by yughues (License: CC0) at
-        https://opengameart.org/content/fern-v21-double-sided-pack
     - Free 3D plants models by yughues (License: CC0) at
         https://opengameart.org/content/free-3d-plants-models
     - Free Handpainted Plants by yughues (License: CC0) at
         https://opengameart.org/content/free-handpainted-plants
-    - [Free] HandPainted Plants 2 by yughues (License: CC0) at
-        https://opengameart.org/content/free-handpainted-plants-2
     - Free houseplants by yughues (License: CC0) at
         https://opengameart.org/content/free-houseplants
     - Plants textures Pack 01 by yughues (License: CC0) at
@@ -156,6 +150,7 @@ ChangeLog
 Unreleased
 * Added sparse grass and stones to desert locations.
 * Improvements to terrain stones: winter version, new mesh and better disposition.
+* Removed layer of flowers (deprecated by recent better additions) for lower memory usage.
 
 2.4
 * Improved proportions and scale for grass details when 'Realistic' option is enabled.
