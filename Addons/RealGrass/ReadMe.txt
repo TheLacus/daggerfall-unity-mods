@@ -145,6 +145,9 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 
 ChangeLog
 -------------------------------------------------------------------------------------------------
+Unreleased
+* Fixed and tweaked some models.
+
 2.5
 * Added sparse grass and stones to desert locations.
 * Improvements to terrain stones: winter version, new mesh and better disposition.
