@@ -6,7 +6,7 @@
   █   ▀███▀      █     ▀      ███    █      █                     
  ▀              █                   ▀      █                      
                ▀                          ▀                      
-2.4 for DaggerFall Unity 0.7.x
+2.5 for DaggerFall Unity 0.10
 =================================================================================================
 
 Description
@@ -147,7 +147,7 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 
 ChangeLog
 -------------------------------------------------------------------------------------------------
-Unreleased
+2.5
 * Added sparse grass and stones to desert locations.
 * Improvements to terrain stones: winter version, new mesh and better disposition.
 * Removed layer of flowers (deprecated by recent better additions) for lower memory usage.
