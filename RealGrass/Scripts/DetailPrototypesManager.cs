@@ -493,7 +493,13 @@ namespace RealGrass
             }
             else
             {
-                GameObject go = prefab ?? (prefab = GameObject.Instantiate(LoadGameObject(greenGrass)));
+                if (!prefab)
+                {
+                    prefab = GameObject.Instantiate(LoadGameObject("GrassDetails"), RealGrass.Instance.transform);
+                    prefab.SetActive(false);
+                }
+
+                GameObject go = prefab;
                 go.GetComponent<Renderer>().material.mainTexture = tex;
                 detailPrototypes[layer].prototype = go;
             }
