@@ -1,9 +1,9 @@
 [
     {
-        "Title": "LowGrass",
+        "Title": "LowGrass (billlboard)",
         "Author": "Uncanny_Valley",
         "Description": "Low-profile grass.",
-        "SettingsVersion": "1.6",
+        "SettingsVersion": "1.7",
         "Values": {
             "Grass": {
                 "Height": "0.65,0.65",
@@ -18,10 +18,10 @@
         "$version": "v1"
     },
     {
-        "Title": "TallGrass",
+        "Title": "TallGrass (billboard)",
         "Author": "Midopa",
         "Description": "More varieties of grass size.",
-        "SettingsVersion": "1.6",
+        "SettingsVersion": "1.7",
         "Values": {
             "Grass": {
                 "Height": "0.5,2.5",
@@ -31,24 +31,6 @@
                 "ThinDensity": "0,7",
                 "Shader": "0",
                 "Realistic": "False"
-            }
-        },
-        "$version": "v1"
-    },
-    {
-        "Title": "DenseGrass",
-        "Author": "TheLacus",
-        "Description": "Thick medium-sized grass.",
-        "SettingsVersion": "1.6",
-        "Values": {
-            "Grass": {
-                "Height": "0.65,1.05",
-                "Width": "0.8,1",
-                "NoiseSpread": "0.4",
-                "ThinDensity": "1,6",
-                "ThickDensity": "5,16",
-                "Shader": "1",
-                "Realistic": "True"
             }
         },
         "$version": "v1"

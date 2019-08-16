@@ -1,5 +1,5 @@
 {
-    "Version": "1.6",
+    "Version": "1.7",
     "Sections": [
         {
             "Name": "Grass",
@@ -9,7 +9,7 @@
                 {
                     "Value": {
                         "First": 0.65,
-                        "Second": 0.65
+                        "Second": 1.05
                     },
                     "Name": "Height",
                     "Description": "Grass height",
@@ -18,7 +18,7 @@
                 },
                 {
                     "Value": {
-                        "First": 1.0,
+                        "First": 0.8,
                         "Second": 1.0
                     },
                     "Name": "Width",
@@ -37,8 +37,8 @@
                 },
                 {
                     "Value": {
-                        "First": 8,
-                        "Second": 24
+                        "First": 6,
+                        "Second": 20
                     },
                     "Name": "ThickDensity",
                     "Description": "Number of grass patches per terrain tile (dense)",
@@ -47,8 +47,8 @@
                 },
                 {
                     "Value": {
-                        "First": 4,
-                        "Second": 12
+                        "First": 2,
+                        "Second": 9
                     },
                     "Name": "ThinDensity",
                     "Description": "Number of grass patches per terrain tile (sparse)",

@@ -147,6 +147,7 @@ ChangeLog
 -------------------------------------------------------------------------------------------------
 Unreleased
 * Fixed and tweaked some models.
+* Improved default settings.
 
 2.5
 * Added sparse grass and stones to desert locations.
