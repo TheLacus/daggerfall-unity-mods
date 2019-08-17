@@ -6,7 +6,7 @@
   █   ▀███▀      █     ▀      ███    █      █                     
  ▀              █                   ▀      █                      
                ▀                          ▀                      
-2.5 for DaggerFall Unity 0.10
+2.5.1 for DaggerFall Unity 0.10
 =================================================================================================
 
 Description
@@ -145,7 +145,7 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 
 ChangeLog
 -------------------------------------------------------------------------------------------------
-Unreleased
+2.5.1
 * Fixed and tweaked some models.
 * Improved default settings.
 
