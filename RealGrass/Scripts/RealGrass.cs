@@ -237,7 +237,7 @@ namespace RealGrass
                     {
                         // Winter
                         detailPrototypesManager.UpdateClimateWinter(climate);
-                        densityManager.SetDensityWinter(terrain, tilemap);
+                        densityManager.SetDensityWinter(terrain, tilemap, climate);
                     }
                     break;
 
@@ -258,10 +258,7 @@ namespace RealGrass
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.GrassAccents, densityManager.GrassAccents);
             }
             if (WaterPlants)
-            {
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.WaterPlants, densityManager.WaterPlants);
-                terrainData.SetDetailLayer(0, 0, detailPrototypesManager.WaterPlantsAlt, densityManager.WaterPlantsAlt);
-            }
             if (TerrainStones)
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Rocks, densityManager.Rocks);
             if (Flowers)

@@ -134,10 +134,6 @@ Some meshes and/or textures have been picked from the following free licensed pa
         https://opengameart.org/content/free-handpainted-plants
     - Free houseplants by yughues (License: CC0) at
         https://opengameart.org/content/free-houseplants
-    - Tropical plant 02 by yughues (License: CC0) at
-        https://opengameart.org/content/tropical-plant-02-0
-    - Tropical shrubs by yughues (License: CC0) at
-        https://opengameart.org/content/tropical-shrubs
 
 * Contacts
 Daggerfall Unity forums: http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
@@ -145,6 +141,9 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 
 ChangeLog
 -------------------------------------------------------------------------------------------------
+Unreleased
+* Reorganized water plants layer.
+
 2.5.1
 * Fixed and tweaked some models.
 * Improved default settings.

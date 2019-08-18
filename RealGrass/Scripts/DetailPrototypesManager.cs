@@ -61,18 +61,13 @@ namespace RealGrass
 
         // Models for water plants
         const string plantsTemperate = "PlantsTemperate"; 
-        const string plantsTemperateAlt = "PlantsTemperateAlt";
         const string plantsSwamp = "PlantsSwamp";
-        const string plantsSwampAlt = "PlantsSwampAlt";
         const string plantsMountain = "PlantsMountain"; 
-        const string plantsMountainAlt = "PlantsMountainAlt";
         const string plantsDesert = "PlantsDesert"; 
-        const string plantsDesertAlt = "PlantsDesertAlt";
 
         // Winter models for water plants
         const string plantsTemperateWinter = "PlantsTemperateWinter";
         const string plantsSwampWinter = "PlantsSwampWinter";
-        const string plantsMountainWinter = "PlantsMountainWinter";
 
         const string bushSwamp = "BushSwamp";
         const string bushTemperate = "BushTemperate";
@@ -250,19 +245,6 @@ namespace RealGrass
                 };
                 detailPrototypes.Add(waterPlantsNear);
                 WaterPlants = ++index;
-
-                // In-water plants settings
-                // We use Grass as above
-                var waterPlantsInside = new DetailPrototype()
-                {
-                    usePrototypeMesh = true,
-                    noiseSpread = properties.NoiseSpreadPlants,
-                    healthyColor = healthyColor,
-                    dryColor = dryColor,
-                    renderMode = DetailRenderMode.Grass
-                };
-                detailPrototypes.Add(waterPlantsInside);
-                WaterPlantsAlt = ++index;
             }
 
             if (RealGrass.Instance.TerrainStones)
@@ -330,10 +312,8 @@ namespace RealGrass
                     SetGrass(brownGrass, realisticGrass);
 
                     if (RealGrass.Instance.WaterPlants)
-                    {
+
                         detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsMountain);
-                        detailPrototypes[WaterPlantsAlt].prototype = LoadGameObject(plantsMountainAlt);
-                    }
                     break;
 
                 case ClimateBases.Swamp:
@@ -342,10 +322,7 @@ namespace RealGrass
                     SetGrass(brownGrass, realisticGrass);
 
                     if (RealGrass.Instance.WaterPlants)
-                    {
                         detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsSwamp);
-                        detailPrototypes[WaterPlantsAlt].prototype = LoadGameObject(plantsSwampAlt);
-                    }
                     break;
 
                 case ClimateBases.Temperate:
@@ -354,10 +331,7 @@ namespace RealGrass
                     SetGrass(greenGrass, realisticGrass);
 
                     if (RealGrass.Instance.WaterPlants)
-                    {
                         detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsTemperate);
-                        detailPrototypes[WaterPlantsAlt].prototype = LoadGameObject(plantsTemperateAlt);
-                    }
                     break;
 
                 default:
@@ -394,9 +368,6 @@ namespace RealGrass
                 case ClimateBases.Mountain:
                     if (drawGrass)
                         SetGrass(brownGrass, realisticGrass);
-
-                    if (RealGrass.Instance.WaterPlants)
-                        detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsMountainWinter);
                     break;
 
                 case ClimateBases.Swamp:
@@ -456,10 +427,7 @@ namespace RealGrass
                 detailPrototypes[Flowers].prototype = LoadGameObject(bushDesert);
 
             if (RealGrass.Instance.WaterPlants)
-            {
                 detailPrototypes[WaterPlants].prototype = LoadGameObject(plantsDesert);
-                detailPrototypes[WaterPlantsAlt].prototype = LoadGameObject(plantsDesertAlt);
-            }
 
             if (RealGrass.Instance.TerrainStones)
             {
