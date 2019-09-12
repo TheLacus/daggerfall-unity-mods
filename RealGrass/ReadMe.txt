@@ -6,7 +6,7 @@
   █   ▀███▀      █     ▀      ███    █      █                     
  ▀              █                   ▀      █                      
                ▀                          ▀                      
-2.5.1 for DaggerFall Unity 0.10
+2.6 for DaggerFall Unity 0.10
 =================================================================================================
 
 Description
@@ -141,7 +141,7 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 
 ChangeLog
 -------------------------------------------------------------------------------------------------
-Unreleased
+2.6
 * Reorganized water plants layer.
 
 2.5.1
