@@ -119,6 +119,7 @@ namespace RealGrass
             isEnabled = true;
 
             RealGrassConsoleCommands.RegisterCommands();
+            Mod.MessageReceiver = MessageReceiver;
         }
 
         #endregion
@@ -445,6 +446,21 @@ namespace RealGrass
                 case Climates.Ocean:
                 default:
                     return (ClimateBases)(-1);
+            }
+        }
+
+        private void MessageReceiver(string message, object data, DFModMessageCallback callBack)
+        {
+            switch (message)
+            {
+                case "toggle":
+                    if (data is bool)
+                        ToggleMod((bool)data);
+                    break;
+
+                default:
+                    Debug.LogErrorFormat("{0}: unknown message received ({1}).", this, message);
+                    break;
             }
         }
 

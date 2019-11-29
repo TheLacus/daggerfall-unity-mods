@@ -112,6 +112,14 @@ Known compatible mods:
 * Distant Terrain, Nystul
 * Vibrant Wind, TheLacus
 
+Mod Messages
+-------------------------------------------------------------------------------------------------
+The following mod messages can be used for communication  with other mods:
+
+- message: "toggle", data: bool, callBack: null
+    Toggles mod. When disabled, grass is removed from all terrains; when enabled,
+    is added again starting from player terrain.
+
 Credits
 -------------------------------------------------------------------------------------------------
 * Contributors
@@ -143,6 +151,7 @@ ChangeLog
 -------------------------------------------------------------------------------------------------
 Unreleased
 * Terrain where player is standing on is initialized first when mod is disabled and then enabled again.
+* Added mod message "toggle".
 
 2.6
 * Reorganized water plants layer.
