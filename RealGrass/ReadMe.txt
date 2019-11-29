@@ -6,7 +6,7 @@
   █   ▀███▀      █     ▀      ███    █      █                     
  ▀              █                   ▀      █                      
                ▀                          ▀                      
-2.6 for DaggerFall Unity 0.10
+2.7 for DaggerFall Unity 0.10
 =================================================================================================
 
 Description
@@ -149,7 +149,7 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 
 ChangeLog
 -------------------------------------------------------------------------------------------------
-Unreleased
+2.7
 * Terrain where player is standing on is initialized first when mod is disabled and then enabled again.
 * Added mod message "toggle".
 
