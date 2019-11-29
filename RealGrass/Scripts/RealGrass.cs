@@ -294,11 +294,17 @@ namespace RealGrass
 
         private IEnumerator InitTerrains()
         {
+            // Do player terrain first
+            var playerTerrain = GameManager.Instance.StreamingWorld.PlayerTerrainTransform.GetComponentInChildren<DaggerfallTerrain>();
+            AddTerrainDetails(playerTerrain, playerTerrain.gameObject.GetComponent<Terrain>().terrainData);
+            yield return null;
+
+            // Do other terrains
             var terrains = GameManager.Instance.StreamingWorld.StreamingTarget.GetComponentsInChildren<DaggerfallTerrain>();
-            foreach (DaggerfallTerrain daggerTerrain in terrains)
+            foreach (DaggerfallTerrain daggerTerrain in terrains.Where(x => x != playerTerrain))
             {
                 AddTerrainDetails(daggerTerrain, daggerTerrain.gameObject.GetComponent<Terrain>().terrainData);
-                yield return new WaitForEndOfFrame();
+                yield return null;
             }
         }
 

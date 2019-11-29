@@ -141,6 +141,9 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 
 ChangeLog
 -------------------------------------------------------------------------------------------------
+Unreleased
+* Terrain where player is standing on is initialized first when mod is disabled and then enabled again.
+
 2.6
 * Reorganized water plants layer.
 
