@@ -14,6 +14,7 @@ using UnityEngine;
 using DaggerfallWorkshop;
 using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
+using DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings;
 using DaggerfallWorkshop.Utility;
 using Climates = DaggerfallConnect.Arena2.MapsFile.Climates;
 
@@ -50,6 +51,7 @@ namespace RealGrass
         DetailPrototypesManager detailPrototypesManager;
         DensityManager densityManager;
         bool isEnabled;
+        Coroutine initTerrains;
 
         internal const string TexturesFolder = "Grass";
 
@@ -281,32 +283,19 @@ namespace RealGrass
         private void StartMod(bool loadSettings, bool initTerrains)
         {
             if (loadSettings)
-                LoadSettings();
+            {
+                Mod.LoadSettingsCallback = LoadSettings;
+                Mod.LoadSettings();
+            }
 
             // Subscribe to events
             DaggerfallTerrain.OnPromoteTerrainData += DaggerfallTerrain_OnPromoteTerrainData;
 
             // Place details on existing terrains
             if (initTerrains)
-                StartCoroutine(InitTerrains());
+                RefreshTerrainDetailsAsync();
 
             Debug.Log("Real Grass is now enabled; subscribed to terrain promotion.");
-        }
-
-        private IEnumerator InitTerrains()
-        {
-            // Do player terrain first
-            var playerTerrain = GameManager.Instance.StreamingWorld.PlayerTerrainTransform.GetComponentInChildren<DaggerfallTerrain>();
-            AddTerrainDetails(playerTerrain, playerTerrain.gameObject.GetComponent<Terrain>().terrainData);
-            yield return null;
-
-            // Do other terrains
-            var terrains = GameManager.Instance.StreamingWorld.StreamingTarget.GetComponentsInChildren<DaggerfallTerrain>();
-            foreach (DaggerfallTerrain daggerTerrain in terrains.Where(x => x != playerTerrain))
-            {
-                AddTerrainDetails(daggerTerrain, daggerTerrain.gameObject.GetComponent<Terrain>().terrainData);
-                yield return null;
-            }
         }
 
         /// <summary>
@@ -329,16 +318,13 @@ namespace RealGrass
             Debug.Log("Real Grass is now disabled; unsubscribed from terrain promotion.");
         }
 
-        private void LoadSettings()
+        private void LoadSettings(ModSettings settings, ModSettingsChange change)
         {
             const string
                 waterPlantsSection  = "WaterPlants",
                 grassSection        = "Grass",
                 othersSection       = "Others",
                 advancedSection     = "Advanced";
-
-            // Load settings
-            var settings = Mod.GetSettings();
 
             // Optional details
             int waterPlantsMode = settings.GetInt(waterPlantsSection, "Mode");
@@ -374,7 +360,7 @@ namespace RealGrass
                 DesertPlants = settings.GetTupleInt(waterPlantsSection, "DesertDensity"),
             };
 
-            switch(settings.GetInt(othersSection, "Flowers"))
+            switch (settings.GetInt(othersSection, "Flowers"))
             {
                 case 0:
                     Flowers = false;
@@ -382,17 +368,14 @@ namespace RealGrass
                 case 1:
                     Flowers = true;
                     density.Flowers = 5;
-                    //density.Bushes = 2;
                     break;
                 case 2:
                     Flowers = true;
                     density.Flowers = 25;
-                    //density.Bushes = 7;
                     break;
                 case 3:
                     Flowers = true;
                     density.Flowers = 50;
-                    //density.Bushes = 15;
                     break;
             }
 
@@ -412,14 +395,52 @@ namespace RealGrass
                     break;
             }
 
-            RealisticGrass = settings.GetValue<bool>(grassSection, "Realistic");
-            FlyingInsects = settings.GetValue<bool>(othersSection, "FlyingInsects");
+            if (change.HasChanged(grassSection, "Realistic"))
+                RealisticGrass = settings.GetValue<bool>(grassSection, "Realistic");
+            
+            if (change.HasChanged(othersSection, "FlyingInsects"))
+                FlyingInsects = settings.GetValue<bool>(othersSection, "FlyingInsects");
 
-            DetailObjectDistance = settings.GetValue<int>(advancedSection, "DetailDistance");
-            DetailObjectDensity = settings.GetValue<float>(advancedSection, "DetailDensity");
+            if (change.HasChanged(advancedSection))
+            {
+                DetailObjectDistance = settings.GetValue<int>(advancedSection, "DetailDistance");
+                DetailObjectDensity = settings.GetValue<float>(advancedSection, "DetailDensity");
+            }
 
             detailPrototypesManager = new DetailPrototypesManager(properties);
             densityManager = new DensityManager(density);
+
+            if (isEnabled)
+                RefreshTerrainDetailsAsync();
+        }
+
+        /// <summary>
+        /// Re-applies detail layers to terrains.
+        /// </summary>
+        private void RefreshTerrainDetailsAsync()
+        {
+            if (initTerrains != null)
+                StopCoroutine(initTerrains);
+
+            initTerrains = StartCoroutine(RefreshTerrainDetailsCoroutine());
+        }
+
+        private IEnumerator RefreshTerrainDetailsCoroutine()
+        {
+            // Do player terrain first
+            var playerTerrain = GameManager.Instance.StreamingWorld.PlayerTerrainTransform.GetComponentInChildren<DaggerfallTerrain>();
+            AddTerrainDetails(playerTerrain, playerTerrain.gameObject.GetComponent<Terrain>().terrainData);
+            yield return null;
+
+            // Do other terrains
+            var terrains = GameManager.Instance.StreamingWorld.StreamingTarget.GetComponentsInChildren<DaggerfallTerrain>();
+            foreach (DaggerfallTerrain daggerTerrain in terrains.Where(x => x != playerTerrain))
+            {
+                AddTerrainDetails(daggerTerrain, daggerTerrain.gameObject.GetComponent<Terrain>().terrainData);
+                yield return null;
+            }
+
+            initTerrains = null;
         }
 
         private static ClimateBases GetClimate(int climateIndex)

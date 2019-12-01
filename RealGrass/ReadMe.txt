@@ -126,7 +126,7 @@ Credits
     - Uncanny_Valley, creator of original mod inclued with early versions of DaggerFall Unity.
     - TheLacus, current developer and maintainer of the standalone mod release.
     - Midopa, contributions to original core mod.
-    - VMblast, artist for textures 'Grass.psd' and 'GrassDetails_n.psd' (use authorized for this project only).
+    - VMblast, artist for textures 'Grass_tex.psd' and 'GrassDetails_n.psd' (use authorized for this project only).
       'DesertGrass.psd' is an edited version of 'Grass.psd'.
 
 * Third parties
@@ -149,6 +149,9 @@ Github: https://github.com/TheLacus/realgrass-du-mod
 
 ChangeLog
 -------------------------------------------------------------------------------------------------
+Unreleased
+* Added support for live changes to mod settings.
+
 2.7
 * Terrain where player is standing on is initialized first when mod is disabled and then enabled again.
 * Added mod message "toggle".

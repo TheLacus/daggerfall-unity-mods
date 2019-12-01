@@ -446,7 +446,7 @@ namespace RealGrass
             string assetName = RealGrass.Instance.RealisticGrass ? realistic : classic;
 
             if (!useGrassShader)
-                detailPrototypes[Grass].prototypeTexture = LoadTexture(assetName);
+                detailPrototypes[Grass].prototypeTexture = LoadTexture(assetName + "_tex");
             else
                 detailPrototypes[Grass].prototype = LoadGameObject(assetName);
         }
