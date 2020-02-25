@@ -11,6 +11,6 @@ A mod for Daggerfall Unity that provides a groundcover with grass, plants, flowe
 + Advanced settings like rendering distance can be tweaked for a quality/performance balance.
 
 ## Info
-+ Version: 2.7
++ Version: 2.8
 + Daggerfall Unity Version: 0.10
 + [RealGrass on Daggerfall Unity forums](https://forums.dfworkshop.net/viewtopic.php?f=27&t=964)
