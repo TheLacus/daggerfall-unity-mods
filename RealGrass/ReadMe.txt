@@ -122,16 +122,13 @@ The following mod messages can be used for communication  with other mods:
 
 Credits
 -------------------------------------------------------------------------------------------------
-* Contributors
-    - Uncanny_Valley, creator of original mod inclued with early versions of DaggerFall Unity.
-    - TheLacus, current developer and maintainer of the standalone mod release.
-    - Midopa, contributions to original core mod.
-    - VMblast, artist for textures 'Grass_tex.psd' and 'GrassDetails_n.psd' (use authorized for this project only).
-      'DesertGrass.psd' is an edited version of 'Grass.psd'.
+- Uncanny_Valley, creator of original mod inclued with early versions of DaggerFall Unity.
+- TheLacus, current developer and maintainer of the standalone mod release.
+- Midopa, contributions to original core mod.
+- VMblast, author of textures 'Grass_tex.psd' and all 'GrassDetails_*.psd'; 'DesertGrass.psd' is an edited version
+  of 'Grass.psd'. Use of these textures is authorized for this project only [RealGrass for Daggerfall Unity].
 
-* Third parties
 Some meshes and/or textures have been picked from the following free licensed packs:
-
     - 60 CC0 Vegetation textures by rubberduck (License: CC0) at
         https://opengameart.org/content/60-cc0-vegetation-textures
     - Butterfly (animated) by CDmir (License: CC0) at
@@ -143,7 +140,7 @@ Some meshes and/or textures have been picked from the following free licensed pa
     - Free houseplants by yughues (License: CC0) at
         https://opengameart.org/content/free-houseplants
 
-* Contacts
+Contacts:
 Daggerfall Unity forums: http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
 Github: https://github.com/TheLacus/realgrass-du-mod
 
