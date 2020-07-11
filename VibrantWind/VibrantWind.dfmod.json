@@ -7,11 +7,11 @@
     "ModDescription": "Changes strength of wind according to current weather.",
     "GUID": "d2fcfc26-4c33-4d47-b566-920c8d3f5757",
     "Files": [
-        "Assets/Game/Addons/VibrantWind/modsettings.json",
-        "Assets/Game/Addons/VibrantWind/Scripts/VibrantWind.cs",
-        "Assets/Game/Addons/VibrantWind/Scripts/API/WindStrength.cs",
-        "Assets/Game/Addons/VibrantWind/Scripts/API/Interpolation.cs",
-        "Assets/Game/Addons/VibrantWind/Scripts/External/VibrantWindModMessages.cs",
-        "Assets/Game/Addons/VibrantWind/Scripts/External/VibrantWindConsoleCommands.cs"
+        "Assets/Game/Mods/VibrantWind/modsettings.json",
+        "Assets/Game/Mods/VibrantWind/Scripts/VibrantWind.cs",
+        "Assets/Game/Mods/VibrantWind/Scripts/API/WindStrength.cs",
+        "Assets/Game/Mods/VibrantWind/Scripts/API/Interpolation.cs",
+        "Assets/Game/Mods/VibrantWind/Scripts/External/VibrantWindModMessages.cs",
+        "Assets/Game/Mods/VibrantWind/Scripts/External/VibrantWindConsoleCommands.cs"
     ]
 }

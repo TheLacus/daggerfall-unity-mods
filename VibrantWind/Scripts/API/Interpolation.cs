@@ -1,4 +1,4 @@
-﻿// Project:         Vibrant Wind for Daggerfall Unity
+// Project:         Vibrant Wind for Daggerfall Unity
 // Web Site:        http://forums.dfworkshop.net/viewtopic.php?f=14&t=532
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Source Code:     https://github.com/TheLacus/vibrantwind-du-mod
@@ -33,7 +33,7 @@ namespace VibrantWind
         /// <summary>
         /// Limits of the interpolation.
         /// </summary>
-        public Tuple<float, float> Range { get; set; }
+        public DaggerfallWorkshop.Utility.Tuple<float, float> Range { get; set; }
 
         /// <summary>
         /// Number of values to generate.
@@ -70,7 +70,7 @@ namespace VibrantWind
         /// <param name="range">Limits of the interpolation.</param>
         /// <param name="precision">Number of values to generate.</param>
         /// <param name="type">Interpolation method defined in <see cref="InterpolationType"/>.</param>
-        public Interpolation(Tuple<float, float> range, int precision, int type = 0)
+        public Interpolation(DaggerfallWorkshop.Utility.Tuple<float, float> range, int precision, int type = 0)
         {
             this.Range = range;
             this.Precision = precision;

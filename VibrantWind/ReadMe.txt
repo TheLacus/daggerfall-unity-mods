@@ -83,6 +83,9 @@ settings or WindZone settings.
 
 Changelog
 ---------
+* Unreleased
+- Compatibility upgrade.
+
 * 0.5
 - Compatibility upgrade.
 
