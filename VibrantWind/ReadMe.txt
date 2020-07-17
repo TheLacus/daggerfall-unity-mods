@@ -5,7 +5,7 @@
    \ V / | | |_) | | | (_| | | | | |_    \ V  V / | | | | | (_| |
     \_/  |_|_.__/|_|  \__,_|_| |_|\__|    \_/\_/  |_|_| |_|\__,_|
                                                                  
-v0.5 for DaggerFall Unity 0.5.33
+v0.6 for DaggerFall Unity 0.10.25
 =================================================================================================
 
 Description 
@@ -83,7 +83,7 @@ settings or WindZone settings.
 
 Changelog
 ---------
-* Unreleased
+* 0.6
 - Compatibility upgrade.
 
 * 0.5

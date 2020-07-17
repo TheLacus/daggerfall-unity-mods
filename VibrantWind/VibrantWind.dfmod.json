@@ -1,9 +1,9 @@
 {
     "ModTitle": "Vibrant Wind",
-    "ModVersion": "0.5",
+    "ModVersion": "0.6",
     "ModAuthor": "TheLacus",
     "ContactInfo": "",
-    "DFUnity_Version": "0.5.33",
+    "DFUnity_Version": "0.10.25",
     "ModDescription": "Changes strength of wind according to current weather.",
     "GUID": "d2fcfc26-4c33-4d47-b566-920c8d3f5757",
     "Files": [
