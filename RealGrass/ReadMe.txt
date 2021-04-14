@@ -79,38 +79,14 @@ Texture Override
 It's possible to import custom textures from StreamingAssets/Textures/Grass.
 
 You can find textures names on github:
-https://github.com/TheLacus/realgrass-du-mod/tree/master/Addons/RealGrass/Assets/Resources
+https://github.com/TheLacus/daggerfall-unity-realgrass/tree/master/RealGrassAssets/Textures
 
 Use an appropriate resolution for desired performance requirements.
-
-How to Optimize
--------------------------------------------------------------------------------------------------
-LOADING TIMES
-* Disable additional details (flowers, stones etc.).
-
-PERFORMANCE
-* Reduce detail distance.
-* Reduce grass/details density.
-* Disable additional details (flowers, stones etc.).
-
-MEMORY
-* Disable additional details (flowers, stones etc.).
-* Reduce terrain distance (game settings).
 
 Uninstall
 -------------------------------------------------------------------------------------------------
 If you wish to uninstall, you can safely remove the mod from the StreamingAssets folder. 
 It won't affect saves.
-
-Compatibility
--------------------------------------------------------------------------------------------------
-This mod is compatible with vegetation retextures as well as mods that replace existing vegetation
-with 3d models, while it may be incompatible with mods that add new vegetation.
-Be careful when installing other mods that affects terrain.
-
-Known compatible mods:
-* Distant Terrain, Nystul
-* Vibrant Wind, TheLacus
 
 Mod Messages
 -------------------------------------------------------------------------------------------------
@@ -129,119 +105,8 @@ Credits
   of 'Grass.psd'. Use of these textures is authorized for this project only [RealGrass for Daggerfall Unity].
 
 Some meshes and/or textures have been picked from the following free licensed packs:
-    - 60 CC0 Vegetation textures by rubberduck (License: CC0) at
-        https://opengameart.org/content/60-cc0-vegetation-textures
-    - Butterfly (animated) by CDmir (License: CC0) at
-        https://opengameart.org/content/butterfly-animated
-    - Free 3D plants models by yughues (License: CC0) at
-        https://opengameart.org/content/free-3d-plants-models
-    - Free Handpainted Plants by yughues (License: CC0) at
-        https://opengameart.org/content/free-handpainted-plants
-    - Free houseplants by yughues (License: CC0) at
-        https://opengameart.org/content/free-houseplants
-
-Contacts:
-Daggerfall Unity forums: http://forums.dfworkshop.net/viewtopic.php?f=14&t=17
-Github: https://github.com/TheLacus/realgrass-du-mod
-
-ChangeLog
--------------------------------------------------------------------------------------------------
-2.8
-* Added support for live changes to mod settings.
-
-2.7
-* Terrain where player is standing on is initialized first when mod is disabled and then enabled again.
-* Added mod message "toggle".
-
-2.6
-* Reorganized water plants layer.
-
-2.5.1
-* Fixed and tweaked some models.
-* Improved default settings.
-
-2.5
-* Added sparse grass and stones to desert locations.
-* Improvements to terrain stones: winter version, new mesh and better disposition.
-* Removed layer of flowers (deprecated by recent better additions) for lower memory usage.
-
-2.4
-* Improved proportions and scale for grass details when 'Realistic' option is enabled.
-* Changes to featured grass plants with 'Realistic' option.
-* Improvements to grass density and disposition.
-* Merged rocks and stones layers, changed texture.
-* Fixed exception thrown when inside a desert region if water plants are disabled.
-
-2.3.1
-* Fixed exception thrown in editor mode.
-* Fixed exception thrown during winter if water plants are disabled.
-
-2.3
-* Make flying insects with particle systems at random spots on terrain.
-* New grass textures by VMblast.
-* Improvements to grass density and disposition.
-
-2.2
-* Graphical improvements.
-* Smooth transition from/to winter.
-* Compatibility upgrade.
-
-2.1
-
-* Seasonal changes (grass color and size).
-* Graphical improvements for plants and flowers.
-* Additional groundcover (bushes and stones).
-
-2.0
-* Support for flowers
-* Settings presets are more user-friendly
-* Texture import is more user-friendly
-
-1.11
-* Optimization of DetailPrototypes terrain setting.
-* Graphic enhancements of water plants.
-* Added console commands: realgrass_toggle, realgrass_distance.
-
-1.10
-* Support Grass shader in addition to GrassBillboard shader
-* The max distance for detail render can be customized for different performance requirements
-* Plants and grass position remains unchanged between sessions for the same terrain
-* Experimental support for flowers
-
-1.09
-* Added presets.
-* Customize textures from disk.
-
-1.08
-* Real Grass and Grass&Plants are now packed in the same mod for increased ease of use and maintenance.
-* (optional) Added winter version of water plants.
-* Customize size and shape of grass from the settings window.
-* Minor improvements.
-
-1.07
-* Converted to mod system.
-Place realgrass.dfmod inside 'StreamingAssets/Mods'.
-* Fixed bug which caused the wrong kind of grass to appear 
-when loading a save made in a different climate.
-
-1.06
-* Properly clear grass when moving into an season/climate without grass.
-
-1.05
-* Adds more variety to grass patches
-* Tweaks density of grass so patches near non-grass terrain look more natural (no "grass walls")
-* Refactoring, cleanup, and comments
-
-1.04
-* Fixes error messages when traveling during winter in grassy climates
-
-1.03
-* Fixes a few misplaced grass placements
-* Added a new type of grass!
-* Improved the green grass texture (I'm no artist but I try)
-* Cleaned up the code and refined it a bit further 
-
-1.02
-* Updated to work with version 1.3 of DaggerFall Tools For Unity
-* You no longer need to edit existing DFTFU files to use Real Grass
-* Code improvements, the loading time for the grass should be significant faster than before
+- 60 CC0 Vegetation textures by rubberduck (License: CC0) at https://opengameart.org/content/60-cc0-vegetation-textures
+- Butterfly (animated) by CDmir (License: CC0) at https://opengameart.org/content/butterfly-animated
+- Free 3D plants models by yughues (License: CC0) at https://opengameart.org/content/free-3d-plants-models
+- Free Handpainted Plants by yughues (License: CC0) at https://opengameart.org/content/free-handpainted-plants
+- Free houseplants by yughues (License: CC0) at https://opengameart.org/content/free-houseplants
