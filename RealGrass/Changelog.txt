@@ -1,5 +1,6 @@
 Unreleased
 * Fixed artifact that was sometimes visible on grass texture when rocks are enabled.
+* Added advanced option to override detail distance with a value outside of suggested range.
 
 2.8
 * Added support for live changes to mod settings.

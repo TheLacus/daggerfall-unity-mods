@@ -404,6 +404,13 @@ namespace RealGrass
             if (change.HasChanged(advancedSection))
             {
                 DetailObjectDistance = settings.GetValue<int>(advancedSection, "DetailDistance");
+                string detailDistanceOverride = settings.GetValue<string>(advancedSection, "DetailDistanceOverride");
+                if (!string.IsNullOrWhiteSpace(detailDistanceOverride) && int.TryParse(detailDistanceOverride, out int value))
+                {
+                    DetailObjectDistance = value;
+                    Debug.Log($"{this}: override detail distance with {value}", this);
+                }
+
                 DetailObjectDensity = settings.GetValue<float>(advancedSection, "DetailDensity");
             }
 
