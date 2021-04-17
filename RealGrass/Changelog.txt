@@ -1,3 +1,6 @@
+Unreleased
+* Fixed artifact that was sometimes visible on grass texture when rocks are enabled.
+
 2.8
 * Added support for live changes to mod settings.
 
