@@ -1,4 +1,4 @@
-Unreleased
+2.9
 * Fixed artifact that was sometimes visible on grass texture when rocks are enabled.
 * Added advanced option to override detail distance with a value outside of suggested range.
 
