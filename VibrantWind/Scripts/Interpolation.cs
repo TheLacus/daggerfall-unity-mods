@@ -8,7 +8,6 @@
 using System;
 using System.Linq;
 using UnityEngine;
-using DaggerfallWorkshop.Utility;
 using System.Collections.Generic;
 
 namespace VibrantWind

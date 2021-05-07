@@ -1,4 +1,4 @@
-﻿// Project:         Vibrant Wind for Daggerfall Unity
+// Project:         Vibrant Wind for Daggerfall Unity
 // Web Site:        http://forums.dfworkshop.net/viewtopic.php?f=14&t=532
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Source Code:     https://github.com/TheLacus/vibrantwind-du-mod
@@ -27,14 +27,9 @@ namespace VibrantWind
     {
         #region Fields
 
-        // Number of weathers.
         static readonly int precision = Enum.GetValues(typeof(WeatherType)).Cast<WeatherType>().Distinct().Count();
-
-        // This mod
         static VibrantWind instance;
-        bool isEnabled = false;
 
-        // DU components
         StreamingWorld streamingWorld;
         PlayerWeather playerWeather;
         WindZone windZone;
@@ -49,7 +44,7 @@ namespace VibrantWind
         /// </summary>
         float[] ambientWind;
 
-        // Index for current weather.
+        bool isEnabled = false;
         int weather = -1;
 
         #endregion
@@ -95,14 +90,11 @@ namespace VibrantWind
         [Invoke(StateManager.StateTypes.Start, 0)]
         public static void Init(InitParams initParams)
         {
-            // Get mod
             Mod = initParams.Mod;
 
-            // Add script to scene
-            GameObject go = new GameObject("VibrantWind");
+            var go = new GameObject(nameof(VibrantWind));
             instance = go.AddComponent<VibrantWind>();
 
-            // Set mod as Ready
             Mod.IsReady = true;
         }
 
@@ -110,23 +102,18 @@ namespace VibrantWind
         {
             if (instance != null && this != instance)
                 Destroy(this.gameObject);
-
-            // Add commands to console
-            VibrantWindConsoleCommands.RegisterCommands();
+            else
+                VibrantWindConsoleCommands.RegisterCommands();
         }
 
         void Start()
         {
-            // Get Daggerfall Unity components
             streamingWorld = GameManager.Instance.StreamingWorld;
             playerWeather = GameManager.Instance.WeatherManager.PlayerWeather;
             windZone = GameManager.Instance.WeatherManager.GetComponent<WindZone>();
 
-            // Setup mod
             Setup();
             Mod.MessageReceiver = VibrantWindModMessages.MessageReceiver;
-
-            // Start mod
             ToggleMod(true, false);
         }
 

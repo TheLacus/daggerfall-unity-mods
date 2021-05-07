@@ -1,4 +1,4 @@
-﻿// Project:         Vibrant Wind for Daggerfall Unity
+// Project:         Vibrant Wind for Daggerfall Unity
 // Web Site:        http://forums.dfworkshop.net/viewtopic.php?f=14&t=532
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Source Code:     https://github.com/TheLacus/vibrantwind-du-mod
@@ -17,13 +17,11 @@ namespace VibrantWind
     /// </summary>
     public static class VibrantWindModMessages
     {
-        public static void MessageReceiver(string message, object data, DFModMessageCallback callBack)
+        public static void MessageReceiver(string message, object data, DFModMessageCallback _)
         {
-            const string ForceWeather = "ForceWeather"; // Set strength of wind with user settings.
-
             switch (message)
             {
-                case ForceWeather:
+                case "ForceWeather":
 
                     try
                     {

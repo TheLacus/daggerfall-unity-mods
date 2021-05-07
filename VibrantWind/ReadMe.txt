@@ -104,4 +104,4 @@ Changelog
 
 Credits
 -------
-TheLacus (TheLacus@yandex.com)
+TheLacus

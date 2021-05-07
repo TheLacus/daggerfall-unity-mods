@@ -38,7 +38,7 @@ namespace VibrantWind
             public static readonly string description = "Enable/Disable automatic wind strength changes.";
             public static readonly string usage = "vwind_toggle";
 
-            public static string Execute(params string[] args)
+            public static string Execute(params string[] _)
             {
                 var vibrantWind = VibrantWind.Instance;
                 if (vibrantWind == null)
@@ -61,8 +61,7 @@ namespace VibrantWind
                 if (vibrantWind == null)
                     return noInstanceMessage;
 
-                int mode;
-                if (args.Length < 1 || !int.TryParse(args[0], out mode))
+                if (args.Length < 1 || !int.TryParse(args[0], out int mode))
                     return usage;
 
                 switch (mode)
@@ -76,11 +75,14 @@ namespace VibrantWind
                             vibrantWind.ForceWeather((WeatherType)int.Parse(args[1]));
                             return "weather set.";
                         }
-                        catch { return usage; }
+                        catch
+                        {
+                            return usage;
+                        }
 
                     case 2:
                         vibrantWind.StartTestWeathers();
-                        return "Close console to start test; values will be logged on disk.";
+                        return "Close console to start test.";
                 }
 
                 return usage;
