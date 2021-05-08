@@ -1,13 +1,9 @@
 # Real Grass
 
-A mod for Daggerfall Unity that provides a groundcover with grass, plants, flowers and other terrain details.
-
-![Real Grass](https://i.imgur.com/R0fz3wE.png)
-
-## Download
-
-Download of the most recent version of the mod is always available on [Nexus Mods](https://www.nexusmods.com/daggerfallunity/mods/20).
+An addon for [Daggerfall Unity](https://github.com/Interkarma/daggerfall-unity) that uses Unity detail prototypes system and Daggerfall terrain tilemap to add grass and other details. It was originally created by Uncanny_Valley and available as part of main repository, then migrated as a standalone addon with the introduction of mod support.
 
 ## License
 
-See **ReadMe.txt** (section Credits) for attribution/license of graphical assets. Code and other files are released under MIT license.
+The code in the repository is licensed under MIT.
+
+Graphical assets in the _RealGrassAssets_ folder have different licenses. See _ReadMe.txt_ (section Credits) for license and attribution.
