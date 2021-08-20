@@ -351,6 +351,7 @@ namespace RealGrass
                     SummerDry = settings.GetColor(grassSection, "SummerDry"),
                     FallHealty = settings.GetColor(grassSection, "FallHealty"),
                     FallDry = settings.GetColor(grassSection, "FallDry"),
+                    SeasonInterpolation = settings.GetBool(grassSection, "SeasonInterpolation")
                 },
                 UseGrassShader = !settings.GetBool(style, "Billboard"),
                 NoiseSpreadPlants = settings.GetFloat(waterPlantsSection, "NoiseSpread"),
