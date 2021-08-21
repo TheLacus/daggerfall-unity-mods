@@ -1,9 +1,48 @@
 {
-    "Version": "1.7",
+    "Version": "1.8",
     "Sections": [
         {
+            "Name": "Style",
+            "Description": "General configuration.",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Options": [
+                        "Classic",
+                        "Mixed",
+                        "Full"
+                    ],
+                    "Value": 2,
+                    "Name": "Style",
+                    "Description": "Full uses multiple grass layers with more detailed textures; mixed is classic plus flower/detail layers.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.MultipleChoiceKey"
+                },
+                {
+                    "Value": false,
+                    "Name": "Billboard",
+                    "Description": "Use billboards that faces the camera.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+                {
+                    "Options": [
+                        "Disabled",
+                        "Reduced",
+                        "Full"
+                    ],
+                    "Value": 2,
+                    "Name": "Stones",
+                    "Description": "Enable stones on ground.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.MultipleChoiceKey"
+                }
+            ],
+            "$version": "v1"
+        },
+        {
             "Name": "Grass",
-            "Description": "Tufts of grass placed on terrain with density, size and colors according to season.",
+            "Description": "Customize color and density of grass.",
             "IsAdvanced": false,
             "Keys": [
                 {
@@ -126,24 +165,6 @@
                     "Description": null,
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ColorKey"
-                },
-                {
-                    "Value": true,
-                    "Name": "Realistic",
-                    "Description": "Use multiple grass layers with more detailed textures.",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                },
-                {
-                    "Options": [
-                        "Billboard",
-                        "Mesh"
-                    ],
-                    "Value": 1,
-                    "Name": "Shader",
-                    "Description": "Shader used to render grass on terrain",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.MultipleChoiceKey"
                 }
             ],
             "$version": "v1"
@@ -186,8 +207,8 @@
                 },
                 {
                     "Value": {
-                        "First": 10,
-                        "Second": 16
+                        "First": 4,
+                        "Second": 8
                     },
                     "Name": "DesertDensity",
                     "Description": null,
@@ -198,48 +219,8 @@
             "$version": "v1"
         },
         {
-            "Name": "Others",
-            "Description": "Additional groundcover models which increases terrain detatil variations.",
-            "IsAdvanced": false,
-            "Keys": [
-                {
-                    "Options": [
-                        "Disabled",
-                        "Low",
-                        "Medium",
-                        "High"
-                    ],
-                    "Value": 3,
-                    "Name": "Flowers",
-                    "Description": "Density of flowers and little bushes.",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.MultipleChoiceKey"
-                },
-                {
-                    "Options": [
-                        "Disabled",
-                        "Reduced",
-                        "Full"
-                    ],
-                    "Value": 2,
-                    "Name": "Stones",
-                    "Description": "Density of stones and rocks.",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.MultipleChoiceKey"
-                },
-                {
-                    "Value": false,
-                    "Name": "FlyingInsects",
-                    "Description": "Particle system bugs.",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                }
-            ],
-            "$version": "v1"
-        },
-        {
             "Name": "Advanced",
-            "Description": "Visual quaity options. Lower to improve performance.",
+            "Description": "Visual quaity options.",
             "IsAdvanced": true,
             "Keys": [
                 {
@@ -271,6 +252,13 @@
                     "Value": false,
                     "Name": "TextureOverride",
                     "Description": "Import textures from loose files (Textures/Grass).",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+                {
+                    "Value": false,
+                    "Name": "FlyingInsects",
+                    "Description": "Particle system bugs.",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 }

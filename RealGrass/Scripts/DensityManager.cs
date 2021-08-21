@@ -18,7 +18,6 @@ namespace RealGrass
         public Range<int> WaterPlants;
         public Range<int> DesertPlants;
         public int Rocks;
-        public int Flowers;
     }
 
     /// <summary>
@@ -35,11 +34,10 @@ namespace RealGrass
         readonly bool realisticGrass;
         readonly bool waterPlants;
         readonly bool terrainStones;
-        readonly bool flowers;
 
         // Values
         readonly Density density;
-        int flowersDensity, bushesDensity, rocksDensity;
+        int rocksDensity;
 
         #endregion
 
@@ -54,7 +52,6 @@ namespace RealGrass
         public int[,] GrassAccents { get; private set; }
         public int[,] WaterPlants { get; private set; }
         public int[,] Rocks { get; private set; }
-        public int[,] Flowers { get; private set; }
 
         #endregion
 
@@ -63,10 +60,9 @@ namespace RealGrass
         public DensityManager(Density density)
         {
             RealGrass realGrass = RealGrass.Instance;
-            this.realisticGrass = realGrass.RealisticGrass;
+            this.realisticGrass = (realGrass.GrassStyle & GrassStyle.Mixed) == GrassStyle.Mixed;
             this.waterPlants = realGrass.WaterPlants;
             this.terrainStones = realGrass.TerrainStones;
-            this.flowers = realGrass.Flowers;
 
             this.density = density;
         }     
@@ -82,10 +78,6 @@ namespace RealGrass
             GrassAccents    = EmptyMap(realisticGrass);
             WaterPlants     = EmptyMap(waterPlants);
             Rocks           = EmptyMap(terrainStones);
-            Flowers         = EmptyMap(flowers);
-
-            // Set density of details for this terrain 
-            flowersDensity = GetTerrainDensityAnnual(density.Flowers);
             rocksDensity = GetTerrainDensityPerennial(density.Rocks);
         }
                 
@@ -128,16 +120,6 @@ namespace RealGrass
                             SetGrassDensity(y * 2, (x * 2) + 1, RandomThick(), seasonalDetailsChance);
                             SetGrassDensity((y * 2) + 1, x * 2, RandomThick(), seasonalDetailsChance);
                             SetGrassDensity((y * 2) + 1, (x * 2) + 1, RandomThick(), seasonalDetailsChance);
-
-                            if (flowers)
-                            {
-                                int commonFlowers = RandomFlowers();
-                                if (commonFlowers != 0)
-                                {
-                                    var index = RandomPosition(y, x);
-                                    Flowers[index.First, index.Second] = commonFlowers;
-                                }
-                            }
                             if (terrainStones)
                             {
                                 int rocks = RandomRocks();
@@ -610,8 +592,7 @@ namespace RealGrass
         /// </summary>
         public void SetDensityDesert(Color32[] tilemap)
         {
-            const float grassChance = 0.15f;
-            const float seasonalDetailsChance = 0.2f;
+            const float grassChance = 0.3f;
 
             for (int y = 0; y < tilemapSize; y++)
             {
@@ -625,7 +606,7 @@ namespace RealGrass
                         case 7:
                             if (terrainStones)
                             {
-                                int rocks = RandomRocks();
+                                int rocks = RandomRocksDesert();
                                 if (rocks != 0)
                                 {
                                     var index = RandomPosition(y, x);
@@ -640,17 +621,17 @@ namespace RealGrass
                         case 11:
                             if (Random.value < grassChance)
                             {
-                                SetGrassDensity(y * 2, x * 2, RandomThin(), seasonalDetailsChance);
-                                SetGrassDensity(y * 2, (x * 2) + 1, RandomThin(), seasonalDetailsChance);
+                                SetGrassDensity(y * 2, x * 2, RandomThin());
+                                SetGrassDensity(y * 2, (x * 2) + 1, RandomThin());
                             }
                             if (Random.value < grassChance)
                             {
-                                SetGrassDensity((y * 2) + 1, x * 2, RandomThin(), seasonalDetailsChance);
-                                SetGrassDensity((y * 2) + 1, (x * 2) + 1, RandomThin(), seasonalDetailsChance);
+                                SetGrassDensity((y * 2) + 1, x * 2, RandomThin());
+                                SetGrassDensity((y * 2) + 1, (x * 2) + 1, RandomThin());
                             }
                             if (terrainStones)
                             {
-                                int rocks = RandomRocks();
+                                int rocks = RandomRocksDesert();
                                 if (rocks != 0)
                                 {
                                     var index = RandomPosition(y, x);
@@ -665,8 +646,6 @@ namespace RealGrass
                                 WaterPlants[(y * 2) + 1, x * 2] = RandomDesert();
                                 WaterPlants[y * 2, x * 2] = RandomDesert();
                             }
-                            if (flowers)
-                                Flowers[(y * 2) + 1, x * 2] = RandomBushesDesert();
                             if (terrainStones)
                                 Rocks[y * 2, x * 2] = RandomRocksDesert();
                             break;
@@ -677,8 +656,6 @@ namespace RealGrass
                                 WaterPlants[y * 2, (x * 2) + 1] = RandomDesert();
                                 WaterPlants[y * 2, (x * 2)] = RandomDesert();
                             }
-                            if (flowers)
-                                Flowers[y * 2, (x * 2) + 1] = RandomBushesDesert();
                             if (terrainStones)
                                 Rocks[y * 2, x * 2] = RandomRocksDesert();
                             break;
@@ -689,8 +666,6 @@ namespace RealGrass
                                 WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomDesert();
                                 WaterPlants[y * 2, (x * 2) + 1] = RandomDesert();
                             }
-                            if (flowers)
-                                Flowers[(y * 2) + 1, (x * 2) + 1] = RandomBushesDesert();
                             if (terrainStones)
                                 Rocks[(y * 2) + 1, (x * 2) + 1] = RandomRocksDesert();
                             break;
@@ -701,8 +676,6 @@ namespace RealGrass
                                 WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomDesert();
                                 WaterPlants[(y * 2) + 1, x * 2] = RandomDesert();
                             }
-                            if (flowers)
-                                Flowers[(y * 2) + 1, (x * 2) + 1] = RandomBushesDesert();
                             if (terrainStones)
                                 Rocks[(y * 2) + 1, (x * 2) + 1] = RandomRocksDesert();
                             break;
@@ -713,8 +686,6 @@ namespace RealGrass
                                 WaterPlants[y * 2, x * 2] = RandomDesert();
                                 WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomDesert();
                             }
-                            if (flowers)
-                                Flowers[y * 2, x * 2] = RandomBushesDesert();
                             if (terrainStones)
                                 Rocks[y * 2, x * 2] = RandomRocksDesert();
                             break;
@@ -724,8 +695,6 @@ namespace RealGrass
                                 WaterPlants[y * 2, (x * 2) + 1] = RandomDesert();
                                 WaterPlants[(y * 2) + 1, x * 2] = RandomDesert();
                             }
-                            if (flowers)
-                                Flowers[y * 2, (x * 2) + 1] = RandomBushesDesert();
                             if (terrainStones)
                                 Rocks[y * 2, (x * 2) + 1] = RandomRocksDesert();
                             break;
@@ -735,8 +704,6 @@ namespace RealGrass
                                 WaterPlants[y * 2, x * 2] = RandomDesert();
                                 WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomDesert();
                             }
-                            if (flowers)
-                                Flowers[y * 2, x * 2] = RandomBushesDesert();
                             if (terrainStones)
                                 Rocks[y * 2, x * 2] = RandomRocksDesert();
                             break;
@@ -746,8 +713,6 @@ namespace RealGrass
                                 WaterPlants[y * 2, (x * 2) + 1] = RandomDesert();
                                 WaterPlants[(y * 2) + 1, x * 2] = RandomDesert();
                             }
-                            if (flowers)
-                                Flowers[y * 2, (x * 2) + 1] = RandomBushesDesert();
                             if (terrainStones)
                                 Rocks[y * 2, (x * 2) + 1] = RandomRocksDesert();
                             break;
@@ -820,31 +785,7 @@ namespace RealGrass
 
         private int RandomRocksDesert()
         {
-            return Random.value < 0.30f ? 5 : 0;
-        }
-
-        /// <summary>
-        /// Generate random values for the placement of flowers for all climates.
-        /// </summary>
-        private int RandomFlowers()
-        {
-            return Random.Range(0, 100) < flowersDensity ? Random.Range(1, 12) : 0;
-        }
-
-        /// <summary>
-        /// Generate random values for the placement of bushes. 
-        /// </summary>
-        private int RandomBushes()
-        {
-            return Random.Range(0, 100) < bushesDensity ? Random.Range(0, 4) : 0;
-        }
-
-        /// <summary>
-        /// Generate random values for the placement of bushes in desert locations. 
-        /// </summary>
-        private int RandomBushesDesert()
-        {
-            return Random.value < 0.4f ? 1 : 0;
+            return (int)(Random.value * 2);
         }
 
         /// <summary>
@@ -876,7 +817,7 @@ namespace RealGrass
         /// </summary>
         /// <param name="density"> The total grass density.</param>
         /// <param name="seasonalChance">Chance that details layers are populated in range 0-1.</param>
-        private void SetGrassDensity(int x, int y, int density, float seasonalChance)
+        private void SetGrassDensity(int x, int y, int density, float seasonalChance = 0)
         {
             if (realisticGrass)
             {
@@ -885,7 +826,7 @@ namespace RealGrass
                     density -= (GrassAccents[x, y] = Random.Range(0, density));
 
                 // Details are tall flowers whose density is affected by season
-                if (Random.value < Mathf.Lerp(0, 0.25f, seasonalChance))
+                if (seasonalChance > 0 && Random.value < Mathf.Lerp(0, 0.25f, seasonalChance))
                     density -= (GrassDetails[x, y] = Random.Range(0, density));
             }
 
@@ -904,19 +845,6 @@ namespace RealGrass
         private static int GetTerrainDensityPerennial(int maxDensity)
         {
             return Mathf.RoundToInt(Mathf.Lerp(0, maxDensity, Random.value));
-        }
-
-        private static int GetTerrainDensityAnnual(int maxDensity)
-        {
-            float density = Mathf.Lerp(0, maxDensity, Random.value);
-
-            int day = DaggerfallUnity.Instance.WorldTime.Now.DayOfYear;
-            if (day < DaysOfYear.Summer)
-                density *= Mathf.InverseLerp(DaysOfYear.Spring, DaysOfYear.Summer, day);
-            else if (day >= DaysOfYear.Fall)
-                density *= (1 - Mathf.InverseLerp(DaysOfYear.Fall, DaysOfYear.Winter, day));
-
-            return Mathf.RoundToInt(density);
         }
 
         private static float GetWinterGrassChance()

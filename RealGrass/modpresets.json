@@ -11,8 +11,11 @@
                 "ThickDensity": "8,24",
                 "NoiseSpread": "0.4",
                 "Width": "1,1",
-                "Shader": "0",
-                "Realistic": "False"
+                "Shader": "0"
+            },
+            "Style": {
+                "Style": "0",
+                "Billboard": "True"
             }
         },
         "$version": "v1"
@@ -29,8 +32,11 @@
                 "NoiseSpread": "0.4",
                 "ThickDensity": "3,20",
                 "ThinDensity": "0,7",
-                "Shader": "0",
-                "Realistic": "False"
+                "Shader": "0"
+            },
+            "Style": {
+                "Style": "0",
+                "Billboard": "True"
             }
         },
         "$version": "v1"

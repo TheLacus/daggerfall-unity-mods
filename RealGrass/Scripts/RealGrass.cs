@@ -17,9 +17,18 @@ using DaggerfallWorkshop.Game.Utility.ModSupport;
 using DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings;
 using DaggerfallWorkshop.Utility;
 using Climates = DaggerfallConnect.Arena2.MapsFile.Climates;
+using System;
 
 namespace RealGrass
 {
+    [Flags]
+    internal enum GrassStyle
+    {
+        Classic = 0,
+        Mixed = 1,
+        Full = 1 | 2,
+    }
+
     #region Static Classes
 
     public static class DaysOfYear
@@ -66,13 +75,12 @@ namespace RealGrass
 
         public static Mod Mod { get; private set; }
 
-        public bool RealisticGrass { get; private set; }
+        internal GrassStyle GrassStyle { get; private set; }
 
         // Optional features
         public bool WaterPlants { get; private set; }
         public bool WinterPlants { get; private set; }
         public bool TerrainStones { get; private set; }
-        public bool Flowers { get; private set; }
 
         /// <summary>
         /// Make flying insects with particle systems.
@@ -209,7 +217,7 @@ namespace RealGrass
 
 #endif
 
-            Random.InitState(TerrainHelper.MakeTerrainKey(daggerTerrain.MapPixelX, daggerTerrain.MapPixelY));
+            UnityEngine.Random.InitState(TerrainHelper.MakeTerrainKey(daggerTerrain.MapPixelX, daggerTerrain.MapPixelY));
 
             // Terrain settings
             terrainData.SetDetailResolution(256, 8);
@@ -255,7 +263,7 @@ namespace RealGrass
 
             // Assign detail layers to the terrain
             terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Grass, densityManager.Grass);
-            if (RealisticGrass)
+            if ((GrassStyle & GrassStyle.Mixed) == GrassStyle.Mixed && climate != ClimateBases.Desert)
             {
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.GrassDetails, densityManager.GrassDetails);
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.GrassAccents, densityManager.GrassAccents);
@@ -264,8 +272,6 @@ namespace RealGrass
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.WaterPlants, densityManager.WaterPlants);
             if (TerrainStones)
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Rocks, densityManager.Rocks);
-            if (Flowers)
-                terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Flowers, densityManager.Flowers);
 
 #if TEST_PERFORMANCE
 
@@ -321,9 +327,9 @@ namespace RealGrass
         private void LoadSettings(ModSettings settings, ModSettingsChange change)
         {
             const string
+                style               = "Style",
                 waterPlantsSection  = "WaterPlants",
                 grassSection        = "Grass",
-                othersSection       = "Others",
                 advancedSection     = "Advanced";
 
             // Optional details
@@ -346,7 +352,7 @@ namespace RealGrass
                     FallHealty = settings.GetColor(grassSection, "FallHealty"),
                     FallDry = settings.GetColor(grassSection, "FallDry"),
                 },
-                UseGrassShader = settings.GetInt(grassSection, "Shader") == 1,
+                UseGrassShader = !settings.GetBool(style, "Billboard"),
                 NoiseSpreadPlants = settings.GetFloat(waterPlantsSection, "NoiseSpread"),
                 TextureOverride = settings.GetBool(advancedSection, "TextureOverride")
             };
@@ -360,26 +366,7 @@ namespace RealGrass
                 DesertPlants = settings.GetTupleInt(waterPlantsSection, "DesertDensity"),
             };
 
-            switch (settings.GetInt(othersSection, "Flowers"))
-            {
-                case 0:
-                    Flowers = false;
-                    break;
-                case 1:
-                    Flowers = true;
-                    density.Flowers = 5;
-                    break;
-                case 2:
-                    Flowers = true;
-                    density.Flowers = 25;
-                    break;
-                case 3:
-                    Flowers = true;
-                    density.Flowers = 50;
-                    break;
-            }
-
-            switch (settings.GetInt(othersSection, "Stones"))
+            switch (settings.GetInt(style, "Stones"))
             {
                 case 0:
                     TerrainStones = false;
@@ -395,11 +382,22 @@ namespace RealGrass
                     break;
             }
 
-            if (change.HasChanged(grassSection, "Realistic"))
-                RealisticGrass = settings.GetValue<bool>(grassSection, "Realistic");
-            
-            if (change.HasChanged(othersSection, "FlyingInsects"))
-                FlyingInsects = settings.GetValue<bool>(othersSection, "FlyingInsects");
+            if (change.HasChanged(style, "Style"))
+            {
+                switch (settings.GetValue<int>(style, "Style"))
+                {
+                    case 0:
+                    default:
+                        GrassStyle = GrassStyle.Classic;
+                        break;
+                    case 1:
+                        GrassStyle = GrassStyle.Mixed;
+                        break;
+                    case 2:
+                        GrassStyle = GrassStyle.Full;
+                        break;
+                }
+            }
 
             if (change.HasChanged(advancedSection))
             {
@@ -412,6 +410,7 @@ namespace RealGrass
                 }
 
                 DetailObjectDensity = settings.GetValue<float>(advancedSection, "DetailDensity");
+                FlyingInsects = settings.GetValue<bool>(advancedSection, "FlyingInsects");
             }
 
             detailPrototypesManager = new DetailPrototypesManager(properties);
