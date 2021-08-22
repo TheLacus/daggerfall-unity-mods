@@ -52,6 +52,5 @@ Credits
 
 Some meshes and/or textures have been picked from the following free licensed packs:
 - 60 CC0 Vegetation textures by rubberduck (License: CC0) at https://opengameart.org/content/60-cc0-vegetation-textures
-- Butterfly (animated) by CDmir (License: CC0) at https://opengameart.org/content/butterfly-animated
 - Free 3D plants models by yughues (License: CC0) at https://opengameart.org/content/free-3d-plants-models
 - Free Handpainted Plants by yughues (License: CC0) at https://opengameart.org/content/free-handpainted-plants

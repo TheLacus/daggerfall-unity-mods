@@ -5,12 +5,14 @@
 // Original Author: TheLacus
 // Contributors:    
 
-using System.IO;
-using System.Collections.Generic;
-using UnityEngine;
 using DaggerfallWorkshop;
-using DaggerfallWorkshop.Utility.AssetInjection;
+using DaggerfallWorkshop.Game.Utility.ModSupport;
 using DaggerfallWorkshop.Utility;
+using DaggerfallWorkshop.Utility.AssetInjection;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
 
 namespace RealGrass
 {
@@ -36,7 +38,6 @@ namespace RealGrass
         public float NoiseSpread;
         public GrassColors GrassColors;
         public bool UseGrassShader;
-        public float NoiseSpreadPlants;
         public bool TextureOverride;
     }
 
@@ -60,19 +61,21 @@ namespace RealGrass
             private readonly Range<float> grassHeight;
             private readonly float noiseSpread;
 
+            protected GrassStyle GrassStyle { get; }
             protected DetailPrototype Grass { get; }
             protected DetailPrototype GrassDetail { get; }
             protected DetailPrototype GrassAccent { get; }
 
-            internal SizeColor(GrassColors grassColors, Range<float> grassHeight, float noiseSpread, DetailPrototype grass, DetailPrototype detail, DetailPrototype accent)
+            internal SizeColor(GrassStyle grassStyle, GrassColors grassColors, Range<float> grassHeight, float noiseSpread, DetailPrototype grass, DetailPrototype detail, DetailPrototype accent)
             {
+                this.GrassStyle = grassStyle;
                 this.grassColors = grassColors;
                 this.grassHeight = grassHeight;
                 this.noiseSpread = noiseSpread;
                 this.Grass = grass;
                 this.GrassDetail = detail;
                 this.GrassAccent = accent;
-            }    
+            }
 
             internal void Refresh(int detail, int accent)
             {
@@ -119,7 +122,7 @@ namespace RealGrass
                 Grass.minHeight = grassHeight.Min;
                 Grass.maxHeight = grassHeight.Max;
 
-                if ((RealGrass.Instance.GrassStyle & GrassStyle.Mixed) == GrassStyle.Mixed)
+                if ((GrassStyle & GrassStyle.Mixed) == GrassStyle.Mixed)
                     SetDetailGrassSize(detail, accent);
             }
 
@@ -132,8 +135,8 @@ namespace RealGrass
 
         private class InterpolatedSizeColor : SizeColor
         {
-            internal InterpolatedSizeColor(GrassColors grassColors, Range<float> grassHeight, float noiseSpread, DetailPrototype grass, DetailPrototype detail, DetailPrototype accent)
-                : base(grassColors, grassHeight, noiseSpread, grass, detail, accent)
+            internal InterpolatedSizeColor(GrassStyle grassStyle, GrassColors grassColors, Range<float> grassHeight, float noiseSpread, DetailPrototype grass, DetailPrototype detail, DetailPrototype accent)
+                : base(grassStyle, grassColors, grassHeight, noiseSpread, grass, detail, accent)
             {
             }
 
@@ -206,7 +209,7 @@ namespace RealGrass
                     Grass.maxHeight = grassHeight.Max * minScale;
                 }
 
-                if ((RealGrass.Instance.GrassStyle & GrassStyle.Mixed) == GrassStyle.Mixed)
+                if ((GrassStyle & GrassStyle.Mixed) == GrassStyle.Mixed)
                     SetDetailGrassSize(detail, accent);
             }
         }
@@ -219,10 +222,8 @@ namespace RealGrass
         const string desertGrass = "DesertGrass";
         const string plantsTemperate = "PlantsTemperate";
         const string plantsSwamp = "PlantsSwamp";
-        const string plantsMountain = "PlantsMountain";
+        const string plantsMountain = "NearWaterGrass";
         const string plantsDesert = "PlantsDesert";
-        const string plantsTemperateWinter = "PlantsTemperateWinter";
-        const string plantsSwampWinter = "PlantsSwampWinter";
         const string rock = "Rock";
         const string rockWinter = "RockWinter";
 
@@ -279,6 +280,9 @@ namespace RealGrass
             }
         };
 
+        private readonly Mod mod;
+        private readonly Transform parent;
+        private readonly RealGrassOptions options;
         private readonly SizeColor sizeColor;
         private readonly bool useGrassShader;
         private readonly bool textureOverride;
@@ -299,18 +303,20 @@ namespace RealGrass
         public int GrassDetails { get; private set; }
         public int GrassAccents { get; private set; }
         public int WaterPlants { get; private set; }
-        public int WaterPlantsAlt { get; private set; }
         public int Rocks { get; private set; }
 
         #endregion
 
         #region Constructor
 
-        public DetailPrototypesManager(PrototypesProperties properties)
+        public DetailPrototypesManager(Mod mod, Transform parent, RealGrassOptions options, PrototypesProperties properties)
         {
             Color healthyColor = new Color(0.70f, 0.70f, 0.70f);
             Color dryColor = new Color(0.40f, 0.40f, 0.40f);
 
+            this.mod = mod;
+            this.parent = parent;
+            this.options = options;
             textureOverride = properties.TextureOverride;
             float noiseSpread = properties.NoiseSpread;
             useGrassShader = properties.UseGrassShader;
@@ -329,7 +335,7 @@ namespace RealGrass
             detailPrototypes.Add(grassPrototypes);
             Grass = index;
 
-            if ((RealGrass.Instance.GrassStyle & GrassStyle.Mixed) == GrassStyle.Mixed)
+            if ((options.GrassStyle & GrassStyle.Mixed) == GrassStyle.Mixed)
             {
                 detailPrototypes.Add(new DetailPrototype()
                 {
@@ -356,12 +362,12 @@ namespace RealGrass
                 GrassAccents = ++index;
             }
 
-            if (RealGrass.Instance.WaterPlants)
+            if (options.WaterPlants)
             {
                 var waterPlantsNear = new DetailPrototype()
                 {
                     usePrototypeMesh = true,
-                    noiseSpread = properties.NoiseSpreadPlants,
+                    noiseSpread = 0.6f,
                     healthyColor = healthyColor,
                     dryColor = dryColor,
                     renderMode = DetailRenderMode.Grass
@@ -370,7 +376,7 @@ namespace RealGrass
                 WaterPlants = ++index;
             }
 
-            if (RealGrass.Instance.TerrainStones)
+            if (options.TerrainStones)
             {
                 detailPrototypes.Add(new DetailPrototype()
                 {
@@ -390,8 +396,8 @@ namespace RealGrass
             GrassColors grassColors = properties.GrassColors;
             Range<float> grassHeight = properties.GrassHeight;
             sizeColor = grassColors.SeasonInterpolation ?
-                new InterpolatedSizeColor(grassColors, grassHeight, noiseSpread, detailPrototypes[Grass], detailPrototypes[GrassDetails], detailPrototypes[GrassAccents]) :
-                new SizeColor(grassColors, grassHeight, noiseSpread, detailPrototypes[Grass], detailPrototypes[GrassDetails], detailPrototypes[GrassAccents]);
+                new InterpolatedSizeColor(options.GrassStyle, grassColors, grassHeight, noiseSpread, detailPrototypes[Grass], detailPrototypes[GrassDetails], detailPrototypes[GrassAccents]) :
+                new SizeColor(options.GrassStyle, grassColors, grassHeight, noiseSpread, detailPrototypes[Grass], detailPrototypes[GrassDetails], detailPrototypes[GrassAccents]);
         }
 
         #endregion
@@ -406,7 +412,7 @@ namespace RealGrass
             RefreshGrassDetails();
             sizeColor.Refresh(currentGrassDetail, currentGrassAccent);
 
-            if ((RealGrass.Instance.GrassStyle & GrassStyle.Mixed) == GrassStyle.Mixed)
+            if ((options.GrassStyle & GrassStyle.Mixed) == GrassStyle.Mixed)
             {
                 SetGrassDetail(GrassDetails, grassDetails[currentGrassDetail], ref grassDetailPrefab);
                 SetGrassDetail(GrassAccents, grassAccents[currentGrassAccent], ref grassAccentPrefab);
@@ -415,43 +421,36 @@ namespace RealGrass
             if (!NeedsUpdate(UpdateType.Summer, currentClimate))
                 return;
 
+            ResetColor(DetailPrototypes[WaterPlants]);
             switch (currentClimate)
             {
                 case ClimateBases.Mountain:
-
-                    // Mountain
                     SetGrass(brownGrass, realisticGrass);
-
-                    if (RealGrass.Instance.WaterPlants)
-
+                    if (options.WaterPlants)
+                    {
+                        DetailPrototypes[WaterPlants].healthyColor = new Color(0.66f, 0.88f, 0.20f);
+                        DetailPrototypes[WaterPlants].dryColor = new Color(0.95f, 0.33f, 0.36f);
                         DetailPrototypes[WaterPlants].prototype = LoadGameObject(plantsMountain);
+                    }
                     break;
 
                 case ClimateBases.Swamp:
-
-                    // Swamp
                     SetGrass(brownGrass, realisticGrass);
-
-                    if (RealGrass.Instance.WaterPlants)
+                    if (options.WaterPlants)
                         DetailPrototypes[WaterPlants].prototype = LoadGameObject(plantsSwamp);
                     break;
 
                 case ClimateBases.Temperate:
-
-                    // Temperate
                     SetGrass(greenGrass, realisticGrass);
-
-                    if (RealGrass.Instance.WaterPlants)
+                    if (options.WaterPlants)
                         DetailPrototypes[WaterPlants].prototype = LoadGameObject(plantsTemperate);
                     break;
 
                 default:
-                    Debug.LogError(string.Format("RealGrass: {0} is not a valid climate (Summer)", currentClimate));
-                    RealGrass.Instance.ToggleMod(false);
-                    break;
+                    throw new ArgumentException("Invalid climate", nameof(currentClimate));
             }
 
-            if (RealGrass.Instance.TerrainStones)
+            if (options.TerrainStones)
             {
                 DetailPrototypes[Rocks].prototype = LoadGameObject(rock);
                 DetailPrototypes[Rocks].healthyColor = new Color(0.70f, 0.70f, 0.70f);
@@ -481,26 +480,18 @@ namespace RealGrass
                 case ClimateBases.Swamp:
                     if (drawGrass)
                         SetGrass(brownGrass, realisticGrass);
-
-                    if (RealGrass.Instance.WaterPlants)
-                        DetailPrototypes[WaterPlants].prototype = LoadGameObject(plantsSwampWinter);
                     break;
 
                 case ClimateBases.Temperate:
                     if (drawGrass)
                         SetGrass(greenGrass, realisticGrass);
-
-                    if (RealGrass.Instance.WaterPlants)
-                        DetailPrototypes[WaterPlants].prototype = LoadGameObject(plantsTemperateWinter);
                     break;
 
                 default:
-                    Debug.LogError(string.Format("RealGrass: {0} is not a valid climate (Winter)", currentClimate));
-                    RealGrass.Instance.ToggleMod(false);
-                    break;
+                    throw new ArgumentException("Invalid climate", nameof(currentClimate));
             }
 
-            if (RealGrass.Instance.TerrainStones)
+            if (options.TerrainStones)
             {
                 DetailPrototypes[Rocks].prototype = LoadGameObject(rockWinter);
                 DetailPrototypes[Rocks].healthyColor = new Color(0.70f, 0.70f, 0.70f);
@@ -523,10 +514,13 @@ namespace RealGrass
             detailPrototype.dryColor = new Color(0.89f, 0.67f, 0.67f);
             detailPrototype.noiseSpread = 0.8f;
 
-            if (RealGrass.Instance.WaterPlants)
+            if (options.WaterPlants)
+            {
+                ResetColor(DetailPrototypes[WaterPlants]);
                 DetailPrototypes[WaterPlants].prototype = LoadGameObject(plantsDesert);
+            }
 
-            if (RealGrass.Instance.TerrainStones)
+            if (options.TerrainStones)
             {
                 DetailPrototypes[Rocks].prototype = LoadGameObject(rock);
                 DetailPrototypes[Rocks].healthyColor = Color.white;
@@ -540,7 +534,7 @@ namespace RealGrass
 
         private void SetGrass(string classic, string realistic)
         {
-            string assetName = (RealGrass.Instance.GrassStyle & GrassStyle.Full) == GrassStyle.Full ? realistic : classic;
+            string assetName = (options.GrassStyle & GrassStyle.Full) == GrassStyle.Full ? realistic : classic;
 
             if (!useGrassShader)
                 DetailPrototypes[Grass].prototypeTexture = LoadTexture(assetName + "_tex");
@@ -560,7 +554,7 @@ namespace RealGrass
             {
                 if (!prefab)
                 {
-                    prefab = GameObject.Instantiate(LoadGameObject("GrassDetails"), RealGrass.Instance.transform);
+                    prefab = UnityEngine.Object.Instantiate(LoadGameObject("GrassDetails"), parent);
                     prefab.SetActive(false);
                 }
 
@@ -576,11 +570,10 @@ namespace RealGrass
         /// <param name="name">Name of texture.</param>
         private Texture2D LoadTexture(string name)
         {
-            Texture2D tex;
-            if (TryImportTextureFromLooseFiles(name, out tex))
+            if (TryImportTextureFromLooseFiles(name, out Texture2D tex))
                 return tex;
 
-            return RealGrass.Mod.GetAsset<Texture2D>(name);
+            return mod.GetAsset<Texture2D>(name);
         }
 
         /// <summary>
@@ -589,10 +582,9 @@ namespace RealGrass
         /// <param name="name">Name of gameobject.</param>
         private GameObject LoadGameObject(string name)
         {
-            GameObject go = RealGrass.Mod.GetAsset<GameObject>(name);
+            GameObject go = mod.GetAsset<GameObject>(name);
 
-            Texture2D tex;
-            if (TryImportTextureFromLooseFiles(name, out tex))
+            if (TryImportTextureFromLooseFiles(name, out Texture2D tex))
                 go.GetComponent<MeshRenderer>().material.mainTexture = tex;
 
             return go;
@@ -629,8 +621,14 @@ namespace RealGrass
 
         private void RefreshGrassDetails()
         {
-            currentGrassDetail = Random.Range(0, grassDetails.Length);
-            currentGrassAccent = Random.Range(0, grassAccents.Length);
+            currentGrassDetail = UnityEngine.Random.Range(0, grassDetails.Length);
+            currentGrassAccent = UnityEngine.Random.Range(0, grassAccents.Length);
+        }
+
+        private void ResetColor(DetailPrototype detailPrototype)
+        {
+            detailPrototype.healthyColor = new Color(0.70f, 0.70f, 0.70f);
+            detailPrototype.dryColor = new Color(0.40f, 0.40f, 0.40f);
         }
 
         private static void ScaleGrassDetail(DetailPrototype reference, DetailPrototype prototype, GrassDetail detail)

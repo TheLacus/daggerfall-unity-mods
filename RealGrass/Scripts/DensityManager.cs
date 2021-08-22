@@ -5,9 +5,11 @@
 // Original Author: TheLacus
 // Contributors:    
 
-using UnityEngine;
 using DaggerfallWorkshop;
+using DaggerfallWorkshop.Game;
+using DaggerfallWorkshop.Game.Utility.ModSupport;
 using DaggerfallWorkshop.Utility;
+using UnityEngine;
 
 namespace RealGrass
 {
@@ -20,6 +22,30 @@ namespace RealGrass
         public int Rocks;
     }
 
+    internal class RealGrassParticles
+    {
+        private readonly Mod mod;
+
+        private GameObject prefab;
+
+        internal RealGrassParticles(Mod mod)
+        {
+            this.mod = mod;
+        }
+
+        /// <summary>
+        /// Instantiate particle system insects at the given position.
+        /// </summary>
+        internal void DoInsects(Vector3 position)
+        {
+            if (!prefab)
+                prefab = mod.GetAsset<GameObject>("Fireflies");
+
+            GameObject go = Object.Instantiate(prefab, position, Quaternion.identity);
+            GameManager.Instance.StreamingWorld.TrackLooseObject(go, false, -1, -1, true);
+        }
+    }
+
     /// <summary>
     /// Manage terrain layers density.
     /// </summary>
@@ -27,16 +53,15 @@ namespace RealGrass
     {
         #region Fields
 
-        // Size of tile map
         const int tilemapSize = 128;
 
-        // Features
-        readonly bool realisticGrass;
-        readonly bool waterPlants;
-        readonly bool terrainStones;
+        private readonly bool realisticGrass;
+        private readonly bool waterPlants;
+        private readonly bool terrainStones;
+        private readonly bool particles;
+        private readonly Density density;
+        private readonly RealGrassParticles particlesManager;
 
-        // Values
-        readonly Density density;
         int rocksDensity;
 
         #endregion
@@ -57,15 +82,15 @@ namespace RealGrass
 
         #region Constructor
 
-        public DensityManager(Density density)
+        public DensityManager(Mod mod, RealGrassOptions options, Density density)
         {
-            RealGrass realGrass = RealGrass.Instance;
-            this.realisticGrass = (realGrass.GrassStyle & GrassStyle.Mixed) == GrassStyle.Mixed;
-            this.waterPlants = realGrass.WaterPlants;
-            this.terrainStones = realGrass.TerrainStones;
-
+            this.realisticGrass = (options.GrassStyle & GrassStyle.Mixed) == GrassStyle.Mixed;
+            this.waterPlants = options.WaterPlants;
+            this.terrainStones = options.TerrainStones;
+            this.particles = options.FlyingInsects;
             this.density = density;
-        }     
+            this.particlesManager = new RealGrassParticles(mod);
+        }
 
         #endregion
 
@@ -73,14 +98,14 @@ namespace RealGrass
 
         public void InitDetailsLayers()
         {
-            Grass           = EmptyMap();
-            GrassDetails    = EmptyMap(realisticGrass);
-            GrassAccents    = EmptyMap(realisticGrass);
-            WaterPlants     = EmptyMap(waterPlants);
-            Rocks           = EmptyMap(terrainStones);
+            Grass = EmptyMap();
+            GrassDetails = EmptyMap(realisticGrass);
+            GrassAccents = EmptyMap(realisticGrass);
+            WaterPlants = EmptyMap(waterPlants);
+            Rocks = EmptyMap(terrainStones);
             rocksDensity = GetTerrainDensityPerennial(density.Rocks);
         }
-                
+
         /// <summary>
         /// Set density for Summer.
         /// </summary>
@@ -88,7 +113,6 @@ namespace RealGrass
         {
             float seasonalDetailsChance = GetGrassDetailsChance();
             bool isNight = DaggerfallUnity.Instance.WorldTime.Now.IsNight;
-            bool shores = currentClimate != ClimateBases.Mountain;
 
             for (int y = 0; y < tilemapSize; y++)
             {
@@ -180,7 +204,7 @@ namespace RealGrass
                         case 84:
                             Grass[(y * 2) + 1, x * 2] = RandomThin();
                             Grass[y * 2, x * 2] = RandomThin();
-                            if (waterPlants && shores)
+                            if (waterPlants)
                             {
                                 WaterPlants[(y * 2) + 1, x * 2] = RandomWaterPlants();
                                 WaterPlants[y * 2, x * 2] = RandomWaterPlants();
@@ -205,7 +229,7 @@ namespace RealGrass
                         case 85:
                             Grass[y * 2, (x * 2) + 1] = RandomThin();
                             Grass[y * 2, x * 2] = RandomThin();
-                            if (waterPlants && shores)
+                            if (waterPlants)
                             {
                                 WaterPlants[y * 2, (x * 2) + 1] = RandomWaterPlants();
                                 WaterPlants[y * 2, (x * 2)] = RandomWaterPlants();
@@ -230,7 +254,7 @@ namespace RealGrass
                         case 86:
                             Grass[(y * 2) + 1, (x * 2) + 1] = RandomThin();
                             Grass[y * 2, (x * 2) + 1] = RandomThin();
-                            if (waterPlants && shores)
+                            if (waterPlants)
                             {
                                 WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
                                 WaterPlants[y * 2, (x * 2) + 1] = RandomWaterPlants();
@@ -255,7 +279,7 @@ namespace RealGrass
                         case 87:
                             Grass[(y * 2) + 1, (x * 2) + 1] = RandomThin();
                             Grass[(y * 2) + 1, x * 2] = RandomThin();
-                            if (waterPlants && shores)
+                            if (waterPlants)
                             {
                                 WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
                                 WaterPlants[(y * 2) + 1, x * 2] = RandomWaterPlants();
@@ -281,7 +305,7 @@ namespace RealGrass
                             Grass[y * 2, x * 2] = RandomThin();
                             Grass[(y * 2) + 1, x * 2] = RandomThin();
                             Grass[(y * 2) + 1, (x * 2) + 1] = RandomThin();
-                            if (waterPlants && shores)
+                            if (waterPlants)
                             {
                                 WaterPlants[y * 2, x * 2] = RandomWaterPlants();
                                 WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
@@ -302,7 +326,7 @@ namespace RealGrass
                             Grass[y * 2, x * 2] = RandomThin();
                             Grass[y * 2, (x * 2) + 1] = RandomThin();
                             Grass[(y * 2) + 1, x * 2] = RandomThin();
-                            if (waterPlants && shores)
+                            if (waterPlants)
                             {
                                 WaterPlants[y * 2, (x * 2) + 1] = RandomWaterPlants();
                                 WaterPlants[(y * 2) + 1, x * 2] = RandomWaterPlants();
@@ -324,7 +348,7 @@ namespace RealGrass
                             Grass[y * 2, x * 2] = RandomThin();
                             Grass[y * 2, (x * 2) + 1] = RandomThin();
                             Grass[(y * 2) + 1, (x * 2) + 1] = RandomThin();
-                            if (waterPlants && shores)
+                            if (waterPlants)
                             {
                                 WaterPlants[y * 2, x * 2] = RandomWaterPlants();
                                 WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
@@ -345,7 +369,7 @@ namespace RealGrass
                             Grass[y * 2, (x * 2) + 1] = RandomThin();
                             Grass[(y * 2) + 1, x * 2] = RandomThin();
                             Grass[(y * 2) + 1, (x * 2) + 1] = RandomThin();
-                            if (waterPlants && shores)
+                            if (waterPlants)
                             {
                                 WaterPlants[y * 2, (x * 2) + 1] = RandomWaterPlants();
                                 WaterPlants[(y * 2) + 1, x * 2] = RandomWaterPlants();
@@ -370,13 +394,13 @@ namespace RealGrass
 
                         // Swamp upper right corner
                         case 81:
-                            if (waterPlants && shores)
+                            if (waterPlants)
                                 WaterPlants[(y * 2), (x * 2)] = RandomWaterPlants();
                             break;
 
                         // Swamp lower left corner
                         case 83:
-                            if (waterPlants && shores)
+                            if (waterPlants)
                                 WaterPlants[(y * 2) + 1, (x * 2) + 1] = RandomWaterPlants();
                             break;
 
@@ -409,9 +433,8 @@ namespace RealGrass
                                 }
                             }
 
-                            // Insects
-                            if (RealGrass.Instance.FlyingInsects && Random.value < 0.2f)
-                                RealGrass.Instance.DoInsects(isNight, GetTileWorldPosition(terrain, x, y));
+                            if (particles && isNight && Random.value < 0.2f)
+                                particlesManager.DoInsects(GetTileWorldPosition(terrain, x, y));
                             break;
 
                         case 116:
@@ -440,8 +463,8 @@ namespace RealGrass
                             break;
                     }
 
-                    if (RealGrass.Instance.FlyingInsects && Random.value < 0.001f)
-                        RealGrass.Instance.DoInsects(isNight, GetTileWorldPosition(terrain, x, y));
+                    if (particles && isNight && Random.value < 0.001f)
+                        particlesManager.DoInsects(GetTileWorldPosition(terrain, x, y));
                 }
             }
         }
@@ -741,7 +764,7 @@ namespace RealGrass
                 }
             }
         }
-        
+
         #endregion
 
         #region Random Generators

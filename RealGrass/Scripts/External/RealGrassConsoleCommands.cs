@@ -1,4 +1,4 @@
-﻿// Project:         Real Grass for Daggerfall Unity
+// Project:         Real Grass for Daggerfall Unity
 // Web Site:        http://forums.dfworkshop.net/viewtopic.php?f=14&t=532
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
 // Source Code:     https://github.com/TheLacus/vibrantwind-du-mod
@@ -14,14 +14,12 @@ namespace RealGrass
 {
     public static class RealGrassConsoleCommands
     {
-        const string noInstanceMessage = "RealGrass instance not found.";
-
-        public static void RegisterCommands()
+        public static void RegisterCommands(RealGrass realGrass, RealGrassOptions options)
         {
             try
             {
-                ConsoleCommandsDatabase.RegisterCommand(ToggleRealGrass.name, ToggleRealGrass.description, ToggleRealGrass.usage, ToggleRealGrass.Execute);
-                ConsoleCommandsDatabase.RegisterCommand(DetailObjectDistance.name, DetailObjectDistance.description, DetailObjectDistance.usage, DetailObjectDistance.Execute);
+                ConsoleCommandsDatabase.RegisterCommand(ToggleRealGrass.name, ToggleRealGrass.description, ToggleRealGrass.usage, ToggleRealGrass.Execute(realGrass));
+                ConsoleCommandsDatabase.RegisterCommand(DetailObjectDistance.name, DetailObjectDistance.description, DetailObjectDistance.usage, DetailObjectDistance.Execute(realGrass, options));
             }
             catch (Exception e)
             {
@@ -35,14 +33,9 @@ namespace RealGrass
             public static readonly string description = "Enable/Disable RealGrass mod.";
             public static readonly string usage = "realgrass_toggle";
 
-            public static string Execute(params string[] args)
+            public static ConsoleCommandCallback Execute(RealGrass realGrass)
             {
-                var realGrass = RealGrass.Instance;
-                if (realGrass == null)
-                    return noInstanceMessage;
-
-                string status = realGrass.ToggleMod() ? "enabled" : "disabled";
-                return string.Format("RealGrass is now {0}", status);
+                return args => $"RealGrass is now {(realGrass.ToggleMod() ? "enabled" : "disabled")}";
             }
         }
 
@@ -52,22 +45,20 @@ namespace RealGrass
             public static readonly string description = "Change detail object distance; should be in range 0-250.";
             public static readonly string usage = "realgrass_distance {value}";
 
-            public static string Execute(params string[] args)
+            public static ConsoleCommandCallback Execute(RealGrass realGrass, RealGrassOptions options)
             {
-                var realGrass = RealGrass.Instance;
-                if (realGrass == null)
-                    return noInstanceMessage;
+                return args =>
+                {
+                    if (args.Length < 1 || !float.TryParse(args[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float value))
+                        return usage;
 
-                float value;
-                if (args.Length < 1 || !float.TryParse(args[0], NumberStyles.Float, CultureInfo.InvariantCulture, out value))
-                    return usage;
+                    if ((value < 0 || value > 250) && (args.Length < 2 || args[1] != "-force"))
+                        return "Use {value} {-force}. High values can fill memory and crash the game.";
 
-                if((value < 0 || value > 250) && (args.Length < 2 || args[1] != "-force"))
-                    return "Use {value} {-force}. High values can fill memory and crash the game.";
-
-                realGrass.DetailObjectDistance = value;
-                realGrass.RestartMod();
-                return string.Format("Detail object distance is {0}", value);
+                    options.DetailObjectDistance = value;
+                    realGrass.RestartMod();
+                    return string.Format("Detail object distance is {0}", value);
+                };
             }
         }
     }

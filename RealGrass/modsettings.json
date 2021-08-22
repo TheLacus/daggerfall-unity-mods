@@ -178,34 +178,20 @@
         },
         {
             "Name": "WaterPlants",
-            "Description": "Swamp vegetation and little plants near water ponds.",
+            "Description": "Customize density of details near water.",
             "IsAdvanced": false,
             "Keys": [
                 {
-                    "Options": [
-                        "Disabled",
-                        "Summer Only",
-                        "Always Enabled"
-                    ],
-                    "Value": 2,
-                    "Name": "Mode",
+                    "Value": true,
+                    "Name": "Enabled",
                     "Description": null,
                     "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.MultipleChoiceKey"
-                },
-                {
-                    "Min": 0.0,
-                    "Max": 1.0,
-                    "Value": 0.4,
-                    "Name": "NoiseSpread",
-                    "Description": "The higher this is, the more varied the vegetation will look.",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 },
                 {
                     "Value": {
-                        "First": 0,
-                        "Second": 3
+                        "First": 1,
+                        "Second": 5
                     },
                     "Name": "Density",
                     "Description": "",

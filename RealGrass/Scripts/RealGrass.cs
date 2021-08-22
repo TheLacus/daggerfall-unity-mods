@@ -8,43 +8,49 @@
 
 // #define TEST_PERFORMANCE
 
-using System.Collections;
-using System.Linq;
-using UnityEngine;
 using DaggerfallWorkshop;
 using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
 using DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings;
 using DaggerfallWorkshop.Utility;
-using Climates = DaggerfallConnect.Arena2.MapsFile.Climates;
 using System;
+using System.Collections;
+using System.Linq;
+using UnityEngine;
+using Climates = DaggerfallConnect.Arena2.MapsFile.Climates;
 
 namespace RealGrass
 {
     [Flags]
-    internal enum GrassStyle
+    public enum GrassStyle
     {
         Classic = 0,
         Mixed = 1,
         Full = 1 | 2,
     }
 
-    #region Static Classes
-
     public static class DaysOfYear
     {
         public const int
 
-            GrowDay =  1 * 30 + 15,
-            Spring  =  2 * 30 +  1,
-            Summer  =  5 * 30 +  1,
-            MidYear =  6 * 30 + 15,
-            Fall    =  8 * 30 +  1,
-            Winter  = 11 * 30 +  1,
-            DieDay  = 12 * 30 - 15;
+            GrowDay = 1 * 30 + 15,
+            Spring = 2 * 30 + 1,
+            Summer = 5 * 30 + 1,
+            MidYear = 6 * 30 + 15,
+            Fall = 8 * 30 + 1,
+            Winter = 11 * 30 + 1,
+            DieDay = 12 * 30 - 15;
     }
 
-    #endregion
+    public class RealGrassOptions
+    {
+        internal GrassStyle GrassStyle { get; set; }
+        public bool WaterPlants { get; set; }
+        public bool TerrainStones { get; set; }
+        public bool FlyingInsects { get; set; }
+        public float DetailObjectDistance { get; set; }
+        public float DetailObjectDensity { get; set; }
+    }
 
     /// <summary>
     /// Places grass and other details on Daggerall Unity terrain.
@@ -53,49 +59,15 @@ namespace RealGrass
     {
         #region Fields
 
-        static RealGrass instance;  
-        static GameObject fireflies;
-        static GameObject butterflies;
+        internal const string TexturesFolder = "Grass";
 
+        private static Mod mod;
+
+        private readonly RealGrassOptions options = new RealGrassOptions();
         DetailPrototypesManager detailPrototypesManager;
         DensityManager densityManager;
         bool isEnabled;
         Coroutine initTerrains;
-
-        internal const string TexturesFolder = "Grass";
-
-        #endregion
-
-        #region Properties
-
-        public static RealGrass Instance
-        {
-            get { return instance ?? (instance = FindObjectOfType<RealGrass>()); }
-        }
-
-        public static Mod Mod { get; private set; }
-
-        internal GrassStyle GrassStyle { get; private set; }
-
-        // Optional features
-        public bool WaterPlants { get; private set; }
-        public bool WinterPlants { get; private set; }
-        public bool TerrainStones { get; private set; }
-
-        /// <summary>
-        /// Make flying insects with particle systems.
-        /// </summary>
-        public bool FlyingInsects { get; private set; }
-
-        /// <summary>
-        /// Details will be rendered up to this distance from the player.
-        /// </summary>
-        public float DetailObjectDistance { get; set; }
-
-        /// <summary>
-        /// General density of details.
-        /// </summary>
-        public float DetailObjectDensity { get; set; }
 
         #endregion
 
@@ -104,23 +76,15 @@ namespace RealGrass
         [Invoke(StateManager.StateTypes.Start, 0)]
         public static void Init(InitParams initParams)
         {
-            // Get mod
-            Mod = initParams.Mod;
+            mod = initParams.Mod;
 
-            // Add script to the scene.
-            GameObject go = new GameObject("RealGrass");
-            instance = go.AddComponent<RealGrass>();
-
-            // After finishing, set the mod's IsReady flag to true.
-            Mod.IsReady = true;
+            GameObject go = new GameObject(mod.Title);
+            go.AddComponent<RealGrass>();
         }
 
         void Awake()
         {
-            if (instance != null && this != instance)
-                Destroy(this.gameObject);
-
-            Debug.LogFormat("{0} started.", this);
+            Debug.Log($"{this} started.");
         }
 
         void Start()
@@ -128,8 +92,9 @@ namespace RealGrass
             StartMod(true, false);
             isEnabled = true;
 
-            RealGrassConsoleCommands.RegisterCommands();
-            Mod.MessageReceiver = MessageReceiver;
+            RealGrassConsoleCommands.RegisterCommands(this, options);
+            mod.MessageReceiver = MessageReceiver;
+            mod.IsReady = true;
         }
 
         #endregion
@@ -138,10 +103,10 @@ namespace RealGrass
 
         public override string ToString()
         {
-            if (Mod == null)
+            if (mod == null)
                 return base.ToString();
 
-            return string.Format("{0} v.{1}", Mod.Title, Mod.ModInfo.ModVersion);
+            return string.Format("{0} v.{1}", mod.Title, mod.ModInfo.ModVersion);
         }
 
         /// <summary>
@@ -186,23 +151,6 @@ namespace RealGrass
 
         #endregion
 
-        #region Internal Methods    
-
-        /// <summary>
-        /// Instantiate particle system insects at the given position.
-        /// </summary>
-        internal void DoInsects(bool isNight, Vector3 position)
-        {
-            GameObject particles = isNight ?
-                (fireflies ?? (fireflies = Mod.GetAsset<GameObject>("Fireflies"))) :
-                (butterflies ?? (butterflies = Mod.GetAsset<GameObject>("Butterflies")));
-
-            GameObject go = Instantiate(particles, position, Quaternion.identity);
-            GameManager.Instance.StreamingWorld.TrackLooseObject(go, false, -1, -1, true);
-        }
-
-        #endregion
-
         #region Private Methods
 
         /// <summary>
@@ -223,8 +171,8 @@ namespace RealGrass
             terrainData.SetDetailResolution(256, 8);
             terrainData.wavingGrassTint = Color.gray;
             Terrain terrain = daggerTerrain.gameObject.GetComponent<Terrain>();
-            terrain.detailObjectDistance = DetailObjectDistance;
-            terrain.detailObjectDensity = DetailObjectDensity;
+            terrain.detailObjectDistance = options.DetailObjectDistance;
+            terrain.detailObjectDensity = options.DetailObjectDensity;
 
             // Get the current season and climate
             var currentSeason = DaggerfallUnity.Instance.WorldTime.Now.SeasonValue;
@@ -240,13 +188,11 @@ namespace RealGrass
                 case ClimateBases.Swamp:
                     if (currentSeason != DaggerfallDateTime.Seasons.Winter)
                     {
-                        // Summer
                         detailPrototypesManager.UpdateClimateSummer(climate);
                         densityManager.SetDensitySummer(terrain, tilemap, climate);
                     }
                     else
                     {
-                        // Winter
                         detailPrototypesManager.UpdateClimateWinter(climate);
                         densityManager.SetDensityWinter(terrain, tilemap, climate);
                     }
@@ -263,14 +209,14 @@ namespace RealGrass
 
             // Assign detail layers to the terrain
             terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Grass, densityManager.Grass);
-            if ((GrassStyle & GrassStyle.Mixed) == GrassStyle.Mixed && climate != ClimateBases.Desert)
+            if ((options.GrassStyle & GrassStyle.Mixed) == GrassStyle.Mixed && climate != ClimateBases.Desert)
             {
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.GrassDetails, densityManager.GrassDetails);
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.GrassAccents, densityManager.GrassAccents);
             }
-            if (WaterPlants)
+            if (options.WaterPlants)
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.WaterPlants, densityManager.WaterPlants);
-            if (TerrainStones)
+            if (options.TerrainStones)
                 terrainData.SetDetailLayer(0, 0, detailPrototypesManager.Rocks, densityManager.Rocks);
 
 #if TEST_PERFORMANCE
@@ -290,8 +236,8 @@ namespace RealGrass
         {
             if (loadSettings)
             {
-                Mod.LoadSettingsCallback = LoadSettings;
-                Mod.LoadSettings();
+                mod.LoadSettingsCallback = LoadSettings;
+                mod.LoadSettings();
             }
 
             // Subscribe to events
@@ -310,7 +256,7 @@ namespace RealGrass
         private void StopMod()
         {
             // Unsubscribe from events
-            DaggerfallTerrain.OnPromoteTerrainData -= DaggerfallTerrain_OnPromoteTerrainData;          
+            DaggerfallTerrain.OnPromoteTerrainData -= DaggerfallTerrain_OnPromoteTerrainData;
 
             // Remove details from terrains
             Terrain[] terrains = GameManager.Instance.StreamingWorld.StreamingTarget.GetComponentsInChildren<Terrain>();
@@ -327,17 +273,12 @@ namespace RealGrass
         private void LoadSettings(ModSettings settings, ModSettingsChange change)
         {
             const string
-                style               = "Style",
-                waterPlantsSection  = "WaterPlants",
-                grassSection        = "Grass",
-                advancedSection     = "Advanced";
+                style = "Style",
+                waterPlantsSection = "WaterPlants",
+                grassSection = "Grass",
+                advancedSection = "Advanced";
 
-            // Optional details
-            int waterPlantsMode = settings.GetInt(waterPlantsSection, "Mode");
-            WaterPlants = waterPlantsMode != 0;
-            WinterPlants = waterPlantsMode == 2;
-
-            // Detail prototypes settings
+            options.WaterPlants = settings.GetBool(waterPlantsSection, "Enabled");
             var properties = new PrototypesProperties()
             {
                 GrassHeight = settings.GetTupleFloat(grassSection, "Height"),
@@ -354,11 +295,9 @@ namespace RealGrass
                     SeasonInterpolation = settings.GetBool(grassSection, "SeasonInterpolation")
                 },
                 UseGrassShader = !settings.GetBool(style, "Billboard"),
-                NoiseSpreadPlants = settings.GetFloat(waterPlantsSection, "NoiseSpread"),
                 TextureOverride = settings.GetBool(advancedSection, "TextureOverride")
             };
 
-            // Detail prototypes density
             var density = new Density()
             {
                 GrassThick = settings.GetTupleInt(grassSection, "ThickDensity"),
@@ -370,15 +309,15 @@ namespace RealGrass
             switch (settings.GetInt(style, "Stones"))
             {
                 case 0:
-                    TerrainStones = false;
+                    options.TerrainStones = false;
                     break;
 
                 case 1:
-                    TerrainStones = true;
+                    options.TerrainStones = true;
                     density.Rocks = 2;
                     break;
                 case 2:
-                    TerrainStones = true;
+                    options.TerrainStones = true;
                     density.Rocks = 4;
                     break;
             }
@@ -389,33 +328,33 @@ namespace RealGrass
                 {
                     case 0:
                     default:
-                        GrassStyle = GrassStyle.Classic;
+                        options.GrassStyle = GrassStyle.Classic;
                         break;
                     case 1:
-                        GrassStyle = GrassStyle.Mixed;
+                        options.GrassStyle = GrassStyle.Mixed;
                         break;
                     case 2:
-                        GrassStyle = GrassStyle.Full;
+                        options.GrassStyle = GrassStyle.Full;
                         break;
                 }
             }
 
             if (change.HasChanged(advancedSection))
             {
-                DetailObjectDistance = settings.GetValue<int>(advancedSection, "DetailDistance");
+                options.DetailObjectDistance = settings.GetValue<int>(advancedSection, "DetailDistance");
                 string detailDistanceOverride = settings.GetValue<string>(advancedSection, "DetailDistanceOverride");
                 if (!string.IsNullOrWhiteSpace(detailDistanceOverride) && int.TryParse(detailDistanceOverride, out int value))
                 {
-                    DetailObjectDistance = value;
+                    options.DetailObjectDistance = value;
                     Debug.Log($"{this}: override detail distance with {value}", this);
                 }
 
-                DetailObjectDensity = settings.GetValue<float>(advancedSection, "DetailDensity");
-                FlyingInsects = settings.GetValue<bool>(advancedSection, "FlyingInsects");
+                options.DetailObjectDensity = settings.GetValue<float>(advancedSection, "DetailDensity");
+                options.FlyingInsects = settings.GetValue<bool>(advancedSection, "FlyingInsects");
             }
 
-            detailPrototypesManager = new DetailPrototypesManager(properties);
-            densityManager = new DensityManager(density);
+            detailPrototypesManager = new DetailPrototypesManager(mod, transform, options, properties);
+            densityManager = new DensityManager(mod, options, density);
 
             if (isEnabled)
                 RefreshTerrainDetailsAsync();
