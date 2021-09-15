@@ -1,9 +1,5 @@
 // Project:         Vibrant Wind for Daggerfall Unity
-// Web Site:        http://forums.dfworkshop.net/viewtopic.php?f=14&t=532
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
-// Source Code:     https://github.com/TheLacus/vibrantwind-du-mod
-// Original Author: TheLacus
-// Contributors:    
 
 using System;
 using UnityEngine;
@@ -15,9 +11,16 @@ namespace VibrantWind
     /// <summary>
     /// Receives messages from other mods and executes commands.
     /// </summary>
-    public static class VibrantWindModMessages
+    public class VibrantWindModMessages
     {
-        public static void MessageReceiver(string message, object data, DFModMessageCallback _)
+        private readonly WindManager windManager;
+
+        internal VibrantWindModMessages(WindManager vibrantWind)
+        {
+            this.windManager = vibrantWind;
+        }
+
+        public void MessageReceiver(string message, object data, DFModMessageCallback _)
         {
             switch (message)
             {
@@ -25,7 +28,7 @@ namespace VibrantWind
 
                     try
                     {
-                        VibrantWind.Instance.ForceWeather((WeatherType)data);
+                        windManager.Weather = (WeatherType)data;
                     }
                     catch (InvalidCastException)
                     {

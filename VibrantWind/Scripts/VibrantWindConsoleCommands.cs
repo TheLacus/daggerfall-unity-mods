@@ -1,14 +1,14 @@
 // Project:         Vibrant Wind for Daggerfall Unity
-// Web Site:        http://forums.dfworkshop.net/viewtopic.php?f=14&t=532
 // License:         MIT License (http://www.opensource.org/licenses/mit-license.php)
-// Source Code:     https://github.com/TheLacus/vibrantwind-du-mod
-// Original Author: TheLacus
-// Contributors:    
 
 using System;
 using UnityEngine;
 using Wenzil.Console;
 using DaggerfallWorkshop.Game.Weather;
+using System.Collections;
+using DaggerfallWorkshop.Game;
+using System.Text;
+using System.Linq;
 
 namespace VibrantWind
 {
@@ -17,18 +17,16 @@ namespace VibrantWind
     /// </summary>
     public static class VibrantWindConsoleCommands
     {
-        const string noInstanceMessage = "Vibrant Wind instance not found.";
-
-        public static void RegisterCommands()
+        public static void RegisterCommands(VibrantWind vibrantWind)
         {
             try
             {
-                ConsoleCommandsDatabase.RegisterCommand(ToggleVibrantWind.name, ToggleVibrantWind.description, ToggleVibrantWind.usage, ToggleVibrantWind.Execute);
-                ConsoleCommandsDatabase.RegisterCommand(VibrantWindDebug.name, VibrantWindDebug.description, VibrantWindDebug.usage, VibrantWindDebug.Execute);
+                ConsoleCommandsDatabase.RegisterCommand(ToggleVibrantWind.name, ToggleVibrantWind.description, ToggleVibrantWind.usage, ToggleVibrantWind.Execute(vibrantWind));
+                ConsoleCommandsDatabase.RegisterCommand(VibrantWindDebug.name, VibrantWindDebug.description, VibrantWindDebug.usage, VibrantWindDebug.Execute(vibrantWind));
             }
             catch (Exception e)
             {
-                Debug.LogError(string.Format("Error Registering Vibrant Wind Console commands: {0}", e.Message));
+                Debug.LogException(e);
             }
         }
 
@@ -38,14 +36,13 @@ namespace VibrantWind
             public static readonly string description = "Enable/Disable automatic wind strength changes.";
             public static readonly string usage = "vwind_toggle";
 
-            public static string Execute(params string[] _)
+            public static ConsoleCommandCallback Execute(VibrantWind vibrantWind)
             {
-                var vibrantWind = VibrantWind.Instance;
-                if (vibrantWind == null)
-                    return noInstanceMessage;
-
-                vibrantWind.ToggleMod(true);
-                return vibrantWind.ToString();
+                return (args) =>
+                {
+                    vibrantWind.ToggleMod(true);
+                    return vibrantWind.ToString();
+                };
             }
         }
 
@@ -55,37 +52,40 @@ namespace VibrantWind
             public static readonly string description = "Debug tools.";
             public static readonly string usage = Usage();
 
-            public static string Execute(params string[] args)
+            public static ConsoleCommandCallback Execute(VibrantWind vibrantWind)
             {
-                var vibrantWind = VibrantWind.Instance;
-                if (vibrantWind == null)
-                    return noInstanceMessage;
-
-                if (args.Length < 1 || !int.TryParse(args[0], out int mode))
-                    return usage;
-
-                switch (mode)
+                WindManager windManager = vibrantWind.WindManager;
+                return (args) =>
                 {
-                    case 0:
-                        return string.Format("Terrain: {0}\nAmbient: {1}", vibrantWind.TerrainWindStrength, vibrantWind.AmbientWindStrength);
+                    if (args.Length < 1 || !int.TryParse(args[0], out int mode))
+                        return usage;
 
-                    case 1:
-                        try
-                        {
-                            vibrantWind.ForceWeather((WeatherType)int.Parse(args[1]));
-                            return "weather set.";
-                        }
-                        catch
-                        {
-                            return usage;
-                        }
+                    switch (mode)
+                    {
+                        case 0:
+                            return string.Format("Terrain: {0}\nAmbient: {1}", windManager.TerrainWindStrength, windManager.AmbientWindStrength);
 
-                    case 2:
-                        vibrantWind.StartTestWeathers();
-                        return "Close console to start test.";
-                }
+                        case 1:
+                            try
+                            {
+                                if (!int.TryParse(args[1], out int weather) || !Enum.IsDefined(typeof(WeatherType), weather))
+                                    return usage;
 
-                return usage;
+                                windManager.Weather = (WeatherType)weather;
+                                return "weather set.";
+                            }
+                            catch
+                            {
+                                return usage;
+                            }
+
+                        case 2:
+                            vibrantWind.StartCoroutine(TestWeathers(windManager));
+                            return "Close console to start test.";
+                    }
+
+                    return usage;
+                };
             }
 
             private static string Usage()
@@ -95,6 +95,34 @@ namespace VibrantWind
                 usage += "\n1: Set weather for wind strength.";
                 usage += "\n2: Test all weathers in succession.";
                 return usage;
+            }
+
+            private static IEnumerator TestWeathers(WindManager windManager)
+            {
+                const int waitSeconds = 6;
+                const string spacer = "################################################";
+
+                var weatherManager = GameManager.Instance.WeatherManager;
+                WeatherType currentWeather = windManager.Weather;
+                var stringBuilder = new StringBuilder();
+                stringBuilder.AppendLine(spacer);
+
+                foreach (var weather in Enum.GetValues(typeof(WeatherType)).Cast<WeatherType>().Distinct())
+                {
+                    weatherManager.SetWeather(weather);
+                    DaggerfallUI.Instance.PopupMessage(weather.ToString());
+
+                    stringBuilder.AppendLine(weather.ToString().ToUpperInvariant());
+                    stringBuilder.AppendLine(string.Format("Terrain: {0}", windManager.TerrainWindStrength));
+                    stringBuilder.AppendLine(string.Format("Ambient: {0}", windManager.AmbientWindStrength));
+
+                    yield return new WaitForSeconds(waitSeconds);
+                }
+
+                weatherManager.SetWeather(currentWeather);
+                stringBuilder.Append(spacer);
+                Debug.Log(stringBuilder);
+                DaggerfallUI.Instance.PopupMessage("Test ended");
             }
         }
     }
