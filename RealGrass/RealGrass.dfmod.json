@@ -13,7 +13,7 @@
         "Assets/Game/Mods/RealGrass/Scripts/RealGrass.cs",
         "Assets/Game/Mods/RealGrass/Scripts/DetailPrototypesManager.cs",
         "Assets/Game/Mods/RealGrass/Scripts/DensityManager.cs",
-        "Assets/Game/Mods/RealGrass/Scripts/API/Range.cs",
+        "Assets/Game/Mods/RealGrass/Scripts/Range.cs",
         "Assets/Game/Mods/RealGrass/Scripts/External/RealGrassConsoleCommands.cs",
         "Assets/Game/Mods/RealGrassAssets/BrownGrass.prefab",
         "Assets/Game/Mods/RealGrassAssets/Textures/GreenGrass_tex.png",
