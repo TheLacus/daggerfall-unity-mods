@@ -1,4 +1,4 @@
-Unreleased
+2.10
 * Reworked style options for more consistency.
 * Simplified settings.
 
