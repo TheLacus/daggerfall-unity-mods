@@ -9,9 +9,9 @@
     "Files": [
         "Assets/Game/Mods/VibrantWind/modsettings.json",
         "Assets/Game/Mods/VibrantWind/Scripts/VibrantWind.cs",
-        "Assets/Game/Mods/VibrantWind/Scripts/API/WindStrength.cs",
-        "Assets/Game/Mods/VibrantWind/Scripts/API/Interpolation.cs",
-        "Assets/Game/Mods/VibrantWind/Scripts/External/VibrantWindModMessages.cs",
-        "Assets/Game/Mods/VibrantWind/Scripts/External/VibrantWindConsoleCommands.cs"
+        "Assets/Game/Mods/VibrantWind/Scripts/VibrantWindConsoleCommands.cs",
+        "Assets/Game/Mods/VibrantWind/Scripts/VibrantWindModMessages.cs",
+        "Assets/Game/Mods/VibrantWind/Scripts/WindStrength.cs",
+        "Assets/Game/Mods/VibrantWind/Scripts/WindPropertyValues.cs"
     ]
 }
