@@ -1,0 +1,123 @@
+{
+    "Version": "0.5",
+    "Sections": [
+        {
+            "Name": "Speed",
+            "Description": "The speed of the wind as it blows grass",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Value": {
+                        "First": 0.1,
+                        "Second": 0.9
+                    },
+                    "Name": "Range",
+                    "Description": "The strength of the wind.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TupleFloatKey"
+                },
+                {
+                    "Options": {
+                        "$content": [
+                            "Lerp",
+                            "Sinerp",
+                            "Coserp",
+                            "SmoothStep"
+                        ],
+                        "$id": "7"
+                    },
+                    "Value": 0,
+                    "Name": "Interpolation",
+                    "Description": "How the values for each weather are chosen.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.MultipleChoiceKey"
+                }
+            ],
+            "$version": "v1"
+        },
+        {
+            "Name": "Bending",
+            "Description": "The degree to which grass objects are bent over by the wind",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Value": {
+                        "First": 0.2,
+                        "Second": 0.6
+                    },
+                    "Name": "Range",
+                    "Description": "The strength of the wind.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TupleFloatKey"
+                },
+                {
+                    "Options": {
+                        "$ref": "7"
+                    },
+                    "Value": 3,
+                    "Name": "Interpolation",
+                    "Description": "How the values for each weather are chosen.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.MultipleChoiceKey"
+                }
+            ],
+            "$version": "v1"
+        },
+        {
+            "Name": "Size",
+            "Description": "The size of the 'ripples' on grassy areas",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Value": {
+                        "First": 0.1,
+                        "Second": 0.8
+                    },
+                    "Name": "Range",
+                    "Description": "The strength of the wind.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TupleFloatKey"
+                },
+                {
+                    "Options": {
+                        "$ref": "7"
+                    },
+                    "Value": 2,
+                    "Name": "Interpolation",
+                    "Description": "How the values for each weather are chosen.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.MultipleChoiceKey"
+                }
+            ],
+            "$version": "v1"
+        },
+        {
+            "Name": "Force",
+            "Description": "Force of the wind as it blows trees and particles",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Value": {
+                        "First": 0.1,
+                        "Second": 1.0
+                    },
+                    "Name": "Range",
+                    "Description": "The strength of the wind.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TupleFloatKey"
+                },
+                {
+                    "Options": {
+                        "$ref": "7"
+                    },
+                    "Value": 0,
+                    "Name": "Interpolation",
+                    "Description": "How the values for each weather are chosen.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.MultipleChoiceKey"
+                }
+            ],
+            "$version": "v1"
+        }
+    ]
+}
