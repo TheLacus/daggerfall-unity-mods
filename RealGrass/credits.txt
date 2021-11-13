@@ -1,0 +1,10 @@
+- Uncanny_Valley, creator of original mod included with early versions of Daggerfall Unity.
+- TheLacus, standalone mod release.
+- Midopa, contributions to original core mod.
+- VMblast, author of textures 'Grass_tex.psd' and all 'GrassDetails_*.psd'; 'DesertGrass.psd' is an edited version
+  of 'Grass.psd'. Use of these textures is authorized for this project only [RealGrass for Daggerfall Unity].
+
+Some meshes and/or textures have been picked from the following free licensed packs:
+- 60 CC0 Vegetation textures by rubberduck (License: CC0) at https://opengameart.org/content/60-cc0-vegetation-textures
+- Free 3D plants models by yughues (License: CC0) at https://opengameart.org/content/free-3d-plants-models
+- Free Handpainted Plants by yughues (License: CC0) at https://opengameart.org/content/free-handpainted-plants

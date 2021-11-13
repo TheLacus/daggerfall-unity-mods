@@ -4,6 +4,6 @@ An addon for [Daggerfall Unity](https://github.com/Interkarma/daggerfall-unity) 
 
 ## License
 
-The code in the repository is licensed under MIT.
+The code in the _RealGrass_ folder is licensed under MIT.
 
-Graphical assets in the _RealGrassAssets_ folder have different licenses. See _ReadMe.txt_ (section Credits) for license and attribution.
+Graphical assets in the _RealGrassAssets_ folder have different licenses. See _credits.txt_ for license and attribution.
