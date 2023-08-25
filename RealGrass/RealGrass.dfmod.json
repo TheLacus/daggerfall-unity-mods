@@ -1,9 +1,9 @@
 {
     "ModTitle": "Real Grass",
-    "ModVersion": "2.10",
+    "ModVersion": "2.11",
     "ModAuthor": "Uncanny_Valley, TheLacus",
     "ContactInfo": "https://www.nexusmods.com/daggerfallunity/mods/20",
-    "DFUnity_Version": "0.13.0",
+    "DFUnity_Version": "0.15.3",
     "ModDescription": "Groundcover with grass, flowers and water plants.",
     "GUID": "2185b00e-bc5d-4758-81f5-7540817e2cbc",
     "Files": [

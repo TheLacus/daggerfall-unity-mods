@@ -1,3 +1,7 @@
+2.11
+* Fixed loading times with stone layer.
+* Use VMblast textures in more places.
+
 2.10
 * Reworked style options for more consistency.
 * Simplified settings.
