@@ -8,7 +8,6 @@
 using DaggerfallWorkshop;
 using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
-using DaggerfallWorkshop.Utility;
 using UnityEngine;
 
 namespace RealGrass
@@ -129,8 +128,8 @@ namespace RealGrass
                                 int rocks = RandomRocks();
                                 if (rocks != 0)
                                 {
-                                    var index = RandomPosition(y, x);
-                                    Rocks[index.First, index.Second] = rocks;
+                                    var (posY, posX) = RandomPosition(y, x);
+                                    Rocks[posY, posX] = rocks;
                                 }
                             }
                             break;
@@ -149,8 +148,8 @@ namespace RealGrass
                                 int rocks = RandomRocks();
                                 if (rocks != 0)
                                 {
-                                    var index = RandomPosition(y, x);
-                                    Rocks[index.First, index.Second] = rocks;
+                                    var (posY, posX) = RandomPosition(y, x);
+                                    Rocks[posY, posX] = rocks;
                                 }
                             }
                             break;
@@ -492,8 +491,8 @@ namespace RealGrass
                                 int rocks = RandomRocks();
                                 if (rocks != 0)
                                 {
-                                    var index = RandomPosition(y, x);
-                                    Rocks[index.First, index.Second] = rocks;
+                                    var (posY, posX) = RandomPosition(y, x);
+                                    Rocks[posY, posX] = rocks;
                                 }
                             }
                             break;
@@ -521,8 +520,8 @@ namespace RealGrass
                                 int rocks = RandomRocks();
                                 if (rocks != 0)
                                 {
-                                    var index = RandomPosition(y, x);
-                                    Rocks[index.First, index.Second] = rocks;
+                                    var (posY, posX) = RandomPosition(y, x);
+                                    Rocks[posY, posX] = rocks;
                                 }
                             }
                             break;
@@ -632,8 +631,8 @@ namespace RealGrass
                                 int rocks = RandomRocksDesert();
                                 if (rocks != 0)
                                 {
-                                    var index = RandomPosition(y, x);
-                                    Rocks[index.First, index.Second] = rocks;
+                                    var (posY, posX) = RandomPosition(y, x);
+                                    Rocks[posY, posX] = rocks;
                                 }
                             }
                             break;
@@ -657,8 +656,8 @@ namespace RealGrass
                                 int rocks = RandomRocksDesert();
                                 if (rocks != 0)
                                 {
-                                    var index = RandomPosition(y, x);
-                                    Rocks[index.First, index.Second] = rocks;
+                                    var (posY, posX) = RandomPosition(y, x);
+                                    Rocks[posY, posX] = rocks;
                                 }
                             }
                             break;
@@ -817,19 +816,19 @@ namespace RealGrass
         /// <param name="y">First index.</param>
         /// <param name="x">Second index.</param>
         /// <returns>One of the four possible position on tile.</returns>
-        private static Tuple<int, int> RandomPosition(int y, int x)
+        private static (int posY, int posX) RandomPosition(int y, int x)
         {
             switch (Random.Range(0, 4))
             {
                 case 0:
-                    return new Tuple<int, int>(y * 2, x * 2);
+                    return (y * 2, x * 2);
                 case 1:
-                    return new Tuple<int, int>(y * 2, (x * 2) + 1);
+                    return (y * 2, (x * 2) + 1);
                 case 2:
-                    return new Tuple<int, int>((y * 2) + 1, x * 2);
+                    return ((y * 2) + 1, x * 2);
                 case 3:
                 default:
-                    return new Tuple<int, int>((y * 2) + 1, (x * 2) + 1);
+                    return ((y * 2) + 1, (x * 2) + 1);
             }
         }
 
